@@ -4,7 +4,7 @@ open System
 module Numbers =
     let Epsilon = 0.000001;
     
-    let withinTolerance a b =
-        let difference = (float) a - b
+    let withinTolerance (a : float) (b : float) =
+        let difference = a - b
         let absoluteDifference = Math.Abs difference
         absoluteDifference < Epsilon
