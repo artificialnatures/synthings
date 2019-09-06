@@ -9,6 +9,9 @@
 
   <ItemGroup>
     <Compile Include="WavesTests.fs" />
+    <Compile Include="NumbersTests.fs" />
+    <Compile Include="DecayTests.fs" />
+    <Compile Include="MovementsTests.fs" />
   </ItemGroup>
 
   <ItemGroup>

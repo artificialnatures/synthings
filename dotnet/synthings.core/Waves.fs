@@ -1,10 +1,12 @@
 namespace synthings.core
-open System
 
 module Waves =
-    let DefaultPeriod = Math.PI * 2.0
-    
-    let sine period time =
-        let increment = time % period
-        let x = increment * DefaultPeriod
-        Math.Sin x
+    open System
+
+    let sine (period : float) (amplitude : float) (time : float) =
+        let increment = Numbers.normalizedPeriodicValue period time
+        let x = increment * Numbers.TwoPi
+        let y = Math.Sin x
+        y * (amplitude / 2.0)
+
+    let sineDefault = sine 1.0 1.0

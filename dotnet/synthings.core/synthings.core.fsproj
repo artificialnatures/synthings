@@ -5,8 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Waves.fs" />
     <Compile Include="Numbers.fs" />
+    <Compile Include="Vectors.fs" />
+    <Compile Include="Waves.fs" />
+    <Compile Include="Decay.fs" />
+    <Compile Include="Movements.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
 </Project>
