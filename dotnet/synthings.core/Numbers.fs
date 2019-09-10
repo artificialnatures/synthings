@@ -14,7 +14,15 @@ module Numbers =
         let difference = a - b
         let absoluteDifference = Math.Abs difference
         absoluteDifference < Epsilon
-
+    
+    let equalsZero (a : float) = equalWithinTolerance a 0.0
+    
+    let equalsAny (validNumbers : float list) (value : float) =
+        List.exists (fun validNumber -> equalWithinTolerance validNumber value) validNumbers
+    
+    let equalsNone (invalidNumbers : float list) (value : float) =
+        not(equalsAny invalidNumbers value)
+    
     let normalizedPeriodicValue (period : float) (accumulatedValue : float) =
         match period, accumulatedValue with
         | 0.0, _ -> 0.0

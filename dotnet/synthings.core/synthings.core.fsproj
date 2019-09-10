@@ -5,15 +5,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Time.fs" />
+    <Compile Include="Signals.fs" />
+    <Compile Include="Reactive.fs" />
+    <Compile Include="Workers.fs" />
+    <Compile Include="Machines.fs" />
+    <Compile Include="Graphs.fs" />
     <Compile Include="Numbers.fs" />
     <Compile Include="Vectors.fs" />
     <Compile Include="Waves.fs" />
-    <Compile Include="Decay.fs" />
+    <Compile Include="Envelopes.fs" />
     <Compile Include="Movements.fs" />
+    <Compile Include="Relay.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="System.Reactive" Version="4.1.6" />
   </ItemGroup>
 
 </Project>

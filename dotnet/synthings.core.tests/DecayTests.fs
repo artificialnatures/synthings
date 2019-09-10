@@ -13,6 +13,6 @@ open synthings.core
 [<InlineData(3.0, 5.0, 8.0, 0.0)>]
 [<InlineData(3.0, 5.0, 10.0, 0.0)>]
 let ``Linear decay`` startTime duration time expected =
-    let actual = Decay.linear startTime duration time
+    let actual = Envelopes.linear startTime duration time
     Assert.Equal(expected, actual, Numbers.DecimalPrecision)
 
