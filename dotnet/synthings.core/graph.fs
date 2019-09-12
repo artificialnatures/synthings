@@ -1,8 +1,8 @@
 namespace synthings.core
 
-module Graphs =
+module graph =
     open System
-    open Machines
+    open machine
         
     type Connection =
         {

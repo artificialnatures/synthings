@@ -1,6 +1,6 @@
 namespace synthings.core
 
-module Numbers =
+module number =
     open System
 
     let Epsilon = 0.000001;

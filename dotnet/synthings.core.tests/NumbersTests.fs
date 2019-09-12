@@ -13,5 +13,5 @@ open synthings.core
 [<InlineData(3.0, 1.5, 0.5)>]
 [<InlineData(3.0, 3.0, 1.0)>]
 let ``Determining the current time increment`` period time expected =
-    let actual = Numbers.normalizedPeriodicValue period time
-    Assert.Equal(expected, actual, Numbers.DecimalPrecision)
+    let actual = number.normalizedPeriodicValue period time
+    Assert.Equal(expected, actual, number.DecimalPrecision)

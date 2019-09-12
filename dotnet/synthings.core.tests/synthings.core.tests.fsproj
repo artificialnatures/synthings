@@ -12,9 +12,8 @@
     <Compile Include="NumbersTests.fs" />
     <Compile Include="DecayTests.fs" />
     <Compile Include="MovementsTests.fs" />
-    <Compile Include="CreatingMachines.fs" />
+    <Compile Include="FiguringOutHowToBuildGraphs.fs" />
     <Compile Include="CreatingSignals.fs" />
-    <Compile Include="ConnectingMachines.fs" />
   </ItemGroup>
 
   <ItemGroup>
