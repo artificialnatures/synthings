@@ -1,12 +1,5 @@
 namespace synthings.core
 
-type Connection =
-    {
-        Id : System.Guid;
-        Upstream : System.Guid;
-        Downstream : System.Guid
-    }
-
 type Graph =
     {
         Root : Machine

@@ -2,18 +2,17 @@ namespace synthings.scalar
 
 module envelope =
     open synthings.core
-    open synthings.core.signal
     
     let linearDecay (startTime : float) (duration : float) =
         let line = curve.linear -1.0 duration 1.0
-        let behavior (signal : Signal) =
+        let behavior (input : Signal) =
             let y =
-                signal
-                |> secondsSinceEpoch
+                input
+                |> signal.secondsSinceEpoch
                 |> time.since startTime
                 |> line
                 |> number.positiveOrZero
-                |> (*) signal.Value
-            {signal with Value = y}
+                |> (*) input.Value
+            {input with Value = y}
         behavior
     

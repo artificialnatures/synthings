@@ -2,18 +2,17 @@ namespace synthings.scalar
 
 module wave =
     open System
-    open synthings.core.number
-    open synthings.core.signal
+    open synthings.core
     
     let sineWave (period : float) (amplitude : float) =
-        let behavior (signal : Signal) =
+        let behavior (input : Signal) =
             let y =
-                signal
-                |> secondsSinceEpoch
-                |> normalizedPeriodicValue period
-                |> (*) TwoPi
+                input
+                |> signal.secondsSinceEpoch
+                |> number.normalizedPeriodicValue period
+                |> (*) number.TwoPi
                 |> Math.Sin
                 |> (*) (amplitude / 2.0)
-            {signal with Value = y}
+            {input with Value = y}
         behavior
     
