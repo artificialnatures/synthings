@@ -8,11 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="WavesTests.fs" />
     <Compile Include="NumbersTests.fs" />
-    <Compile Include="DecayTests.fs" />
-    <Compile Include="MovementsTests.fs" />
-    <Compile Include="FiguringOutHowToBuildGraphs.fs" />
     <Compile Include="CreatingSignals.fs" />
   </ItemGroup>
 

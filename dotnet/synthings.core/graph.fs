@@ -1,21 +1,24 @@
 namespace synthings.core
 
+type Connection =
+    {
+        Id : System.Guid;
+        Upstream : System.Guid;
+        Downstream : System.Guid
+    }
+
+type Graph =
+    {
+        Root : Machine
+        Machines : Map<System.Guid, Machine>;
+        Connections : Map<System.Guid, System.Guid>
+    }
+
 module graph =
-    open System
     open machine
-        
-    type Connection =
-        {
-            Id : Guid;
-            Upstream : Guid;
-            Downstream : Guid
-        }
     
-    type Graph =
-        {
-            Machines : Machine list;
-            Connections : Connection list
-        }
+    let empty = {Root = createRelay "Root"; Machines = Map.empty; Connections = Map.empty}
     
-    let emptyGraph = { Machines = List.empty; Connections = List.empty }
+    let addMachine (machine : Machine) (graph : Graph) =
+        {graph with Machines = Map.add machine.Id machine graph.Machines}
     

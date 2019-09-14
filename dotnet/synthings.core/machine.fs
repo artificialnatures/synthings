@@ -1,15 +1,17 @@
 namespace synthings.core
 
+type Machine =
+    {
+        Id : System.Guid;
+        Name : string;
+        Behavior : Behavior;
+    }
+
 module machine =
     open System
-    open signal
     open behavior
     
-    type Machine =
-        {
-            Id : Guid;
-            Name : string;
-            Behavior : Behavior;
-            Input : IObserver<Signal>;
-            Output : IObservable<Signal>;
-        }
+    let create name behavior = { Id = Guid.NewGuid(); Name = name; Behavior = behavior }
+    
+    let createRelay name = { Id = Guid.NewGuid(); Name = name; Behavior = relay }
+    

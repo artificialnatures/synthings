@@ -1,16 +1,16 @@
 namespace synthings.core
 
+type Signal =
+    {
+        Id : System.Guid;
+        Epoch : System.DateTime;
+        Time : System.DateTime;
+        Value : float
+    }
+
 module signal =
     open System
     open time
-    
-    type Signal =
-        {
-            Id : Guid;
-            Epoch : DateTime;
-            Time : DateTime;
-            Value : float
-        }
     
     let unpack (signal : Signal) = signal.Value
     

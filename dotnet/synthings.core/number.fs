@@ -2,7 +2,7 @@ namespace synthings.core
 
 module number =
     open System
-
+    
     let Epsilon = 0.000001;
     let DecimalPrecision = 5;
     let TwoPi = Math.PI * 2.0
@@ -15,7 +15,9 @@ module number =
         let absoluteDifference = Math.Abs difference
         absoluteDifference < Epsilon
     
-    let equalsZero (a : float) = equalWithinTolerance a 0.0
+    let equalsZero (n : float) = equalWithinTolerance n 0.0
+    
+    let positiveOrZero (n : float) = if n > 0.0 then n else 0.0
     
     let equalsAny (validNumbers : float list) (value : float) =
         List.exists (fun validNumber -> equalWithinTolerance validNumber value) validNumbers

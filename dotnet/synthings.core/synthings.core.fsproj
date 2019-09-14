@@ -11,9 +11,8 @@
     <Compile Include="machine.fs" />
     <Compile Include="graph.fs" />
     <Compile Include="number.fs" />
-    <Compile Include="wave.fs" />
-    <Compile Include="envelope.fs" />
-    <Compile Include="movement.fs" />
+    <Compile Include="persistence.fs" />
+    <Compile Include="library.fs" />
   </ItemGroup>
 
   <ItemGroup>
