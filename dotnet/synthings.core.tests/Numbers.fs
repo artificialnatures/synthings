@@ -1,4 +1,4 @@
-module synthings.core.tests.NumbersTests
+module synthings.core.tests.Numbers
 
 open Xunit
 open synthings.core

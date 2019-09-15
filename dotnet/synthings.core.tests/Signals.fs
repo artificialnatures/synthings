@@ -1,4 +1,4 @@
-module synthings.core.tests.CreatingSignals
+module synthings.core.tests.Signals
 
 open Xunit
 open synthings.core

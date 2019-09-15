@@ -8,9 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="NumbersTests.fs" />
-    <Compile Include="CreatingSignals.fs" />
-    <Compile Include="CreatingMachines.fs" />
+    <Compile Include="Numbers.fs" />
+    <Compile Include="Signals.fs" />
+    <Compile Include="Machines.fs" />
+    <Compile Include="Graphs.fs" />
   </ItemGroup>
 
   <ItemGroup>

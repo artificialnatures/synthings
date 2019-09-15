@@ -35,13 +35,17 @@ module machine =
     
     let createMachine name behavior =
         let input = forward behavior emptyOutput
-        { Id = Guid.NewGuid(); Name = name; Behavior = behavior; Input = input; Outputs =  emptyOutput}
+        {Id = Guid.NewGuid(); Name = name; Behavior = behavior; Input = input; Outputs =  emptyOutput}
     
     let createRelay name =
-        { Id = Guid.NewGuid(); Name = name; Behavior = relay; Input = forward relay emptyOutput; Outputs = emptyOutput }
+        let id = Guid.NewGuid()
+        let behavior = relay
+        let outputs = emptyOutput
+        let input = forward behavior outputs
+        {Id = id; Name = name; Behavior = behavior; Input = input; Outputs = outputs}
     
     let connect (upstream : Machine) (downstream : Machine) =
-        let upstreamOutputs = List.append [downstream.Input] upstream.Outputs
+        let upstreamOutputs = List.append upstream.Outputs [downstream.Input]
         let upstreamInput = forward upstream.Behavior upstreamOutputs
         let connectedUpstream = {upstream with Input = upstreamInput; Outputs = upstreamOutputs}
         {Id = Guid.NewGuid(); Upstream = connectedUpstream; Downstream = downstream}
