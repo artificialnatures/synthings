@@ -49,5 +49,5 @@ let ``Build a calculation graph`` () =
     let signal = signal.createSignal time.now 0.0 0.0
     graph1.Root.Input signal
     let expected = [1.0; 2.0; 3.0]
-    let result = List.forall (fun actualValue -> number.equalsAny expected actualValue) actual
+    let result = number.equalsAll expected actual
     Assert.True(result)

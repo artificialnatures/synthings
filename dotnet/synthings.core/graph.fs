@@ -34,17 +34,17 @@ module graph =
         {graph with Connections = List.append graph.Connections [connection]}
     
     let connect (upstreamId : Guid) (downstreamId : Guid) (graph : Graph) =
-        let connection = machine.connect (graph.Machines.Item upstreamId) (graph.Machines.Item downstreamId)
+        let changes = machine.connect (graph.Machines.Item upstreamId) (graph.Machines.Item downstreamId)
         graph
-        |> replaceMachine connection.Upstream
-        |> addConnection connection
+        |> replaceMachine changes.Upstream
+        |> addConnection changes.Connection
     
     let connectToRoot (downstreamId : Guid) (graph : Graph) =
-        let connection = machine.connect graph.Root (graph.Machines.Item downstreamId)
+        let changes = machine.connect graph.Root (graph.Machines.Item downstreamId)
         graph
-        |> replaceRoot connection.Upstream
-        |> replaceMachine connection.Upstream
-        |> addConnection connection
+        |> replaceRoot changes.Upstream
+        |> replaceMachine changes.Upstream
+        |> addConnection changes.Connection
     
     let input (graph : Graph) (machineId : Guid) (signal : Signal) =
         (graph.Machines.Item machineId).Input signal

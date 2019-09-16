@@ -12,9 +12,9 @@ let ``Connect two simple machines`` () =
         result <- signal.Value
         signal
     let receiver = machine.createMachine "Receiver" updateResult
-    let connection = machine.connect incrementer receiver
+    let changes = machine.connect incrementer receiver
     let testSignal = signal.createSignal time.now 0.0 0.0
-    connection.Upstream.Input testSignal
+    changes.Upstream.Input testSignal
     Assert.True(number.equalWithinTolerance result 1.0)
 
 [<Fact>]
@@ -28,10 +28,10 @@ let ``Connect two machines to one`` () =
          result <- result + signal.Value
          signal
     let receiver = machine.createMachine "Receiver" updateResult
-    let connection1 = machine.connect incrementer receiver
+    let changes1 = machine.connect incrementer receiver
     let signal1 = signal.createSignal time.now 0.0 0.0
-    connection1.Upstream.Input signal1
-    let connection2 = machine.connect adder receiver
+    changes1.Upstream.Input signal1
+    let changes2 = machine.connect adder receiver
     let signal2 = signal.createSignal time.now 0.0 0.0
-    connection2.Upstream.Input signal2
+    changes2.Upstream.Input signal2
     Assert.True(number.equalWithinTolerance result 3.0)

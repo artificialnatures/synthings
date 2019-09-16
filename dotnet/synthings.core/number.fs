@@ -22,6 +22,9 @@ module number =
     let equalsAny (validNumbers : float list) (value : float) =
         List.exists (fun validNumber -> equalWithinTolerance validNumber value) validNumbers
     
+    let equalsAll (validNumbers : float list) (values : float list) =
+        List.forall (fun value -> equalsAny validNumbers value) values
+    
     let equalsNone (invalidNumbers : float list) (value : float) =
         not(equalsAny invalidNumbers value)
     

@@ -14,8 +14,14 @@ type Machine =
 type Connection =
     {
         Id : System.Guid;
-        Upstream : Machine;
-        Downstream : Machine
+        UpstreamId : System.Guid;
+        DownstreamId : System.Guid
+    }
+
+type ConnectionChangeSet =
+    {
+        Connection : Connection;
+        Upstream : Machine
     }
 
 module machine =
@@ -48,5 +54,6 @@ module machine =
         let upstreamOutputs = List.append upstream.Outputs [downstream.Input]
         let upstreamInput = forward upstream.Behavior upstreamOutputs
         let connectedUpstream = {upstream with Input = upstreamInput; Outputs = upstreamOutputs}
-        {Id = Guid.NewGuid(); Upstream = connectedUpstream; Downstream = downstream}
+        let connection = {Id = Guid.NewGuid(); UpstreamId = connectedUpstream.Id; DownstreamId = downstream.Id}
+        {Connection = connection; Upstream = connectedUpstream}
     
