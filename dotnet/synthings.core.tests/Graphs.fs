@@ -17,10 +17,10 @@ let ``A graph with 2 connected machines`` () =
         graph.empty
         |> graph.addMachine machine1
         |> graph.addMachine receiver
-        |> graph.connect machine1.Id receiver.Id //Why is order important?
-        |> graph.connectToRoot machine1.Id       //Doesn't work if these lines are swapped...need to update upstream connections
+        |> graph.connectToRoot machine1.Id
+        |> graph.connect machine1.Id receiver.Id
     let signal = signal.createSignal time.now 0.0 0.0
-    graph1.Root.Input signal
+    graph.induce graph1 signal
     Assert.True(number.equalWithinTolerance 1.0 actual)
 
 [<Fact>]
@@ -47,7 +47,7 @@ let ``Build a calculation graph`` () =
         |> graph.connectToRoot machine2.Id
         |> graph.connectToRoot machine3.Id
     let signal = signal.createSignal time.now 0.0 0.0
-    graph1.Root.Input signal
+    graph.induce graph1 signal
     let expected = [1.0; 2.0; 3.0]
     let result = number.equalsAll expected actual
     Assert.True(result)

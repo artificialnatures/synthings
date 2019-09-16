@@ -1,10 +1,17 @@
 namespace synthings.core
 
+type Connection =
+    {
+        Id : System.Guid;
+        UpstreamId : System.Guid;
+        DownstreamId : System.Guid
+    }
+
 type Graph =
     {
         Root : Machine
         Machines : Map<System.Guid, Machine>;
-        Connections : Connection list
+        Connections : Map<System.Guid, System.Guid list>
     }
 
 module graph =
@@ -14,7 +21,7 @@ module graph =
     let empty =
         let root = createRelay "Root"
         let machines = Map.empty |> Map.add root.Id root
-        {Root = root; Machines = machines; Connections = List.empty}
+        {Root = root; Machines = machines; Connections = Map.empty}
     
     let addMachine (machine : Machine) (graph : Graph) =
         {graph with Machines = Map.add machine.Id machine graph.Machines}
@@ -30,22 +37,33 @@ module graph =
     let replaceRoot (machine : Machine) (graph : Graph) =
         {graph with Root = machine}
     
-    let addConnection (connection : Connection) (graph : Graph) =
-        {graph with Connections = List.append graph.Connections [connection]}
+    let addDownstreamConnection (upstreamId : Guid) (downstreamId : Guid) (connectionMap : Map<Guid, Guid list>) =
+        let connections = List.append (connectionMap.Item upstreamId) [downstreamId]
+        connectionMap
+        |> Map.remove upstreamId
+        |> Map.add upstreamId connections
     
     let connect (upstreamId : Guid) (downstreamId : Guid) (graph : Graph) =
-        let changes = machine.connect (graph.Machines.Item upstreamId) (graph.Machines.Item downstreamId)
-        graph
-        |> replaceMachine changes.Upstream
-        |> addConnection changes.Connection
+        let upstreamHasConnections = graph.Connections.ContainsKey upstreamId
+        let connectionMap =
+            match upstreamHasConnections with
+            | true -> addDownstreamConnection upstreamId downstreamId graph.Connections
+            | false -> Map.add upstreamId [downstreamId] graph.Connections
+        {graph with Connections = connectionMap}
     
     let connectToRoot (downstreamId : Guid) (graph : Graph) =
-        let changes = machine.connect graph.Root (graph.Machines.Item downstreamId)
-        graph
-        |> replaceRoot changes.Upstream
-        |> replaceMachine changes.Upstream
-        |> addConnection changes.Connection
+        connect graph.Root.Id downstreamId graph
     
-    let input (graph : Graph) (machineId : Guid) (signal : Signal) =
-        (graph.Machines.Item machineId).Input signal
+    let sendTo (graph : Graph) (machineId : Guid) (message : Message) =
+        let downstream = graph.Machines.Item machineId
+        downstream.Input message
+    
+    let sendFrom (graph : Graph) (upstreamId : Guid) (message : Message) =
+        let upstreamHasConnections = graph.Connections.ContainsKey upstreamId
+        if upstreamHasConnections then
+            let downstreamConnections = graph.Connections.Item upstreamId
+            List.iter (fun downstreamId -> sendTo graph downstreamId message) downstreamConnections
+    
+    let induce (graph : Graph) (signal : Signal) =
+        graph.Root.Input {Signal = signal; Forwarder = sendFrom graph}
     
