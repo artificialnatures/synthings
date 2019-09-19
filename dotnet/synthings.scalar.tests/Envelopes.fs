@@ -1,4 +1,4 @@
-module synthings.scalar.tests.EnvelopeTests
+module synthings.scalar.tests.Envelopes
 
 open Xunit
 open synthings.core

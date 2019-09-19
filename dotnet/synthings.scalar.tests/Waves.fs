@@ -1,4 +1,4 @@
-module synthings.scalar.tests.WavesTests
+module synthings.scalar.tests.Waves
 
 open Xunit
 open synthings.core

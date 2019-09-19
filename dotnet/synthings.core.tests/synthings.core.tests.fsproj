@@ -12,6 +12,7 @@
     <Compile Include="Signals.fs" />
     <Compile Include="Machines.fs" />
     <Compile Include="Graphs.fs" />
+    <Compile Include="Libraries.fs" />
   </ItemGroup>
 
   <ItemGroup>
