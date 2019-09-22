@@ -1,5 +1,4 @@
 namespace synthings.core
-open System
 
 type Machine =
     {
@@ -25,4 +24,13 @@ module machine =
         let id = Guid.NewGuid()
         let behavior = relay
         {Id = id; Name = name; Behavior = behavior; Input = input id behavior; DownstreamConnections = List.empty}
+    
+    let createMonitor (machine : Machine) =
+        let mutable state = List.empty
+        let recordState (signal : Signal) =
+            state <- List.append state [signal.Value]
+            signal
+        let compositeBehavior = machine.Behavior >> recordState
+        let compositeMachine = createMachine machine.Name compositeBehavior
+        compositeMachine, state
     

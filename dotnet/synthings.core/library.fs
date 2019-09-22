@@ -6,6 +6,9 @@ type Identifier =
         Id : System.Guid
     }
 
+type Identifier with
+    static member empty = {Id = System.Guid.Empty; Name = System.String.Empty}
+
 type MachineBuilder = System.Guid -> Machine
 
 type Topic =
@@ -17,14 +20,31 @@ type Topic =
 
 type Library =
     {
-        Topics : Topic list;
+        Identifier : Identifier;
+        Topics : Topic list
     }
 
 type Library with
-    static member empty = {Topics = List.empty}
+    static member empty = {Identifier = Identifier.empty; Topics = List.empty}
 
 type LibraryModule =
     abstract member Library : Library
+
+type LibraryCollection =
+    {
+        Libraries : Library list
+    }
+
+type LibraryCollection with
+    static member empty = {Libraries = List.empty}
+    static member add (library : Library) (collection : LibraryCollection) =
+        {collection with Libraries = List.append collection.Libraries [library]}
+    static member append (libraries : seq<Library>) (collection : LibraryCollection) =
+        let merged =
+            collection.Libraries
+            |> Seq.append libraries
+            |> Seq.toList
+        {collection with Libraries = merged}
 
 module library =
     open System.IO
@@ -76,13 +96,18 @@ module library =
     let internal loadLibraryField (libraryField : FieldInfo) =
         match libraryField.GetValue() with
         | :? Library as library -> library
-        | _ -> {Topics = List.empty}
+        | _ -> Library.empty
+    
+    let isLibraryModule (typeInfo : TypeInfo) =
+        typeInfo.ImplementedInterfaces
+        |> Seq.contains typeof<LibraryModule>
     
     let internal loadLibrary (assembly : Assembly) =
-        let libraryModule = findLibraryModule assembly
-        match libraryModule with
-        | Some m -> loadLibraryField (m.GetField "Library")
-        | None -> {Topics = List.empty}
+        let libraryType = Seq.tryFind isLibraryModule assembly.DefinedTypes
+        let instance = assembly.CreateInstance(libraryType.Value.FullName)
+        match instance with
+        | :? LibraryModule as libraryModule -> libraryModule.Library
+        | _ -> Library.empty
     
     let internal isSynthingsAssembly (assembly : Assembly) =
         let libraryModule = findLibraryModule assembly
@@ -112,7 +137,13 @@ module library =
     let internal mergeLibrary (first : Library) (second : Library) =
         {first with Topics = List.append first.Topics second.Topics}
     
+    let internal coreLibrary =
+        {
+            Identifier = {Id = System.Guid.Parse("CD2476A1-1A0C-461D-8A3D-5220F935CD96"); Name = "Core"};
+            Topics = [basicTopic]
+        }
+    
     let create () =
-        [{Topics = [basicTopic]}]
-        |> Seq.append (findLibraries ())
-        |> Seq.reduce mergeLibrary
+        LibraryCollection.empty
+        |> LibraryCollection.add coreLibrary
+        |> LibraryCollection.append (findLibraries ())

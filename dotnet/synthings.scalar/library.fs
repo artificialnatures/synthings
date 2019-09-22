@@ -31,25 +31,27 @@ module scalarLibrary =
         | LinearDecay -> envelope.linearDecay 0.0 10.0
         | _ -> behavior.error
     
-    let createMachine (topic : ScalarTopic) (behaviorId : System.Guid) =
+    let createMachine (behaviorId : System.Guid) =
         let behaviorType = reverseLookup.Item behaviorId
         let name = (identifiers.Item behaviorType).Name
         let behavior = createBehavior behaviorType
         machine.createMachine name behavior
     
-    let library =
-        {Topics = [
-            {
+    let internal library =
+        {
+            Identifier = {Id = System.Guid.Parse("BE583799-66EB-4A14-A016-2CCAA90C1ABD"); Name = "Scalar"};
+            Topics =
+            [{
                 Identifier = identifiers.Item Wave;
-                BuildMachine = createMachine Wave;
+                BuildMachine = createMachine;
                 Behaviors = [identifiers.Item SineWave]
             };
             {
                 Identifier = identifiers.Item Envelope;
-                BuildMachine = createMachine Envelope;
+                BuildMachine = createMachine;
                 Behaviors = [identifiers.Item LinearDecay]
-            }
-        ]}
+            }]
+         }
 
 type ScalarLibrary() =
     interface LibraryModule with
