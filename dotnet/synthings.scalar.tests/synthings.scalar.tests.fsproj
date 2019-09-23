@@ -18,4 +18,8 @@
       <ProjectReference Include="..\synthings.scalar\synthings.scalar.fsproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Include="Waves.fs" />
+    </ItemGroup>
+
 </Project>
