@@ -34,7 +34,7 @@ let ``Build a calculation graph`` () =
     let machine2 = machine.createMachine "Machine 2" (add 1.0)
     let machine3 = machine.createMachine "Machine 3" (add 1.0)
     let receiver = machine.createMachine "Receiver" updateResult
-    let graph1 =
+    let calculationGraph =
         graph.empty
         |> graph.addMachine machine1
         |> graph.addMachine machine2
@@ -47,7 +47,7 @@ let ``Build a calculation graph`` () =
         |> graph.connectToRoot machine2.Id
         |> graph.connectToRoot machine3.Id
     let signal = signal.createSignal time.now 0.0 0.0
-    graph.induce graph1 signal
+    graph.induce calculationGraph signal
     let expected = [1.0; 2.0; 3.0]
-    let result = number.equalsAll expected actual
+    let result = number.actualEqualsAnyInExpected expected actual
     Assert.True(result)

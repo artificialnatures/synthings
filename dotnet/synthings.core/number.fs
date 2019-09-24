@@ -22,11 +22,25 @@ module number =
     let equalsAny (validNumbers : float list) (value : float) =
         List.exists (fun validNumber -> equalWithinTolerance validNumber value) validNumbers
     
-    let equalsAll (validNumbers : float list) (values : float list) =
-        List.forall (fun value -> equalsAny validNumbers value) values
-    
     let equalsNone (invalidNumbers : float list) (value : float) =
         not(equalsAny invalidNumbers value)
+    
+    let actualEqualsAnyInExpected (expected : float list) (actual : float list) =
+        List.forall (fun a -> equalsAny expected a) actual
+    
+    let listsAreIdentical (expected : float list) (actual : float list) =
+        if expected.Length <> actual.Length then false
+        else
+            List.zip expected actual
+            |> List.forall (fun pair -> equalWithinTolerance (fst pair) (snd pair))
+    
+    let isDescending (values : float list) =
+        List.pairwise values
+        |> List.forall (fun pair -> fst pair > snd pair)
+    
+    let isAscending (values : float list) =
+        List.pairwise values
+        |> List.forall (fun pair -> fst pair < snd pair)
     
     let normalizedPeriodicValue (period : float) (accumulatedValue : float) =
         match period, accumulatedValue with

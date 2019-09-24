@@ -16,10 +16,8 @@ type Graph =
 
 module graph =
     open System
-    open machine
-    
     let empty =
-        let root = createRelay "Root"
+        let root = machine.createRelay()
         let machines = Map.empty |> Map.add root.Id root
         {Root = root; Machines = machines; Connections = Map.empty}
     

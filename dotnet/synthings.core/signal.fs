@@ -8,6 +8,8 @@ type Signal =
         Value : float
     }
 
+type Behavior = Signal -> Signal
+
 module signal =
     open System
     open time

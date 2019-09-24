@@ -14,13 +14,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\synthings.core\synthings.core.fsproj" />
-      <ProjectReference Include="..\synthings.scalar\synthings.scalar.fsproj" />
+      <Compile Include="Libraries.fs" />
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Include="Waves.fs" />
-      <Compile Include="Envelopes.fs" />
+      <ProjectReference Include="..\synthings.core\synthings.core.fsproj" />
+      <ProjectReference Include="..\synthings.scalar\synthings.scalar.fsproj" />
     </ItemGroup>
 
 </Project>

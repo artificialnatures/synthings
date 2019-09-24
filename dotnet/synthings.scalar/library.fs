@@ -1,58 +1,38 @@
 ﻿namespace synthings.scalar
-
 open synthings.core
 
-module scalarLibrary =
-    type ScalarTopic =
-        | Wave
-            | SineWave
-        | Envelope
-            |LinearDecay
+type ScalarTopic =
+    | Wave
+    | Envelope
+    interface TopicIdentifier
+
+module library =
+    open System
+    let topics () =
+        [
+            {Topic = Wave; DisplayName = "Wave"; Id = Guid.Parse("68C8D99F-1452-408E-9D2C-EC7F07DB7F93")};
+            {Topic = Envelope; DisplayName = "Envelope"; Id = Guid.Parse("09D5E3CF-03EC-4E19-8EC0-62B75A408C0D")}
+        ]
     
-    type Parameters =
-        | WaveParameters of period : float * amplitude : float
-        | EnvelopeParameters of startTime : float * duration : float
+    let listBehaviors (topicIdentifier : TopicIdentifier) =
+        match topicIdentifier with
+        | :? ScalarTopic as scalarTopic ->
+            match scalarTopic with
+            | Wave -> wave.listBehaviors ()
+            | Envelope -> envelope.listBehaviors ()
+        | _ -> List.empty
     
-    let internal identifiers =
-        Map.empty
-        |> Map.add Wave {Name = "Waves"; Id = System.Guid.Parse("2D70E7E1-677D-4474-9AF5-C416A4BAC3A9")}
-        |> Map.add Envelope {Name = "Envelopes"; Id = System.Guid.Parse("9A5F0EB0-D0B7-41FC-AE53-FC21C752C1E3")}
-        |> Map.add SineWave {Name = "Sine Wave"; Id = System.Guid.Parse("9463604B-74BF-47B8-860E-73048D6967F7")}
-        |> Map.add LinearDecay {Name = "Linear Decay"; Id = System.Guid.Parse("80D4DCF5-9D82-4962-BBD9-F9B4FE7B23EC")}
-    
-    let internal reverseLookup =
-        Map.toSeq identifiers
-        |> Seq.map (fun pair -> (snd pair).Id, fst pair)
-        |> Map.ofSeq
-    
-    let createBehavior behaviorType =
-        match behaviorType with
-        | SineWave -> wave.sineWave 1.0 2.0
-        | LinearDecay -> envelope.linearDecay 0.0 10.0
-        | _ -> behavior.error
-    
-    let createMachine (behaviorId : System.Guid) =
-        let behaviorType = reverseLookup.Item behaviorId
-        let name = (identifiers.Item behaviorType).Name
-        let behavior = createBehavior behaviorType
-        machine.createMachine name behavior
-    
-    let internal library =
-        {
-            Identifier = {Id = System.Guid.Parse("BE583799-66EB-4A14-A016-2CCAA90C1ABD"); Name = "Scalar"};
-            Topics =
-            [{
-                Identifier = identifiers.Item Wave;
-                BuildMachine = createMachine;
-                Behaviors = [identifiers.Item SineWave]
-            };
-            {
-                Identifier = identifiers.Item Envelope;
-                BuildMachine = createMachine;
-                Behaviors = [identifiers.Item LinearDecay]
-            }]
-         }
+    let createMachine (behaviorIdentifier : BehaviorIdentifier) =
+        match behaviorIdentifier with
+        | :? WaveBehavior as waveBehavior -> wave.createMachine waveBehavior WaveParameters.Default
+        | :? EnvelopeBehavior as envelopeBehavior -> envelope.createMachine envelopeBehavior EnvelopeParameters.Default
+        | _ -> machine.createError()
 
 type ScalarLibrary() =
-    interface LibraryModule with
-        member this.Library = scalarLibrary.library
+    member this.listTopics () = (this :> LibraryResolver).listTopics ()
+    member this.listBehaviors topicIdentifier = (this :> LibraryResolver).listBehaviors topicIdentifier
+    member this.createMachine behaviorIdentifier = (this :> LibraryResolver).createMachine behaviorIdentifier
+    interface LibraryResolver with
+        member this.listTopics () = library.topics ()
+        member this.listBehaviors topicDescriptor = library.listBehaviors topicDescriptor.Topic
+        member this.createMachine behaviorDescriptor = library.createMachine behaviorDescriptor.Behavior

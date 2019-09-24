@@ -6,14 +6,15 @@
 
   <ItemGroup>
     <Compile Include="time.fs" />
+    <Compile Include="number.fs" />
     <Compile Include="signal.fs" />
     <Compile Include="message.fs" />
-    <Compile Include="behavior.fs" />
     <Compile Include="machine.fs" />
     <Compile Include="graph.fs" />
-    <Compile Include="number.fs" />
+    <Compile Include="taxonomy.fs" />
     <Compile Include="persistence.fs" />
     <Compile Include="library.fs" />
+    <Compile Include="aggregateLibrary.fs" />
   </ItemGroup>
 
   <ItemGroup>

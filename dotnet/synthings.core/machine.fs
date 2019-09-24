@@ -11,7 +11,6 @@ type Machine =
 
 module machine =
     open System
-    open behavior
     
     let input (id : Guid) (behavior : Behavior) (message : Message) =
         message.Forwarder id {message with Signal = behavior message.Signal}
@@ -20,17 +19,10 @@ module machine =
         let id = Guid.NewGuid()
         {Id = id; Name = name; Behavior = behavior; Input = input id behavior; DownstreamConnections = List.empty}
     
-    let createRelay name =
-        let id = Guid.NewGuid()
-        let behavior = relay
-        {Id = id; Name = name; Behavior = behavior; Input = input id behavior; DownstreamConnections = List.empty}
+    let createRelay () =
+        let relay (signal : Signal) = signal
+        createMachine "Relay" relay
     
-    let createMonitor (machine : Machine) =
-        let mutable state = List.empty
-        let recordState (signal : Signal) =
-            state <- List.append state [signal.Value]
-            signal
-        let compositeBehavior = machine.Behavior >> recordState
-        let compositeMachine = createMachine machine.Name compositeBehavior
-        compositeMachine, state
-    
+    let createError () =
+        let error (signal : Signal) = {signal with Value = 0.0}
+        createMachine "Error" error
