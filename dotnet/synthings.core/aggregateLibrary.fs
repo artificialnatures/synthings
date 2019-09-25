@@ -1,26 +1,23 @@
 namespace synthings.core
+open System
 
 module aggregateLibrary =
     open System.IO
     open System.Reflection
     
     let internal isLibraryResolver (typeInfo : TypeInfo) =
-        typeInfo.IsAssignableFrom(typeof<LibraryResolver>)
+        Seq.exists (fun interfaceType -> interfaceType = typeof<LibraryResolver>) typeInfo.ImplementedInterfaces
     
-    let internal typeName (typeInfo : TypeInfo) =
-        typeInfo.GetType().FullName
-    
-    let findLibraryResolvers (assembly : Assembly) =
+    let internal findLibraryResolvers (assembly : Assembly) =
         Seq.filter isLibraryResolver assembly.DefinedTypes
     
     let internal instantiateLibraries (assembly : Assembly) =
         findLibraryResolvers assembly
-        |> Seq.map typeName
-        |> Seq.map assembly.CreateInstance
+        |> Seq.map Activator.CreateInstance
         |> Seq.map (fun obj -> obj :?> LibraryResolver)
         |> Seq.toList
     
-    let isSynthingsAssembly (assembly : Assembly) =
+    let internal isSynthingsAssembly (assembly : Assembly) =
         Seq.isEmpty (findLibraryResolvers assembly)
     
     let internal hasSynthingsAssemblyName (filePath : string) =
@@ -30,7 +27,7 @@ module aggregateLibrary =
         filename <> "synthings.core.dll" &&
         not (filename.Contains "test")
     
-    let findAssemblies () =
+    let internal findAssemblies () =
         Assembly.GetAssembly(typeof<Signal>).Location
         |> (fun path -> (Directory.GetParent path).FullName)
         |> Directory.EnumerateFiles
@@ -38,7 +35,7 @@ module aggregateLibrary =
         |> Seq.map (fun path -> Assembly.LoadFile path)
         |> Seq.toList
     
-    let loadLibraries () =
+    let internal loadLibraries () =
         findAssemblies()
         |> List.map instantiateLibraries
         |> List.concat
@@ -81,6 +78,8 @@ module aggregateLibrary =
         member internal this.Topics = listTopics this.Libraries
         member internal this.TopicMap = buildAggregateTopicMap this.Libraries
         interface LibraryResolver with
+            member this.Origin = "Aggregate"
+            member this.Name = "Aggregate"
             member this.listTopics () = this.Topics
             member this.listBehaviors topicDescriptor = this.TopicMap.Item(topicDescriptor.Id).Behaviors
             member this.createMachine behaviorDescriptor = 

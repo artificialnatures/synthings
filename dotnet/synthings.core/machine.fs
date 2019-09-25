@@ -26,3 +26,7 @@ module machine =
     let createError () =
         let error (signal : Signal) = {signal with Value = 0.0}
         createMachine "Error" error
+    
+    let createMonitor (originalMachine : Machine) (record : Behavior) =
+        let behavior = originalMachine.Behavior >> record
+        {originalMachine with Behavior = behavior; Input = input originalMachine.Id behavior}

@@ -29,10 +29,10 @@ module library =
         | _ -> machine.createError()
 
 type ScalarLibrary() =
-    member this.listTopics () = (this :> LibraryResolver).listTopics ()
-    member this.listBehaviors topicIdentifier = (this :> LibraryResolver).listBehaviors topicIdentifier
-    member this.createMachine behaviorIdentifier = (this :> LibraryResolver).createMachine behaviorIdentifier
+    member this.createMachine (behaviorIdentifier : BehaviorIdentifier) = library.createMachine behaviorIdentifier
     interface LibraryResolver with
+        member this.Origin = typeof<ScalarTopic>.Namespace
+        member this.Name = "Scalar"
         member this.listTopics () = library.topics ()
         member this.listBehaviors topicDescriptor = library.listBehaviors topicDescriptor.Topic
         member this.createMachine behaviorDescriptor = library.createMachine behaviorDescriptor.Behavior

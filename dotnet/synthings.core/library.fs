@@ -49,6 +49,8 @@ module library =
         member this.listBehaviors topicIdentifier = (this :> LibraryResolver).listBehaviors topicIdentifier
         member this.createMachine behaviorIdentifier = (this :> LibraryResolver).createMachine behaviorIdentifier
         interface LibraryResolver with
+            member this.Origin = typeof<CoreTopic>.Namespace
+            member this.Name = "Core"
             member this.listTopics () = topics()
             member this.listBehaviors topicDescriptor = listBehaviors topicDescriptor.Topic
             member this.createMachine behaviorDescriptor = createMachine behaviorDescriptor.Behavior
