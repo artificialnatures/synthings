@@ -12,4 +12,9 @@
     <OutputPath>..\bin\Release\</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\synthings.core\synthings.core.fsproj" />
+    <ProjectReference Include="..\synthings.scalar\synthings.scalar.fsproj" />
+  </ItemGroup>
+
 </Project>
