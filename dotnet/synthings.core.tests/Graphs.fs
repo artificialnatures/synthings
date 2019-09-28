@@ -19,7 +19,8 @@ let ``A graph with 2 connected machines`` () =
         |> graph.addMachine receiver
         |> graph.connectToRoot machine1.Id
         |> graph.connect machine1.Id receiver.Id
-    let signal = signal.createSignal time.now 0.0 0.0
+    let epoch = time.now ()
+    let signal = Signal.createSample epoch 0.0 0.0
     graph.induce graph1 signal
     Assert.True(number.equalWithinTolerance 1.0 actual)
 
@@ -46,7 +47,8 @@ let ``Build a calculation graph`` () =
         |> graph.connectToRoot machine1.Id
         |> graph.connectToRoot machine2.Id
         |> graph.connectToRoot machine3.Id
-    let signal = signal.createSignal time.now 0.0 0.0
+    let epoch = time.now ()
+    let signal = Signal.createSample epoch 0.0 0.0
     graph.induce calculationGraph signal
     let expected = [1.0; 2.0; 3.0]
     let result = number.actualEqualsAnyInExpected expected actual

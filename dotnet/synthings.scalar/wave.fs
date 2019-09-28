@@ -21,7 +21,7 @@ module wave =
         let behavior (input : Signal) =
             let y =
                 input
-                |> signal.secondsSinceEpoch
+                |> Signal.secondsSinceEpoch
                 |> number.normalizedPeriodicValue period
                 |> (*) number.TwoPi
                 |> Math.Sin

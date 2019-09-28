@@ -1,4 +1,5 @@
 namespace synthings.core
+open System.Threading
 
 type Connection =
     {
@@ -52,8 +53,8 @@ module graph =
     let connectToRoot (downstreamId : Guid) (graph : Graph) =
         connect graph.Root.Id downstreamId graph
     
-    let connectMonitor (machineId : Guid) (graph : Graph) =
-        let monitor = monitor.create()
+    let connectMonitor (machineId : Guid) (window : Window) (graph : Graph) =
+        let monitor = Monitor(window)
         let revisedGraph = connect machineId monitor.Machine.Id graph
         (revisedGraph, monitor)
     

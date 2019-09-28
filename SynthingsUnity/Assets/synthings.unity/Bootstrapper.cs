@@ -2,7 +2,6 @@
 {
     using System;
     using System.Linq;
-    using Microsoft.FSharp.Core;
     using UnityEngine;
 
     public class Bootstrapper : MonoBehaviour
@@ -18,7 +17,7 @@
             var waveBehaviors = library.listBehaviors(waveTopic);
             var sineWaveBehavior = waveBehaviors.First(behavior => behavior.DisplayName.Contains("Sine"));
             var sineWaveMachine = library.createMachine(sineWaveBehavior);
-            _monitor = synthings.core.monitor.create();
+            _monitor = synthings.core.monitor.createTimeWindowed(10.0);
             _graph = synthings.core.graph.empty; //create linq-esque methods for chaining?
             _graph = synthings.core.graph.addMachine(sineWaveMachine, _graph);
             _graph = synthings.core.graph.addMachine(_monitor.Machine, _graph);
@@ -28,8 +27,9 @@
 
         void Update()
         {
-            var signal = synthings.core.signal.createRealtimeSignal(_epoch, synthings.core.time.now(), 0.0f);
+            var signal = synthings.core.Signal.createNow(_epoch, 0.0f);
             synthings.core.graph.induce(_graph, signal);
+            Debug.Log($"Recorded {_monitor.Recording.Signals.Length} signals, latest = {_monitor.LatestValue}");
             cube.transform.position = cube.transform.right * (float)_monitor.LatestValue;
         }
 

@@ -10,7 +10,7 @@ let main argv =
     let waveBehaviors = library.listBehaviors waveTopic
     let sineBehavior = List.find (fun (behaviorDescriptor : BehaviorDescriptor) -> behaviorDescriptor.DisplayName.Contains "Sine") waveBehaviors
     let sineMachine = library.createMachine sineBehavior
-    let monitor = monitor.create()
+    let monitor = Monitor(FrameLimit(10))
     let testGraph =
         graph.empty
         |> graph.addMachine sineMachine
@@ -21,7 +21,7 @@ let main argv =
     let epoch = time.now()
     let mutable frameCount = 0
     while frameCount < 100000 do
-        inducer (signal.createRealtimeSignal epoch (time.now()) 0.0)
+        inducer (Signal.createNow epoch 0.0)
         let totalTime = (monitor.LatestSignal.Time - epoch).TotalSeconds
         printfn "%i value = %f at %f" frameCount monitor.LatestValue totalTime
         Thread.Sleep 20

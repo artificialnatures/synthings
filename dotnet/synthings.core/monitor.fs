@@ -1,17 +1,16 @@
 namespace synthings.core
 
-type Monitor() =
-    let mutable recording = signal.empty
-    //TODO: truncate based on time window, e.g. past 10 seconds
+type Monitor(window : Window) =
+    let recording = {Signals = List.empty; Window = window}
     let recorder (signal : Signal) =
-        recording <- signal
+        Recording.append signal recording
         signal
     let machine = machine.createMachine "Monitor" recorder
     member this.Recording = recording
-    member this.Length = 1
-    member this.LatestSignal = recording
-    member this.LatestValue = this.LatestSignal.Value
+    member this.LatestSignal = Recording.latestSignal recording
+    member this.LatestValue = Recording.latestValue recording
     member this.Machine = machine
 
 module monitor =
-    let create () = Monitor()
+    let createFrameWindowed (frames : int) = Monitor(FrameLimit(frames))
+    let createTimeWindowed (seconds : float) = Monitor(TimeLimit(seconds))

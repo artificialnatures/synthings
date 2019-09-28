@@ -17,7 +17,7 @@ let ``Assess performance of simple graph`` () =
         graph.empty
         |> graph.addMachine sineMachine
         |> graph.connectToRoot sineMachine.Id
-    let signals = signal.createUniformSignalSequence 0.0 10000.0 1.0 0.0
+    let signals = Signal.createUniformSeries (time.now ()) 0.0 10000.0 1.0 0.0
     let inducer = graph.induce testGraph
     Seq.iter inducer signals
     stopwatch.Stop()
@@ -34,14 +34,14 @@ let ``Assess performance of simple graph with a monitor`` () =
     let waveBehaviors = library.listBehaviors waveTopic
     let sineBehavior = List.find (fun (behaviorDescriptor : BehaviorDescriptor) -> behaviorDescriptor.DisplayName.Contains "Sine") waveBehaviors
     let sineMachine = library.createMachine sineBehavior
-    let monitor = monitor.create()
+    let monitor = Monitor(FrameLimit(10))
     let testGraph =
         graph.empty
         |> graph.addMachine sineMachine
         |> graph.addMachine monitor.Machine
         |> graph.connectToRoot sineMachine.Id
         |> graph.connect sineMachine.Id monitor.Machine.Id
-    let signals = signal.createUniformSignalSequence 0.0 10000.0 1.0 0.0
+    let signals = Signal.createUniformSeries (time.now ()) 0.0 10000.0 1.0 0.0
     let inducer = graph.induce testGraph
     Seq.iter inducer signals
     stopwatch.Stop()

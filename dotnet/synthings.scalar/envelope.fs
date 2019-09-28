@@ -20,7 +20,7 @@ module envelope =
         let behavior (input : Signal) =
             let y =
                 input
-                |> signal.secondsSinceEpoch
+                |> Signal.secondsSinceEpoch
                 |> time.since startTime
                 |> line
                 |> number.positiveOrZero
