@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <Compile Include="Libraries.fs" />
+      <Compile Include="Performance.fs" />
     </ItemGroup>
 
     <ItemGroup>

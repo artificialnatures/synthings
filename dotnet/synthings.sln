@@ -17,6 +17,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.scalar.tests", "s
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.library.tests", "synthings.library.tests\synthings.library.tests.fsproj", "{879DA6EF-B46A-4FC5-B92C-7A262164241D}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.console", "synthings.console\synthings.console.fsproj", "{94991209-CEE6-4373-B65C-7D41027E34E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,5 +116,17 @@ Global
 		{879DA6EF-B46A-4FC5-B92C-7A262164241D}.Release|x64.Build.0 = Release|Any CPU
 		{879DA6EF-B46A-4FC5-B92C-7A262164241D}.Release|x86.ActiveCfg = Release|Any CPU
 		{879DA6EF-B46A-4FC5-B92C-7A262164241D}.Release|x86.Build.0 = Release|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Debug|x64.Build.0 = Debug|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Debug|x86.Build.0 = Debug|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Release|x64.ActiveCfg = Release|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Release|x64.Build.0 = Release|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Release|x86.ActiveCfg = Release|Any CPU
+		{94991209-CEE6-4373-B65C-7D41027E34E7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

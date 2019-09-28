@@ -52,6 +52,11 @@ module graph =
     let connectToRoot (downstreamId : Guid) (graph : Graph) =
         connect graph.Root.Id downstreamId graph
     
+    let connectMonitor (machineId : Guid) (graph : Graph) =
+        let monitor = monitor.create()
+        let revisedGraph = connect machineId monitor.Machine.Id graph
+        (revisedGraph, monitor)
+    
     let sendTo (graph : Graph) (machineId : Guid) (message : Message) =
         let downstream = graph.Machines.Item machineId
         downstream.Input message

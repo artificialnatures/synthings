@@ -15,7 +15,7 @@ let ``Sine wave produces oscillating values`` () =
         signal
     let monitoredMachine = machine.createMonitor sineWaveMachine record
     let messages =
-        signal.createSignalSequence 0.0 2.0 0.25 0.0
+        signal.createUniformSignalSequence 0.0 2.0 0.25 0.0
         |> Seq.map message.packWithoutForwarding
     Seq.iter monitoredMachine.Input messages
     Assert.True(number.listsAreIdentical expected actual)

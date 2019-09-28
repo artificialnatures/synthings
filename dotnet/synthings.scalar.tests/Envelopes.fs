@@ -14,7 +14,7 @@ let ``Linear decay produces descending values`` () =
         signal
     let monitoredMachine = machine.createMonitor linearDecayMachine record
     let messages =
-        signal.createSignalSequence 0.0 10.0 1.0 1.0
+        signal.createUniformSignalSequence 0.0 10.0 1.0 1.0
         |> Seq.map message.packWithoutForwarding
     Seq.iter monitoredMachine.Input messages
     Assert.True(number.isDescending actual)

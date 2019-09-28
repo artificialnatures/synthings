@@ -15,4 +15,6 @@
       <ProjectReference Include="..\synthings.core\synthings.core.fsproj" />
     </ItemGroup>
 
+    <Import Project="../CopyOutputToUnityProject.targets" />
+
 </Project>
