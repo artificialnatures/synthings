@@ -1,5 +1,4 @@
 namespace synthings.core
-open System.Threading
 
 type Connection =
     {
