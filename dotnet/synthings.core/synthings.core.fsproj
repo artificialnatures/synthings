@@ -8,6 +8,7 @@
     <Compile Include="time.fs" />
     <Compile Include="number.fs" />
     <Compile Include="signal.fs" />
+    <Compile Include="behavior.fs" />
     <Compile Include="recording.fs" />
     <Compile Include="message.fs" />
     <Compile Include="machine.fs" />

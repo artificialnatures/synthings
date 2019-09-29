@@ -26,5 +26,3 @@ type Signal with
     static member createSeries (epoch : System.DateTime) (startTime : float) (interval : float) (values : float list) =
         List.mapi (fun index value -> Signal.createSample epoch (startTime + ((float)index * interval)) value) values
     static member empty = Signal.createNow (time.now ()) 0.0
-
-type Behavior = Signal -> Signal
