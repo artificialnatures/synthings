@@ -4,7 +4,7 @@ type Machine =
     {
         Id : System.Guid;
         Name : string;
-        Input : Port;
+        Input : Message -> unit;
         Behavior : Behavior;
         DownstreamConnections : System.Guid list
     }
