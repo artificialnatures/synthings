@@ -55,16 +55,3 @@ let ``Limiting the recording capacity of a monitor with TimeLimit`` () =
             List.zip expected monitor.Recording.Signals
             |> List.forall (fun (expected, actual) -> expected.Value = actual.Value)
     Assert.True(result)
-
-[<Fact>]
-let ``Truncate by time`` () =
-    let epoch = time.now ()
-    let values = [0.0; 1.0; 2.0; 3.0; 4.0; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0]
-    let inputs = Signal.createSeries epoch 0.0 1.0 values
-    let actualSignals = window.truncateByTime 5.0 inputs
-    let expectedSignals = window.truncateByCount 6 inputs
-    let result =
-        List.zip expectedSignals actualSignals
-        |> List.forall (fun (expected, actual) -> expected.Value = actual.Value)
-    Assert.True(result)
-    
