@@ -14,14 +14,14 @@ let ``A graph with 2 connected machines`` () =
     let machine1 = machine.createMachine "Machine 1" (add 1.0)
     let receiver = machine.createMachine "Receiver" updateResult
     let graph1 =
-        graph.empty
-        |> graph.addMachine machine1
-        |> graph.addMachine receiver
-        |> graph.connectToRoot machine1.Id
-        |> graph.connect machine1.Id receiver.Id
+        Graph.empty
+        |> Graph.addMachine machine1
+        |> Graph.addMachine receiver
+        |> Graph.connectToRoot machine1.Id
+        |> Graph.connect machine1.Id receiver.Id
     let epoch = time.now ()
     let signal = Signal.createSample epoch 0.0 0.0
-    graph.induce graph1 signal
+    Graph.induce graph1 signal
     Assert.True(number.equalWithinTolerance 1.0 actual)
 
 [<Fact>]
@@ -36,20 +36,20 @@ let ``Build a calculation graph`` () =
     let machine3 = machine.createMachine "Machine 3" (add 1.0)
     let receiver = machine.createMachine "Receiver" updateResult
     let calculationGraph =
-        graph.empty
-        |> graph.addMachine machine1
-        |> graph.addMachine machine2
-        |> graph.addMachine machine3
-        |> graph.addMachine receiver
-        |> graph.connect machine1.Id receiver.Id
-        |> graph.connect machine2.Id receiver.Id
-        |> graph.connect machine3.Id receiver.Id
-        |> graph.connectToRoot machine1.Id
-        |> graph.connectToRoot machine2.Id
-        |> graph.connectToRoot machine3.Id
+        Graph.empty
+        |> Graph.addMachine machine1
+        |> Graph.addMachine machine2
+        |> Graph.addMachine machine3
+        |> Graph.addMachine receiver
+        |> Graph.connect machine1.Id receiver.Id
+        |> Graph.connect machine2.Id receiver.Id
+        |> Graph.connect machine3.Id receiver.Id
+        |> Graph.connectToRoot machine1.Id
+        |> Graph.connectToRoot machine2.Id
+        |> Graph.connectToRoot machine3.Id
     let epoch = time.now ()
     let signal = Signal.createSample epoch 0.0 0.0
-    graph.induce calculationGraph signal
+    Graph.induce calculationGraph signal
     let expected = [1.0; 2.0; 3.0]
     let result = number.actualEqualsAnyInExpected expected actual
     Assert.True(result)

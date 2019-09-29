@@ -14,11 +14,11 @@ let ``Assess performance of simple graph`` () =
     let sineBehavior = List.find (fun (behaviorDescriptor : BehaviorDescriptor) -> behaviorDescriptor.DisplayName.Contains "Sine") waveBehaviors
     let sineMachine = library.createMachine sineBehavior
     let testGraph =
-        graph.empty
-        |> graph.addMachine sineMachine
-        |> graph.connectToRoot sineMachine.Id
+        Graph.empty
+        |> Graph.addMachine sineMachine
+        |> Graph.connectToRoot sineMachine.Id
     let signals = Signal.createUniformSeries (time.now ()) 0.0 10000.0 1.0 0.0
-    let inducer = graph.induce testGraph
+    let inducer = Graph.induce testGraph
     Seq.iter inducer signals
     stopwatch.Stop()
     let elapsedTime = stopwatch.Elapsed.TotalSeconds
@@ -36,13 +36,13 @@ let ``Assess performance of simple graph with a monitor`` () =
     let sineMachine = library.createMachine sineBehavior
     let monitor = Monitor(FrameLimit(10))
     let testGraph =
-        graph.empty
-        |> graph.addMachine sineMachine
-        |> graph.addMachine monitor.Machine
-        |> graph.connectToRoot sineMachine.Id
-        |> graph.connect sineMachine.Id monitor.Machine.Id
+        Graph.empty
+        |> Graph.addMachine sineMachine
+        |> Graph.addMachine monitor.Machine
+        |> Graph.connectToRoot sineMachine.Id
+        |> Graph.connect sineMachine.Id monitor.Machine.Id
     let signals = Signal.createUniformSeries (time.now ()) 0.0 10000.0 1.0 0.0
-    let inducer = graph.induce testGraph
+    let inducer = Graph.induce testGraph
     Seq.iter inducer signals
     stopwatch.Stop()
     let elapsedTime = stopwatch.Elapsed.TotalSeconds

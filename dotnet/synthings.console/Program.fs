@@ -12,12 +12,12 @@ let main argv =
     let sineMachine = library.createMachine sineBehavior
     let monitor = Monitor(FrameLimit(10))
     let testGraph =
-        graph.empty
-        |> graph.addMachine sineMachine
-        |> graph.addMachine monitor.Machine
-        |> graph.connectToRoot sineMachine.Id
-        |> graph.connect sineMachine.Id monitor.Machine.Id
-    let inducer = graph.induce testGraph
+        Graph.empty
+        |> Graph.addMachine sineMachine
+        |> Graph.addMachine monitor.Machine
+        |> Graph.connectToRoot sineMachine.Id
+        |> Graph.connect sineMachine.Id monitor.Machine.Id
+    let inducer = Graph.induce testGraph
     let epoch = time.now()
     let mutable frameCount = 0
     while frameCount < 100000 do

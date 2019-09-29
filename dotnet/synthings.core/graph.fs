@@ -14,59 +14,58 @@ type Graph =
         Connections : Map<System.Guid, System.Guid list>
     }
 
-module graph =
-    open System
-    let empty =
+type Graph with
+    static member empty =
         let root = machine.createRelay()
         let machines = Map.empty |> Map.add root.Id root
         {Root = root; Machines = machines; Connections = Map.empty}
     
-    let addMachine (machine : Machine) (graph : Graph) =
+    static member addMachine (machine : Machine) (graph : Graph) =
         {graph with Machines = Map.add machine.Id machine graph.Machines}
     
-    let removeMachine (machine : Machine) (graph : Graph) =
+    static member removeMachine (machine : Machine) (graph : Graph) =
         {graph with Machines = Map.remove machine.Id graph.Machines}
     
-    let replaceMachine (machine : Machine) (graph : Graph) =
+    static member replaceMachine (machine : Machine) (graph : Graph) =
         graph
-        |> removeMachine machine
-        |> addMachine machine
+        |> Graph.removeMachine machine
+        |> Graph.addMachine machine
     
-    let replaceRoot (machine : Machine) (graph : Graph) =
+    static member replaceRoot (machine : Machine) (graph : Graph) =
         {graph with Root = machine}
     
-    let addDownstreamConnection (upstreamId : Guid) (downstreamId : Guid) (connectionMap : Map<Guid, Guid list>) =
+    static member addDownstreamConnection (upstreamId : System.Guid) (downstreamId : System.Guid) (connectionMap : Map<System.Guid, System.Guid list>) =
         let connections = List.append (connectionMap.Item upstreamId) [downstreamId]
         connectionMap
         |> Map.remove upstreamId
         |> Map.add upstreamId connections
     
-    let connect (upstreamId : Guid) (downstreamId : Guid) (graph : Graph) =
+    static member connect (upstreamId : System.Guid) (downstreamId : System.Guid) (graph : Graph) =
         let upstreamHasConnections = graph.Connections.ContainsKey upstreamId
         let connectionMap =
             match upstreamHasConnections with
-            | true -> addDownstreamConnection upstreamId downstreamId graph.Connections
+            | true -> Graph.addDownstreamConnection upstreamId downstreamId graph.Connections
             | false -> Map.add upstreamId [downstreamId] graph.Connections
         {graph with Connections = connectionMap}
     
-    let connectToRoot (downstreamId : Guid) (graph : Graph) =
-        connect graph.Root.Id downstreamId graph
+    static member connectToRoot (downstreamId : System.Guid) (graph : Graph) =
+        Graph.connect graph.Root.Id downstreamId graph
     
-    let connectMonitor (machineId : Guid) (window : Window) (graph : Graph) =
+    static member connectMonitor (machineId : System.Guid) (window : Window) (graph : Graph) =
         let monitor = Monitor(window)
-        let revisedGraph = connect machineId monitor.Machine.Id graph
+        let revisedGraph = Graph.connect machineId monitor.Machine.Id graph
         (revisedGraph, monitor)
     
-    let sendTo (graph : Graph) (machineId : Guid) (message : Message) =
+    static member sendTo (graph : Graph) (machineId : System.Guid) (message : Message) =
         let downstream = graph.Machines.Item machineId
         downstream.Input message
     
-    let sendFrom (graph : Graph) (upstreamId : Guid) (message : Message) =
+    static member sendFrom (graph : Graph) (upstreamId : System.Guid) (message : Message) =
         let upstreamHasConnections = graph.Connections.ContainsKey upstreamId
         if upstreamHasConnections then
             let downstreamConnections = graph.Connections.Item upstreamId
-            List.iter (fun downstreamId -> sendTo graph downstreamId message) downstreamConnections
+            List.iter (fun downstreamId -> Graph.sendTo graph downstreamId message) downstreamConnections
     
-    let induce (graph : Graph) (signal : Signal) =
-        graph.Root.Input {Signal = signal; Forwarder = sendFrom graph}
+    static member induce (graph : Graph) (signal : Signal) =
+        graph.Root.Input {Signal = signal; Forwarder = Graph.sendFrom graph}
     
