@@ -40,9 +40,9 @@ module library =
         match behaviorIdentifier with
         | :? CoreBehavior as coreBehavior ->
             match coreBehavior with
-            | Relay -> machine.createMachine "Relay" relay
-            | Error -> machine.createMachine "Error" error
-        | _ -> machine.createMachine "Error" error
+            | Relay -> Machine.createMachine "Relay" relay
+            | Error -> Machine.createMachine "Error" error
+        | _ -> Machine.createMachine "Error" error
     
     type internal CoreLibrary() =
         member this.listTopics () = (this :> LibraryResolver).listTopics ()

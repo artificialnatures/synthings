@@ -13,7 +13,7 @@ let ``Sine wave produces oscillating values`` () =
     let record (signal : Signal) =
         actual <- List.append actual [signal.Value]
         signal
-    let monitoredMachine = machine.createMonitor sineWaveMachine record
+    let monitoredMachine = Machine.createMonitor sineWaveMachine record
     let messages =
         Signal.createUniformSeries (time.now ()) 0.0 2.0 0.25 0.0
         |> Seq.map message.packWithoutForwarding

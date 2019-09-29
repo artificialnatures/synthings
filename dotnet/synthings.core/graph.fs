@@ -16,7 +16,7 @@ type Graph =
 
 type Graph with
     static member empty =
-        let root = machine.createRelay()
+        let root = Machine.createRelay()
         let machines = Map.empty |> Map.add root.Id root
         {Root = root; Machines = machines; Connections = Map.empty}
     

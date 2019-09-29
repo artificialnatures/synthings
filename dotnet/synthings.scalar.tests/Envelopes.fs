@@ -12,7 +12,7 @@ let ``Linear decay produces descending values`` () =
     let record (signal : Signal) =
         actual <- List.append actual [signal.Value]
         signal
-    let monitoredMachine = machine.createMonitor linearDecayMachine record
+    let monitoredMachine = Machine.createMonitor linearDecayMachine record
     let messages =
         Signal.createUniformSeries (time.now ()) 0.0 10.0 1.0 1.0
         |> Seq.map message.packWithoutForwarding

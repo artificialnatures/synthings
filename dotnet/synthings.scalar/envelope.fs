@@ -46,4 +46,4 @@ module envelope =
         let behavior =
             match behaviorIdentifier with
             | LinearDecay -> linearDecay startTime duration
-        machine.createMachine name behavior
+        Machine.createMachine name behavior

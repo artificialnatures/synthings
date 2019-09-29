@@ -89,7 +89,7 @@ module aggregateLibrary =
                     |> List.tryFind (fun topicMap -> topicMap.containsBehavior behaviorDescriptor)
                 match topicMap with
                 | Some topicMap -> topicMap.Library.createMachine behaviorDescriptor
-                | None -> machine.createError()
+                | None -> Machine.createError()
     
     let build () =
         let libraries = loadLibraries()

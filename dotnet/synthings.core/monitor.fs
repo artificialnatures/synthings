@@ -5,7 +5,7 @@ type Monitor(window : Window) =
     let recorder (signal : Signal) =
         Recording.append signal recording
         signal
-    let machine = machine.createMachine "Monitor" recorder
+    let machine = Machine.createMachine "Monitor" recorder
     member this.Recording = recording
     member this.LatestSignal = Recording.latestSignal recording
     member this.LatestValue = Recording.latestValue recording

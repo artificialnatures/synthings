@@ -26,7 +26,7 @@ module library =
         match behaviorIdentifier with
         | :? WaveBehavior as waveBehavior -> wave.createMachine waveBehavior WaveParameters.Default
         | :? EnvelopeBehavior as envelopeBehavior -> envelope.createMachine envelopeBehavior EnvelopeParameters.Default
-        | _ -> machine.createError()
+        | _ -> Machine.createError()
 
 type ScalarLibrary() =
     member this.createMachine (behaviorIdentifier : BehaviorIdentifier) = library.createMachine behaviorIdentifier

@@ -11,8 +11,8 @@ let ``A graph with 2 connected machines`` () =
     let updateResult signal =
         actual <- signal.Value
         signal
-    let machine1 = machine.createMachine "Machine 1" (add 1.0)
-    let receiver = machine.createMachine "Receiver" updateResult
+    let machine1 = Machine.createMachine "Machine 1" (add 1.0)
+    let receiver = Machine.createMachine "Receiver" updateResult
     let graph1 =
         Graph.empty
         |> Graph.addMachine machine1
@@ -31,10 +31,10 @@ let ``Build a calculation graph`` () =
     let updateResult signal =
         actual <- List.append [signal.Value] actual
         signal
-    let machine1 = machine.createMachine "Machine 1" (add 1.0)
-    let machine2 = machine.createMachine "Machine 2" (add 1.0)
-    let machine3 = machine.createMachine "Machine 3" (add 1.0)
-    let receiver = machine.createMachine "Receiver" updateResult
+    let machine1 = Machine.createMachine "Machine 1" (add 1.0)
+    let machine2 = Machine.createMachine "Machine 2" (add 1.0)
+    let machine3 = Machine.createMachine "Machine 3" (add 1.0)
+    let receiver = Machine.createMachine "Receiver" updateResult
     let calculationGraph =
         Graph.empty
         |> Graph.addMachine machine1

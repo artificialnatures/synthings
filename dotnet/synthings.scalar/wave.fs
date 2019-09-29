@@ -47,4 +47,4 @@ module wave =
             match behaviorIdentifier with
             | SineWave -> sineWave period amplitude
         let name = displayName behaviorIdentifier
-        machine.createMachine name behavior
+        Machine.createMachine name behavior

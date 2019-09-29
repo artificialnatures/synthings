@@ -9,24 +9,22 @@ type Machine =
         DownstreamConnections : System.Guid list
     }
 
-module machine =
-    open System
-    
-    let input (id : Guid) (behavior : Behavior) (message : Message) =
+type Machine with
+    static member input (id : System.Guid) (behavior : Behavior) (message : Message) =
         message.Forwarder id {message with Signal = behavior message.Signal}
     
-    let createMachine name behavior =
-        let id = Guid.NewGuid()
-        {Id = id; Name = name; Behavior = behavior; Input = input id behavior; DownstreamConnections = List.empty}
+    static member createMachine name behavior =
+        let id = System.Guid.NewGuid()
+        {Id = id; Name = name; Behavior = behavior; Input = Machine.input id behavior; DownstreamConnections = List.empty}
     
-    let createRelay () =
+    static member createRelay () =
         let relay (signal : Signal) = signal
-        createMachine "Relay" relay
+        Machine.createMachine "Relay" relay
     
-    let createError () =
+    static member createError () =
         let error (signal : Signal) = {signal with Value = 0.0}
-        createMachine "Error" error
+        Machine.createMachine "Error" error
     
-    let createMonitor (originalMachine : Machine) (record : Behavior) =
+    static member createMonitor (originalMachine : Machine) (record : Behavior) =
         let behavior = originalMachine.Behavior >> record
-        {originalMachine with Behavior = behavior; Input = input originalMachine.Id behavior}
+        {originalMachine with Behavior = behavior; Input = Machine.input originalMachine.Id behavior}
