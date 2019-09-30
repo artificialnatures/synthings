@@ -4,7 +4,7 @@ open Xunit
 open synthings.core
 
 [<Fact>]
-let ``A graph with 2 connected machines`` () =
+let ``A standalone graph with 2 connected machines`` () =
     let add amount signal =
         {signal with Value = signal.Value + amount}
     let mutable actual = 0.0
@@ -25,7 +25,7 @@ let ``A graph with 2 connected machines`` () =
     Assert.True(number.equalWithinTolerance 1.0 actual)
 
 [<Fact>]
-let ``Build a calculation graph`` () =
+let ``Build a standalone calculation graph`` () =
     let add amount signal = {signal with Value = signal.Value + amount}
     let mutable actual : float list = List.empty
     let updateResult signal =

@@ -8,13 +8,13 @@ type ScalarTopic =
 
 module library =
     open System
-    let topics () =
+    let internal topics () =
         [
             {Topic = Wave; DisplayName = "Wave"; Id = Guid.Parse("68C8D99F-1452-408E-9D2C-EC7F07DB7F93")};
             {Topic = Envelope; DisplayName = "Envelope"; Id = Guid.Parse("09D5E3CF-03EC-4E19-8EC0-62B75A408C0D")}
         ]
     
-    let listBehaviors (topicIdentifier : TopicIdentifier) =
+    let internal listBehaviors (topicIdentifier : TopicIdentifier) =
         match topicIdentifier with
         | :? ScalarTopic as scalarTopic ->
             match scalarTopic with
@@ -22,14 +22,14 @@ module library =
             | Envelope -> envelope.listBehaviors ()
         | _ -> List.empty
     
-    let createMachine (behaviorIdentifier : BehaviorIdentifier) =
+    let internal createMachine (behaviorIdentifier : BehaviorIdentifier) =
         match behaviorIdentifier with
         | :? WaveBehavior as waveBehavior -> wave.createMachine waveBehavior WaveParameters.Default
         | :? EnvelopeBehavior as envelopeBehavior -> envelope.createMachine envelopeBehavior EnvelopeParameters.Default
         | _ -> Machine.createError()
 
 type ScalarLibrary() =
-    member this.createMachine (behaviorIdentifier : BehaviorIdentifier) = library.createMachine behaviorIdentifier
+    static member build () = ScalarLibrary() :> LibraryResolver
     interface LibraryResolver with
         member this.Origin = typeof<ScalarTopic>.Namespace
         member this.Name = "Scalar"

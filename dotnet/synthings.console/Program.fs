@@ -4,6 +4,8 @@ open synthings.core
 
 [<EntryPoint>]
 let main argv =
+    //TODO: refactor using Application
+    (*
     let library = aggregateLibrary.build()
     let topics = library.listTopics()
     let waveTopic = List.find (fun (topic : TopicDescriptor) -> topic.DisplayName.Contains "Wave") topics
@@ -26,5 +28,6 @@ let main argv =
         printfn "%i value = %f at %f" frameCount monitor.LatestValue totalTime
         Thread.Sleep 20
         frameCount <- frameCount + 1
+    *)
     printf "Done."
     0

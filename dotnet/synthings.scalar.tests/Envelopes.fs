@@ -6,7 +6,9 @@ open synthings.scalar
 
 [<Fact>]
 let ``Linear decay produces descending values`` () =
-    let scalarLibrary = ScalarLibrary()
+    //TODO: refactor using Application
+    (*
+    let scalarLibrary = ScalarLibrary.build ()
     let linearDecayMachine = scalarLibrary.createMachine EnvelopeBehavior.LinearDecay
     let mutable actual = List.empty
     let record (signal : Signal) =
@@ -18,3 +20,5 @@ let ``Linear decay produces descending values`` () =
         |> Seq.map Message.packWithoutForwarding
     Seq.iter monitoredMachine.Input messages
     Assert.True(number.isDescending actual)
+    *)
+    Assert.True(false)

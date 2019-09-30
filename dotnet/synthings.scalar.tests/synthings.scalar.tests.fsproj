@@ -2,7 +2,6 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-
         <IsPackable>false</IsPackable>
         <GenerateProgramFile>false</GenerateProgramFile>
     </PropertyGroup>
@@ -21,6 +20,8 @@
     <ItemGroup>
       <Compile Include="Waves.fs" />
       <Compile Include="Envelopes.fs" />
+      <Compile Include="Wiggle.fs" />
+      <Compile Include="Program.fs" />
     </ItemGroup>
 
 </Project>

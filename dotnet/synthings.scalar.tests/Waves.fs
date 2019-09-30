@@ -6,6 +6,8 @@ open synthings.scalar
 
 [<Fact>]
 let ``Sine wave produces oscillating values`` () =
+    //TODO: refactor using Application
+    (*
     let scalarLibrary = ScalarLibrary()
     let sineWaveMachine = scalarLibrary.createMachine WaveBehavior.SineWave
     let expected = [0.0; 1.0; 0.0; -1.0; 0.0; 1.0; 0.0; -1.0; 0.0]
@@ -19,3 +21,5 @@ let ``Sine wave produces oscillating values`` () =
         |> Seq.map Message.packWithoutForwarding
     Seq.iter monitoredMachine.Input messages
     Assert.True(number.listsAreIdentical expected actual)
+    *)
+    Assert.True(false)

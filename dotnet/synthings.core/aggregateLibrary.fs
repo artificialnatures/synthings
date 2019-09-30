@@ -28,18 +28,18 @@ module aggregateLibrary =
         not (filename.Contains "test")
     
     let internal findAssemblies () =
-        Assembly.GetAssembly(typeof<Signal>).Location
-        |> (fun path -> (Directory.GetParent path).FullName)
-        |> Directory.EnumerateFiles
-        |> Seq.filter hasSynthingsAssemblyName
-        |> Seq.map (fun path -> Assembly.LoadFile path)
-        |> Seq.toList
+        let p = Assembly.GetAssembly(typeof<Signal>).Location
+        let fp = (fun path -> (Directory.GetParent path).FullName) p
+        let aps = Directory.EnumerateFiles fp
+        let sap = Seq.filter hasSynthingsAssemblyName aps
+        let assemblies = Seq.map (fun path -> Assembly.LoadFile path) sap
+        Seq.toList assemblies
     
     let internal loadLibraries () =
-        findAssemblies()
-        |> List.map instantiateLibraries
-        |> List.concat
-        |> List.append [library.build()]
+        let assemblies = findAssemblies()
+        let libs = List.map instantiateLibraries assemblies
+        let ll = List.concat libs
+        List.append [CoreLibrary.build()] ll
     
     let internal listTopics (libraries : seq<LibraryResolver>) =
         libraries
@@ -73,24 +73,26 @@ module aggregateLibrary =
         |> List.map (fun topicMap -> (topicMap.Topic.Id, topicMap))
         |> Map.ofList
     
-    type internal AggregateLibrary(libraries : LibraryResolver list) =
-        member internal this.Libraries = libraries
-        member internal this.Topics = listTopics this.Libraries
-        member internal this.TopicMap = buildAggregateTopicMap this.Libraries
+    type internal AggregateLibrary() =
+        let _libraries = loadLibraries()
+        let _topics = listTopics _libraries
+        let _topicMap = buildAggregateTopicMap _libraries
+        let _listBehaviors (topicDescriptor : TopicDescriptor) = _topicMap.Item(topicDescriptor.Id).Behaviors
+        let _createMachine behaviorDescriptor =
+            let topicMap =
+                List.map (fun (topic : TopicDescriptor) -> topic.Id) _topics
+                |> List.map (fun id -> _topicMap.Item id)
+                |> List.tryFind (fun topicMap -> topicMap.containsBehavior behaviorDescriptor)
+            match topicMap with
+            | Some topicMap -> topicMap.Library.createMachine behaviorDescriptor
+            | None -> Machine.createError()
+        member this.Libraries = _libraries
+        member this.Topics = _topics
+        member this.listBehaviors topicDescriptor = _listBehaviors topicDescriptor
+        member this.createMachine behaviorDescriptor = _createMachine behaviorDescriptor
         interface LibraryResolver with
             member this.Origin = "Aggregate"
             member this.Name = "Aggregate"
-            member this.listTopics () = this.Topics
-            member this.listBehaviors topicDescriptor = this.TopicMap.Item(topicDescriptor.Id).Behaviors
-            member this.createMachine behaviorDescriptor = 
-                let topicMap =
-                    List.map (fun (topic : TopicDescriptor) -> topic.Id) this.Topics
-                    |> List.map (fun id -> this.TopicMap.Item id)
-                    |> List.tryFind (fun topicMap -> topicMap.containsBehavior behaviorDescriptor)
-                match topicMap with
-                | Some topicMap -> topicMap.Library.createMachine behaviorDescriptor
-                | None -> Machine.createError()
-    
-    let build () =
-        let libraries = loadLibraries()
-        AggregateLibrary(libraries) :> LibraryResolver
+            member this.listTopics () = _topics
+            member this.listBehaviors topicDescriptor = _listBehaviors topicDescriptor
+            member this.createMachine behaviorDescriptor = library.createMachine behaviorDescriptor.Behavior

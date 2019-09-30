@@ -10,7 +10,5 @@ type Monitor(window : Window) =
     member this.LatestSignal = Recording.latestSignal recording
     member this.LatestValue = Recording.latestValue recording
     member this.Machine = machine
-
-module monitor =
-    let createFrameWindowed (frames : int) = Monitor(FrameLimit(frames))
-    let createTimeWindowed (seconds : float) = Monitor(TimeLimit(seconds))
+    static member createFrameWindowed (frames : int) = Monitor(FrameLimit(frames))
+    static member createTimeWindowed (seconds : float) = Monitor(TimeLimit(seconds))
