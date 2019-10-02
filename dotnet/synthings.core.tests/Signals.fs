@@ -6,7 +6,7 @@ open synthings.core
 [<Fact>]
 let ``A signal sequence has equally distributed sample times`` () =
     let interval = 1.0
-    let epoch = time.now ()
+    let epoch = Instant.now ()
     let result =
         Signal.createUniformSeries epoch 0.0 10.0 interval 0.0
         |> List.pairwise
@@ -16,7 +16,7 @@ let ``A signal sequence has equally distributed sample times`` () =
 
 [<Fact>]
 let ``A signal sequence has ascending sample times`` () =
-    let epoch = time.now ()
+    let epoch = Instant.now ()
     let result =
         Signal.createUniformSeries epoch 0.0 10.0 1.0 0.0
         |> List.map Signal.secondsSinceEpoch
@@ -26,7 +26,7 @@ let ``A signal sequence has ascending sample times`` () =
 
 [<Fact>]
 let ``Values can be specified in a signal sequence`` () =
-    let epoch = time.now ()
+    let epoch = Instant.now ()
     let values = [0.0; 1.0; 2.0; 3.0; 4.0; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0]
     let signals = Signal.createSeries epoch 0.0 1.0 values
     let result =

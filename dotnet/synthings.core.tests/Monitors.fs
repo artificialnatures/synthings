@@ -10,7 +10,7 @@ let ``Monitor the output of a machine`` () =
         Graph.empty
         |> Graph.addMachine monitor.Machine
         |> Graph.connectToRoot monitor.Machine.Id
-    let epoch = time.now ()
+    let epoch = Instant.now ()
     let values = [0.0; 1.0; 2.0; 3.0; 4.0; 5.0]
     let expected = Signal.createSeries epoch 0.0 1.0 values
     Seq.iter (fun signal -> Graph.induce relayGraph signal) expected
@@ -27,7 +27,7 @@ let ``Limiting the recording capacity of a monitor with FrameLimit`` () =
         Graph.empty
         |> Graph.addMachine monitor.Machine
         |> Graph.connectToRoot monitor.Machine.Id
-    let epoch = time.now ()
+    let epoch = Instant.now ()
     let values = [0.0; 1.0; 2.0; 3.0; 4.0; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0]
     let inputs = Signal.createSeries epoch 0.0 1.0 values
     List.iter (fun signal -> Graph.induce relayGraph signal) inputs
@@ -45,7 +45,7 @@ let ``Limiting the recording capacity of a monitor with TimeLimit`` () =
         Graph.empty
         |> Graph.addMachine monitor.Machine
         |> Graph.connectToRoot monitor.Machine.Id
-    let epoch = time.now ()
+    let epoch = Instant.now ()
     let values = [0.0; 1.0; 2.0; 3.0; 4.0; 5.0; 6.0; 7.0; 8.0; 9.0; 10.0]
     let inputs = Signal.createSeries epoch 0.0 1.0 values
     let expected = Signal.createSeries epoch 5.0 1.0 values.[5..]

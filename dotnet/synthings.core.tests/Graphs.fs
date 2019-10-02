@@ -19,7 +19,7 @@ let ``A standalone graph with 2 connected machines`` () =
         |> Graph.addMachine receiver
         |> Graph.connectToRoot machine1.Id
         |> Graph.connect machine1.Id receiver.Id
-    let epoch = time.now ()
+    let epoch = Instant.now ()
     let signal = Signal.createSample epoch 0.0 0.0
     Graph.induce graph1 signal
     Assert.True(number.equalWithinTolerance 1.0 actual)
@@ -47,7 +47,7 @@ let ``Build a standalone calculation graph`` () =
         |> Graph.connectToRoot machine1.Id
         |> Graph.connectToRoot machine2.Id
         |> Graph.connectToRoot machine3.Id
-    let epoch = time.now ()
+    let epoch = Instant.now ()
     let signal = Signal.createSample epoch 0.0 0.0
     Graph.induce calculationGraph signal
     let expected = [1.0; 2.0; 3.0]

@@ -1,10 +1,14 @@
 namespace synthings.core
 
-type Instant = System.DateTime
+type Instant =
+    {
+        Time : System.DateTime
+    }
 
-module time =
-    let now () = System.DateTime.Now
-    let since (referenceTime : float) (sampleTime : float) = sampleTime - referenceTime
-    let until (referenceTime : float) (sampleTime : float) = sampleTime - referenceTime
-    let toDateTime (epoch : Instant) (time : float) = epoch + System.TimeSpan.FromSeconds time
-    let secondsSinceEpoch (epoch : Instant) (time : Instant) = (time - epoch).TotalSeconds
+type Instant with
+    static member fromDateTime (dateTime : System.DateTime) = {Time = dateTime}
+    static member now () = {Time = System.DateTime.Now}
+    static member secondsBetween (earlier : Instant) (later : Instant) =
+        (later.Time - earlier.Time).TotalSeconds
+    static member future (reference : Instant) (duration : float) =
+        Instant.fromDateTime (reference.Time + System.TimeSpan.FromSeconds(duration))
