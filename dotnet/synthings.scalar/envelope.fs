@@ -11,17 +11,15 @@ type EnvelopeBehavior =
     interface BehaviorIdentifier
 
 module envelope =
-    open System
     let defaultStartTime = 0.0
     let defaultDuration = 10.0
     
-    let linearDecay (startTime : float) (duration : float) =
+    let linearDecay (startTime : Instant) (duration : float) =
         let line = curve.linear -1.0 duration 1.0
         let behavior (input : Signal) =
             let y =
-                input
-                |> Signal.secondsSinceEpoch
-                //|> time.since startTime
+                input.Time
+                |> Instant.secondsBetween startTime
                 |> line
                 |> number.positiveOrZero
                 |> (*) input.Value
@@ -45,5 +43,5 @@ module envelope =
         let name = displayName behaviorIdentifier
         let behavior =
             match behaviorIdentifier with
-            | LinearDecay -> linearDecay startTime duration
+            | LinearDecay -> linearDecay (Instant.now()) duration
         Machine.createMachine name behavior
