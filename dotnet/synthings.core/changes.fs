@@ -22,7 +22,7 @@ type Change<'subjectType> with
 type ChangeSet =
     {
         Id : System.Guid;
-        TimeOfCreation : System.DateTime;
+        TimeOfCreation : Instant;
         MachineChanges : Change<Machine> list;
         ViewChanges : Change<View> list
     }
