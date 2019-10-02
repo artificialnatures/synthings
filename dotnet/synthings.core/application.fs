@@ -3,9 +3,9 @@ open aggregateLibrary
 
 module application =
     let internal buildBehaviorMenuView (library : AggregateLibrary) =
-        {Id = identifier.create(); DisplayName = "Behavior Menu"}
+        {Id = Identifier.create(); DisplayName = "Behavior Menu"}
     let internal buildGraphView (graph : Graph) =
-        {Id = identifier.create(); DisplayName = "Graph"}
+        {Id = Identifier.create(); DisplayName = "Graph"}
     
     let internal buildViews (library : AggregateLibrary) (graph : Graph) =
         let behaviorMenuView = buildBehaviorMenuView library

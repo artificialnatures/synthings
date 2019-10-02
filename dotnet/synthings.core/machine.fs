@@ -14,7 +14,7 @@ type Machine with
         message.Forwarder id {message with Signal = behavior message.Signal}
     
     static member createMachine name behavior =
-        let id = identifier.create ()
+        let id = Identifier.create ()
         {Id = id; Name = name; Behavior = behavior; Input = Machine.input id behavior; DownstreamConnections = List.empty}
     
     static member createRelay () =

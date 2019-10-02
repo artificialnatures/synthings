@@ -1,7 +1,10 @@
 namespace synthings.core
 
-type Identifier = System.Guid
+type Identifier =
+    {
+        Guid : System.Guid
+    }
 
-module identifier =
-    let create () = System.Guid.NewGuid()
-    let fromString (id : string) = System.Guid.Parse(id)
+type Identifier with
+    static member create () = {Guid = System.Guid.NewGuid()}
+    static member fromString (id : string) = {Guid = System.Guid.Parse(id)}

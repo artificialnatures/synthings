@@ -13,7 +13,7 @@ type Signal with
     static member timeSpan (earlier : Signal) (later : Signal) = Instant.secondsBetween earlier.Time later.Time
     static member secondsSinceEpoch (signal : Signal) = Instant.secondsBetween signal.Epoch signal.Time
     static member create (epoch : Instant) (sampleTime : Instant) (value : float) =
-        {Id = identifier.create(); Epoch = epoch; Time = sampleTime; Value = value}
+        {Id = Identifier.create(); Epoch = epoch; Time = sampleTime; Value = value}
     static member createNow (epoch : Instant) (value : float) =
         let timeNow = Instant.now ()
         Signal.create epoch timeNow value

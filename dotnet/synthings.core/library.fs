@@ -26,15 +26,15 @@ module library =
     
     let internal topics () =
         [
-            {Topic = Core; DisplayName = "Core"; Id = identifier.fromString("56DBAC92-F1A6-400C-8640-3C48CD10A2CC")}
+            {Topic = Core; DisplayName = "Core"; Id = Identifier.fromString("56DBAC92-F1A6-400C-8640-3C48CD10A2CC")}
         ]
     
     let internal behaviors =
         [
-            {Behavior = Relay; DisplayName = "Relay"; Id = identifier.fromString("F6D899DB-FF57-475D-94A1-2A1E0FB64DB4")};
-            {Behavior = UniformInteger; DisplayName = "Uniform Integer"; Id = identifier.fromString("E310E62F-251E-419B-B550-97EADBBF3066")};
-            {Behavior = UniformFloat; DisplayName = "Uniform Float"; Id = identifier.fromString("EFD34144-FCA8-4BCB-B877-8499FE07AD86")};
-            {Behavior = Error; DisplayName = "Error"; Id = identifier.fromString("2ACDA383-51D6-4946-8554-635ED1749C84")}
+            {Behavior = Relay; DisplayName = "Relay"; Id = Identifier.fromString("F6D899DB-FF57-475D-94A1-2A1E0FB64DB4")};
+            {Behavior = UniformInteger; DisplayName = "Uniform Integer"; Id = Identifier.fromString("E310E62F-251E-419B-B550-97EADBBF3066")};
+            {Behavior = UniformFloat; DisplayName = "Uniform Float"; Id = Identifier.fromString("EFD34144-FCA8-4BCB-B877-8499FE07AD86")};
+            {Behavior = Error; DisplayName = "Error"; Id = Identifier.fromString("2ACDA383-51D6-4946-8554-635ED1749C84")}
         ]
     
     let internal listBehaviors (topicIdentifier : TopicIdentifier) =

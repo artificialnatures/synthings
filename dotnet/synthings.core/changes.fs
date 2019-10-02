@@ -29,6 +29,6 @@ type ChangeSet =
 
 type ChangeSet with
     static member withChangeLists (machineChanges : Change<Machine> list) (viewChanges : Change<View> list) =
-        {Id = identifier.create(); TimeOfCreation = Instant.now(); MachineChanges = machineChanges; ViewChanges = viewChanges}
+        {Id = Identifier.create(); TimeOfCreation = Instant.now(); MachineChanges = machineChanges; ViewChanges = viewChanges}
     static member machineCreated (machine : Machine) (view : View) =
         ChangeSet.withChangeLists [Change.create machine] [Change.create view]

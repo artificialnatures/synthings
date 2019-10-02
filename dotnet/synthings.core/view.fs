@@ -8,4 +8,4 @@ type View =
 
 type View with
     static member forMachine (machine : Machine) =
-        {Id = identifier.create(); DisplayName = machine.Name}
+        {Id = Identifier.create(); DisplayName = machine.Name}

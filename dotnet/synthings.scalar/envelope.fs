@@ -21,7 +21,7 @@ module envelope =
             let y =
                 input
                 |> Signal.secondsSinceEpoch
-                |> time.since startTime
+                //|> time.since startTime
                 |> line
                 |> number.positiveOrZero
                 |> (*) input.Value
@@ -34,7 +34,7 @@ module envelope =
     
     let listBehaviors () =
         [
-            {Behavior = LinearDecay; DisplayName = displayName LinearDecay; Id = identifier.fromString("696AC296-A54D-4E1A-9942-F58C64FD14D1")}
+            {Behavior = LinearDecay; DisplayName = displayName LinearDecay; Id = Identifier.fromString("696AC296-A54D-4E1A-9942-F58C64FD14D1")}
         ]
     
     let createMachine (behaviorIdentifier : EnvelopeBehavior) (parameters : EnvelopeParameters) =
