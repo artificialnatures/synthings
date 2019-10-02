@@ -10,14 +10,14 @@ type TopicDescriptor =
     {
         Topic : TopicIdentifier;
         DisplayName : string;
-        Id : System.Guid
+        Id : Identifier
     }
 
 type BehaviorDescriptor =
     {
         Behavior : BehaviorIdentifier;
         DisplayName : string;
-        Id : System.Guid
+        Id : Identifier
     }
 
 type LibraryResolver =

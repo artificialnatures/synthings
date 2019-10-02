@@ -2,19 +2,19 @@ namespace synthings.core
 
 type Machine =
     {
-        Id : System.Guid;
+        Id : Identifier;
         Name : string;
         Input : Message -> unit;
         Behavior : Behavior;
-        DownstreamConnections : System.Guid list
+        DownstreamConnections : Identifier list
     }
 
 type Machine with
-    static member input (id : System.Guid) (behavior : Behavior) (message : Message) =
+    static member input (id : Identifier) (behavior : Behavior) (message : Message) =
         message.Forwarder id {message with Signal = behavior message.Signal}
     
     static member createMachine name behavior =
-        let id = System.Guid.NewGuid()
+        let id = identifier.create ()
         {Id = id; Name = name; Behavior = behavior; Input = Machine.input id behavior; DownstreamConnections = List.empty}
     
     static member createRelay () =

@@ -21,7 +21,7 @@ type Change<'subjectType> with
 
 type ChangeSet =
     {
-        Id : System.Guid;
+        Id : Identifier;
         TimeOfCreation : Instant;
         MachineChanges : Change<Machine> list;
         ViewChanges : Change<View> list
@@ -29,6 +29,6 @@ type ChangeSet =
 
 type ChangeSet with
     static member withChangeLists (machineChanges : Change<Machine> list) (viewChanges : Change<View> list) =
-        {Id = System.Guid.NewGuid(); TimeOfCreation = time.now(); MachineChanges = machineChanges; ViewChanges = viewChanges}
+        {Id = identifier.create(); TimeOfCreation = time.now(); MachineChanges = machineChanges; ViewChanges = viewChanges}
     static member machineCreated (machine : Machine) (view : View) =
         ChangeSet.withChangeLists [Change.create machine] [Change.create view]

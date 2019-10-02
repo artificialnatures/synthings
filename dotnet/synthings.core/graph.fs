@@ -2,16 +2,16 @@ namespace synthings.core
 
 type Connection =
     {
-        Id : System.Guid;
-        UpstreamId : System.Guid;
-        DownstreamId : System.Guid
+        Id : Identifier;
+        UpstreamId : Identifier;
+        DownstreamId : Identifier
     }
 
 type Graph =
     {
         Root : Machine
-        Machines : Map<System.Guid, Machine>;
-        Connections : Map<System.Guid, System.Guid list>
+        Machines : Map<Identifier, Machine>;
+        Connections : Map<Identifier, Identifier list>
     }
 
 type Graph with
@@ -34,13 +34,13 @@ type Graph with
     static member replaceRoot (machine : Machine) (graph : Graph) =
         {graph with Root = machine}
     
-    static member addDownstreamConnection (upstreamId : System.Guid) (downstreamId : System.Guid) (connectionMap : Map<System.Guid, System.Guid list>) =
+    static member addDownstreamConnection (upstreamId : Identifier) (downstreamId : Identifier) (connectionMap : Map<Identifier, Identifier list>) =
         let connections = List.append (connectionMap.Item upstreamId) [downstreamId]
         connectionMap
         |> Map.remove upstreamId
         |> Map.add upstreamId connections
     
-    static member connect (upstreamId : System.Guid) (downstreamId : System.Guid) (graph : Graph) =
+    static member connect (upstreamId : Identifier) (downstreamId : Identifier) (graph : Graph) =
         let upstreamHasConnections = graph.Connections.ContainsKey upstreamId
         let connectionMap =
             match upstreamHasConnections with
@@ -48,19 +48,19 @@ type Graph with
             | false -> Map.add upstreamId [downstreamId] graph.Connections
         {graph with Connections = connectionMap}
     
-    static member connectToRoot (downstreamId : System.Guid) (graph : Graph) =
+    static member connectToRoot (downstreamId : Identifier) (graph : Graph) =
         Graph.connect graph.Root.Id downstreamId graph
     
-    static member connectMonitor (machineId : System.Guid) (window : Window) (graph : Graph) =
+    static member connectMonitor (machineId : Identifier) (window : Window) (graph : Graph) =
         let monitor = Monitor(window)
         let revisedGraph = Graph.connect machineId monitor.Machine.Id graph
         (revisedGraph, monitor)
     
-    static member sendTo (graph : Graph) (machineId : System.Guid) (message : Message) =
+    static member sendTo (graph : Graph) (machineId : Identifier) (message : Message) =
         let downstream = graph.Machines.Item machineId
         downstream.Input message
     
-    static member sendFrom (graph : Graph) (upstreamId : System.Guid) (message : Message) =
+    static member sendFrom (graph : Graph) (upstreamId : Identifier) (message : Message) =
         let upstreamHasConnections = graph.Connections.ContainsKey upstreamId
         if upstreamHasConnections then
             let downstreamConnections = graph.Connections.Item upstreamId

@@ -2,7 +2,7 @@ namespace synthings.core
 
 type Signal =
     {
-        Id : System.Guid;
+        Id : Identifier;
         Epoch : Instant;
         Time : Instant;
         Value : float
@@ -13,7 +13,7 @@ type Signal with
     static member timeSpan (earlier : Signal) (later : Signal) = (later.Time - earlier.Time).TotalSeconds
     static member secondsSinceEpoch (signal : Signal) = time.secondsSinceEpoch signal.Epoch signal.Time
     static member create (epoch : Instant) (sampleTime : Instant) (value : float) =
-        {Id = System.Guid.NewGuid(); Epoch = epoch; Time = sampleTime; Value = value}
+        {Id = identifier.create(); Epoch = epoch; Time = sampleTime; Value = value}
     static member createNow (epoch : Instant) (value : float) =
         let timeNow = time.now ()
         Signal.create epoch timeNow value

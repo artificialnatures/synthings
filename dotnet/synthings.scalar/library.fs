@@ -10,8 +10,8 @@ module library =
     open System
     let internal topics () =
         [
-            {Topic = Wave; DisplayName = "Wave"; Id = Guid.Parse("68C8D99F-1452-408E-9D2C-EC7F07DB7F93")};
-            {Topic = Envelope; DisplayName = "Envelope"; Id = Guid.Parse("09D5E3CF-03EC-4E19-8EC0-62B75A408C0D")}
+            {Topic = Wave; DisplayName = "Wave"; Id = identifier.fromString("68C8D99F-1452-408E-9D2C-EC7F07DB7F93")};
+            {Topic = Envelope; DisplayName = "Envelope"; Id = identifier.fromString("09D5E3CF-03EC-4E19-8EC0-62B75A408C0D")}
         ]
     
     let internal listBehaviors (topicIdentifier : TopicIdentifier) =

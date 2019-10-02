@@ -35,7 +35,7 @@ module wave =
     
     let listBehaviors () =
         [
-            {Behavior = SineWave; DisplayName = displayName SineWave; Id = Guid.Parse("F681ED1F-0FD2-4763-9215-216323CE7CB7")}
+            {Behavior = SineWave; DisplayName = displayName SineWave; Id = identifier.fromString("F681ED1F-0FD2-4763-9215-216323CE7CB7")}
         ]
     
     let createMachine (behaviorIdentifier : WaveBehavior) (parameters : WaveParameters) =
