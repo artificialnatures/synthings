@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="identifier.fs" />
+    <Compile Include="subject.fs" />
     <Compile Include="time.fs" />
     <Compile Include="number.fs" />
     <Compile Include="signal.fs" />
@@ -15,8 +17,10 @@
     <Compile Include="monitor.fs" />
     <Compile Include="graph.fs" />
     <Compile Include="taxonomy.fs" />
+    <Compile Include="view.fs" />
     <Compile Include="library.fs" />
     <Compile Include="aggregateLibrary.fs" />
+    <Compile Include="changes.fs" />
     <Compile Include="application.fs" />
   </ItemGroup>
   

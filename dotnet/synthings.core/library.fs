@@ -6,16 +6,22 @@ type CoreTopic =
 
 type CoreBehavior =
     | Relay
+    | UniformInteger
+    | UniformFloat
     | Error
     interface BehaviorIdentifier
 
 type CoreParameters =
     | Default
+    | IntegerNumber of number : int
+    | FloatNumber of number : float
     interface Parameters
 
 module library =
     open System
     let internal relay (signal : Signal) = signal
+    let internal uniformInteger (number : int) (signal : Signal) = {signal with Value = (float)number}
+    let internal uniformFloat (number : float) (signal : Signal) = {signal with Value = number}
     let internal error (signal : Signal) = {signal with Value = 0.0} //TODO: add error handling
     
     let internal topics () =
@@ -26,6 +32,8 @@ module library =
     let internal behaviors =
         [
             {Behavior = Relay; DisplayName = "Relay"; Id = Guid.Parse("F6D899DB-FF57-475D-94A1-2A1E0FB64DB4")};
+            {Behavior = UniformInteger; DisplayName = "Uniform Integer"; Id = Guid.Parse("E310E62F-251E-419B-B550-97EADBBF3066")};
+            {Behavior = UniformFloat; DisplayName = "Uniform Float"; Id = Guid.Parse("EFD34144-FCA8-4BCB-B877-8499FE07AD86")};
             {Behavior = Error; DisplayName = "Error"; Id = Guid.Parse("2ACDA383-51D6-4946-8554-635ED1749C84")}
         ]
     
@@ -41,6 +49,8 @@ module library =
         | :? CoreBehavior as coreBehavior ->
             match coreBehavior with
             | Relay -> Machine.createMachine "Relay" relay
+            | UniformInteger -> Machine.createMachine "Uniform Integer" (uniformInteger 1)
+            | UniformFloat -> Machine.createMachine "Uniform Float" (uniformFloat 1.0)
             | Error -> Machine.createMachine "Error" error
         | _ -> Machine.createMachine "Error" error
     

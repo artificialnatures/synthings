@@ -1,5 +1,7 @@
 namespace synthings.core
 
+type Instant = System.DateTime
+
 module time =
     open System
     let now () = DateTime.Now

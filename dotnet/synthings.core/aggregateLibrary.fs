@@ -55,8 +55,8 @@ module aggregateLibrary =
         }
     
     type internal TopicMap with
-        member topicMap.containsBehavior (behaviorDescriptor : BehaviorDescriptor) =
-            List.exists (fun behavior -> behavior.Id = behaviorDescriptor.Id) topicMap.Behaviors
+        static member containsBehavior (behaviorDescriptor : BehaviorDescriptor) (topicMap : TopicMap) =
+            List.exists (fun (behavior : BehaviorDescriptor) -> behavior.Id = behaviorDescriptor.Id) topicMap.Behaviors
     
     let internal createTopicMap (topicDescriptor : TopicDescriptor) (library : LibraryResolver) =
         let behaviors = library.listBehaviors topicDescriptor
@@ -76,14 +76,14 @@ module aggregateLibrary =
     type internal AggregateLibrary() =
         let _libraries = loadLibraries()
         let _topics = listTopics _libraries
-        let _topicMap = buildAggregateTopicMap _libraries
-        let _listBehaviors (topicDescriptor : TopicDescriptor) = _topicMap.Item(topicDescriptor.Id).Behaviors
+        let _topicMaps = buildAggregateTopicMap _libraries
+        let _listBehaviors (topicDescriptor : TopicDescriptor) = _topicMaps.Item(topicDescriptor.Id).Behaviors
         let _createMachine behaviorDescriptor =
-            let topicMap =
+            let matchingTopicMap =
                 List.map (fun (topic : TopicDescriptor) -> topic.Id) _topics
-                |> List.map (fun id -> _topicMap.Item id)
-                |> List.tryFind (fun topicMap -> topicMap.containsBehavior behaviorDescriptor)
-            match topicMap with
+                |> List.map (fun id -> _topicMaps.Item id)
+                |> List.tryFind (fun topicMap -> TopicMap.containsBehavior behaviorDescriptor topicMap)
+            match matchingTopicMap with
             | Some topicMap -> topicMap.Library.createMachine behaviorDescriptor
             | None -> Machine.createError()
         member this.Libraries = _libraries

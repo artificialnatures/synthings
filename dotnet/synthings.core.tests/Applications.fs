@@ -13,5 +13,5 @@ let ``Creating a graph using Application`` () =
         |> List.head
         |> application.Library.listBehaviors
         |> List.head
-    application.createMachine firstBehaviorInLibrary
+    application.CreateMachine firstBehaviorInLibrary
     Assert.Equal(2, Map.count application.Graph.Machines)

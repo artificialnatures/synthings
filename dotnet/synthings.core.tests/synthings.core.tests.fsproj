@@ -12,6 +12,7 @@
     <Compile Include="Graphs.fs" />
     <Compile Include="Monitors.fs" />
     <Compile Include="Applications.fs" />
+    <Compile Include="Views.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
