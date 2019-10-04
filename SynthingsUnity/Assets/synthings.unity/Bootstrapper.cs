@@ -11,31 +11,33 @@
         
         void Start()
         {
-            _epoch = time.now(); //create a clock with epoch
-            var library = aggregateLibrary.build();
-            var topics = library.listTopics();
+            _epoch = Instant.now(); //create a clock with epoch
+            _application = new synthings.core.Application();
+            var topics = _application.Library.listTopics();
             var waveTopic = topics.First(topic => topic.DisplayName.Contains("Wave"));
-            var waveBehaviors = library.listBehaviors(waveTopic);
+            var waveBehaviors = _application.Library.listBehaviors(waveTopic);
             var sineWaveBehavior = waveBehaviors.First(behavior => behavior.DisplayName.Contains("Sine"));
-            var sineWaveMachine = library.createMachine(sineWaveBehavior);
-            _monitor = Monitor.createTimeWindowed(10.0);
-            _graph = Graph.empty; //create linq-esque methods for chaining?
-            _graph = Graph.addMachine(sineWaveMachine, _graph);
-            _graph = Graph.addMachine(_monitor.Machine, _graph);
-            _graph = Graph.connect(_graph.Root.Id, sineWaveMachine.Id, _graph);
-            _graph = Graph.connect(sineWaveMachine.Id, _monitor.Machine.Id, _graph);
+            var changeSet = _application.CreateMachine(sineWaveBehavior);
+            _viewId = changeSet.ViewChanges.First(change => change.Subject.DisplayName.Contains("Sine")).Subject.SubjectId;
+            _application.ConnectToRoot(changeSet.MachineChanges.First().Subject.Id);
         }
 
         void Update()
         {
             var signal = Signal.createNow(_epoch, 0.0f);
-            Graph.induce(_graph, signal);
-            Debug.Log($"Recorded {_monitor.Recording.Signals.Length} signals, latest = {_monitor.LatestValue}");
-            cube.transform.position = cube.transform.right * (float)_monitor.LatestValue;
+            var changeSet = _application.Induce(signal);
+            foreach (var change in changeSet.ViewChanges)
+            {
+                if (change.Subject.SubjectId.Guid != _viewId.Guid) continue;
+                var value = change.Subject.History.Last().Value;
+                cube.transform.position = cube.transform.right * (float)value;
+            }
         }
 
+        private synthings.core.Application _application;
         private Graph _graph;
         private Monitor _monitor;
-        private DateTime _epoch;
+        private Instant _epoch;
+        private Identifier _viewId;
     }
 }
