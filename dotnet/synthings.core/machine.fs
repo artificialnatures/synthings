@@ -5,8 +5,7 @@ type Machine =
         Id : Identifier;
         Name : string;
         Input : Message -> unit;
-        Behavior : Behavior;
-        DownstreamConnections : Identifier list
+        Behavior : Behavior
     }
 
 type Machine with
@@ -15,7 +14,7 @@ type Machine with
     
     static member createMachine name behavior =
         let id = Identifier.create ()
-        {Id = id; Name = name; Behavior = behavior; Input = Machine.input id behavior; DownstreamConnections = List.empty}
+        {Id = id; Name = name; Behavior = behavior; Input = Machine.input id behavior}
     
     static member createRelay () =
         let relay (signal : Signal) = signal
