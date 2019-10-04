@@ -1,9 +1,10 @@
 namespace synthings.core
 
-type Message =
+type Forwarder = Identifier -> Message -> unit
+and Message =
     {
         Signal : Signal;
-        Forwarder : Identifier -> Message -> unit
+        Forwarder : Forwarder
     }
 
 type Message with

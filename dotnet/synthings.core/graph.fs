@@ -1,24 +1,17 @@
 namespace synthings.core
 
-type Connection =
-    {
-        Id : Identifier;
-        UpstreamId : Identifier;
-        DownstreamId : Identifier
-    }
-
 type Graph =
     {
         Root : Machine
         Machines : Map<Identifier, Machine>;
-        Connections : Map<Identifier, Identifier list>
+        Connections : ConnectionSet
     }
 
 type Graph with
     static member empty =
         let root = Machine.createRelay()
         let machines = Map.empty |> Map.add root.Id root
-        {Root = root; Machines = machines; Connections = Map.empty}
+        {Root = root; Machines = machines; Connections = ConnectionSet.empty}
     
     static member addMachine (machine : Machine) (graph : Graph) =
         {graph with Machines = Map.add machine.Id machine graph.Machines}
@@ -41,31 +34,20 @@ type Graph with
         |> Map.add upstreamId connections
     
     static member connect (upstreamId : Identifier) (downstreamId : Identifier) (graph : Graph) =
-        let upstreamHasConnections = graph.Connections.ContainsKey upstreamId
-        let connectionMap =
-            match upstreamHasConnections with
-            | true -> Graph.addDownstreamConnection upstreamId downstreamId graph.Connections
-            | false -> Map.add upstreamId [downstreamId] graph.Connections
-        {graph with Connections = connectionMap}
+        {graph with Connections = ConnectionSet.connect upstreamId downstreamId graph.Connections}
     
     static member connectToRoot (downstreamId : Identifier) (graph : Graph) =
-        Graph.connect graph.Root.Id downstreamId graph
-    
-    static member connectMonitor (machineId : Identifier) (window : Window) (graph : Graph) =
-        let monitor = Monitor(window)
-        let revisedGraph = Graph.connect machineId monitor.Machine.Id graph
-        (revisedGraph, monitor)
+        {graph with Connections = ConnectionSet.connect graph.Root.Id downstreamId graph.Connections}
     
     static member sendTo (graph : Graph) (machineId : Identifier) (message : Message) =
         let downstream = graph.Machines.Item machineId
         downstream.Input message
     
     static member sendFrom (graph : Graph) (upstreamId : Identifier) (message : Message) =
-        let upstreamHasConnections = graph.Connections.ContainsKey upstreamId
-        if upstreamHasConnections then
-            let downstreamConnections = graph.Connections.Item upstreamId
-            List.iter (fun downstreamId -> Graph.sendTo graph downstreamId message) downstreamConnections
+        ConnectionSet.downstreamConnections upstreamId graph.Connections
+        |> List.iter (fun connection -> Graph.sendTo graph connection.DownstreamId message)
     
-    static member induce (graph : Graph) (signal : Signal) =
+    static member induceInternal (graph : Graph) (signal : Signal) =
         graph.Root.Input {Signal = signal; Forwarder = Graph.sendFrom graph}
-    
+    static member induce (forwarder : Forwarder) (graph : Graph) (signal : Signal) =
+        graph.Root.Input {Signal = signal; Forwarder = forwarder}
