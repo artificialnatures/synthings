@@ -20,7 +20,7 @@ let ``Creating a graph using Application`` () =
     let relayMachine = machineCreated.MachineChanges.Head.Subject
     let connectionCreated = application.ConnectToRoot relayMachine.Id
     Assert.Equal(1, connectionCreated.ConnectionChanges.Length) //a connection was created
-    Assert.Equal(1, connectionCreated.ViewChanges.Length) //a view was created to represent the view
+    Assert.Equal(1, connectionCreated.ViewChanges.Length) //a view was created to represent the connection
     let values = [0.0; 1.0; 2.0; 3.0; 4.0; 5.0]
     let epoch = Instant.now()
     let signals = Signal.createSeries epoch 0.0 1.0 values
@@ -32,5 +32,5 @@ let ``Creating a graph using Application`` () =
     let change = List.find (fun (change : Change<View>) -> change.Subject.DisplayName = relayMachine.Name) changeSet.ViewChanges
     Assert.Equal(Operation.Update, change.Operation)
     Assert.Equal(relayMachine.Name, change.Subject.DisplayName)
-    let history = Seq.toList (Seq.map Signal.unpack change.Subject.History)
+    let history = List.map Signal.unpack change.Subject.Recording.Signals
     Assert.True(number.listsAreIdentical values history)

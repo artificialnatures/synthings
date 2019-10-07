@@ -2,7 +2,6 @@ module synthings.core.tests.Views
 
 open Xunit
 open synthings.core
-open synthings.core
 
 [<Fact>]
 let ``Application has views for menu and graph initially`` () =

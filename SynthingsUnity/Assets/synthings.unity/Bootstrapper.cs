@@ -29,8 +29,8 @@
             foreach (var change in changeSet.ViewChanges)
             {
                 if (change.Subject.SubjectId.Guid != _viewId.Guid) continue;
-                var value = change.Subject.History.Last().Value;
-                cube.transform.position = cube.transform.right * (float)value;
+                var value = (float)change.Subject.History.Last().Value;
+                cube.transform.position = cube.transform.right * value;
             }
         }
 

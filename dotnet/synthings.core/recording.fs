@@ -1,12 +1,14 @@
 namespace synthings.core
 
 type Window =
+    | Empty
+    | Singleton
     | FrameLimit of int
     | TimeLimit of float
 
 type Recording =
     {
-        mutable Signals : Signal list;
+        Signals : Signal list;
         Window : Window
     }
 
@@ -26,19 +28,23 @@ module window =
     let internal truncateByTime (limit : float) (signals : Signal list) =
         if signals.Length = 0 then signals else
             let startIndex = findFirstIndexWithinLimit limit signals
-            signals.[startIndex..]
+            let truncated = signals.[startIndex..]
+            truncated
     
     let internal limit (window : Window) (signals : Signal list) =
         match window with
+        | Empty -> List.empty
+        | Singleton -> truncateByCount 1 signals
         | FrameLimit limit -> truncateByCount limit signals
         | TimeLimit limit -> truncateByTime limit signals
 
 type Recording with
+    static member create (window : Window) = {Signals = List.empty; Window = window}
     static member append (signal : Signal) (recording : Recording) =
-        recording.Signals <- window.limit recording.Window (List.append recording.Signals [signal])
-    
+        let appended = List.append recording.Signals [signal]
+        let limited = window.limit recording.Window appended
+        {recording with Signals = limited}
     static member latestSignal (recording : Recording) =
         if List.isEmpty recording.Signals then Signal.empty else List.last recording.Signals
-    
     static member latestValue (recording : Recording) =
         (Recording.latestSignal recording).Value

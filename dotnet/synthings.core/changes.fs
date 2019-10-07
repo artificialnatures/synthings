@@ -36,3 +36,5 @@ type ChangeSet with
         ChangeSet.withChangeLists [Change.create machine] List.empty [Change.create view]
     static member connectionCreated (connection : Connection) (view : View) =
         ChangeSet.withChangeLists List.empty [Change.create connection] [Change.create view]
+    static member addView (view : View) (changeSet : ChangeSet) =
+        {changeSet with ViewChanges = List.append changeSet.ViewChanges [Change.update view]}

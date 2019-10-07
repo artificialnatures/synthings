@@ -6,9 +6,9 @@ type Application() =
     let mutable _graph = Graph.empty
     let initialViews =
         [
-            View.create (Identifier.create()) "Behavior Menu";
-            View.create (Identifier.create()) "Graph";
-            View.create _graph.Root.Id _graph.Root.Name
+            View.create (Identifier.create()) "Behavior Menu" Window.Empty;
+            View.create (Identifier.create()) "Graph" Window.Empty;
+            View.forMachine _graph.Root (TimeLimit(10.0))
         ]
     let mutable _viewMap = List.map (fun (view : View) -> (view.SubjectId, view)) initialViews |> Map.ofList
     let mutable _changeSet = ChangeSet.empty
@@ -20,7 +20,8 @@ type Application() =
     member this.CreateMachine (behaviorDescriptor : BehaviorDescriptor) =
         let machine = _library.createMachine behaviorDescriptor
         _graph <- Graph.addMachine machine _graph
-        let view = View.forMachine machine
+        let window = TimeLimit(10.0)
+        let view = View.forMachine machine window
         this.AddView view
         ChangeSet.machineCreated machine view
     member this.Connect (upstreamId : Identifier) (downstreamId : Identifier) =
@@ -34,9 +35,9 @@ type Application() =
     member this.Record (upstreamId : Identifier) (message : Message) =
         if Map.containsKey upstreamId _viewMap then
             let view = _viewMap.Item upstreamId
-            let revisedView = {view with History = Seq.append view.History [message.Signal]}
+            let revisedView = View.record message.Signal view
             this.AddView revisedView
-            _changeSet <- {_changeSet with ViewChanges = List.append _changeSet.ViewChanges [Change.update revisedView]}
+            _changeSet <- ChangeSet.addView revisedView _changeSet
     member this.Forward (upstreamId : Identifier) (message : Message) =
         this.Record upstreamId message
         Graph.sendFrom _graph upstreamId message
