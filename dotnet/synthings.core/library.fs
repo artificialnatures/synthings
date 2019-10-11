@@ -29,7 +29,7 @@ module library =
             {Topic = Core; DisplayName = "Core"; Id = Identifier.fromString("56DBAC92-F1A6-400C-8640-3C48CD10A2CC")}
         ]
     
-    let internal behaviors =
+    let internal behaviorDescriptors =
         [
             {Behavior = Relay; DisplayName = "Relay"; Id = Identifier.fromString("F6D899DB-FF57-475D-94A1-2A1E0FB64DB4")};
             {Behavior = UniformInteger; DisplayName = "Uniform Integer"; Id = Identifier.fromString("E310E62F-251E-419B-B550-97EADBBF3066")};
@@ -41,8 +41,16 @@ module library =
         match topicIdentifier with
         | :? CoreTopic as coreTopic ->
             match coreTopic with
-            | Core -> behaviors
+            | Core -> behaviorDescriptors
         | _ -> List.empty
+    
+    let internal findBehaviorDescriptor (behaviorIdentifier : BehaviorIdentifier) =
+        List.find (fun (descriptor : BehaviorDescriptor) -> descriptor.Behavior = behaviorIdentifier) behaviorDescriptors
+    
+    let internal behaviorWithIdentifier (behaviorIdentifier : BehaviorIdentifier) =
+        match behaviorIdentifier with
+        | :? CoreBehavior as coreBehavior -> findBehaviorDescriptor behaviorIdentifier
+        | _ -> failwith "Could not find BehaviorIdentifier."
     
     let internal createMachine (behaviorIdentifier : BehaviorIdentifier) =
         match behaviorIdentifier with
@@ -54,8 +62,14 @@ module library =
             | Error -> Machine.createMachine "Error" error
         | _ -> Machine.createMachine "Error" error
     
-type internal CoreLibrary() =
+type CoreLibrary() =
     static member build () = CoreLibrary() :> LibraryResolver
+    member this.Origin = (this :> LibraryResolver).Origin
+    member this.Name = (this :> LibraryResolver).Name
+    member this.listTopics () = (this :> LibraryResolver).listTopics ()
+    member this.listBehaviors topicDescriptor = (this :> LibraryResolver).listBehaviors topicDescriptor
+    member this.createMachine behaviorDescriptor = (this :> LibraryResolver).createMachine behaviorDescriptor
+    member this.behaviorWithIdentifier (behaviorIdentifier : BehaviorIdentifier) = library.behaviorWithIdentifier behaviorIdentifier
     interface LibraryResolver with
         member this.Origin = typeof<CoreTopic>.Namespace
         member this.Name = "Core"

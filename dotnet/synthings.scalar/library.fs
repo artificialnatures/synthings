@@ -7,7 +7,6 @@ type ScalarTopic =
     interface TopicIdentifier
 
 module library =
-    open System
     let internal topics () =
         [
             {Topic = Wave; DisplayName = "Wave"; Id = Identifier.fromString("68C8D99F-1452-408E-9D2C-EC7F07DB7F93")};
@@ -18,9 +17,15 @@ module library =
         match topicIdentifier with
         | :? ScalarTopic as scalarTopic ->
             match scalarTopic with
-            | Wave -> wave.listBehaviors ()
-            | Envelope -> envelope.listBehaviors ()
+            | Wave -> wave.behaviorDescriptors
+            | Envelope -> envelope.behaviorDescriptors
         | _ -> List.empty
+    
+    let internal behaviorWithIdentifier (behaviorIdentifier : BehaviorIdentifier) =
+        match behaviorIdentifier with
+        | :? WaveBehavior as waveBehavior -> wave.findBehaviorDescriptor behaviorIdentifier
+        | :? EnvelopeBehavior as envelopeBehavior -> envelope.findBehaviorDescriptor behaviorIdentifier
+        | _ -> failwith "Could not find BehaviorIdentifier."
     
     let internal createMachine (behaviorIdentifier : BehaviorIdentifier) =
         match behaviorIdentifier with
@@ -30,6 +35,12 @@ module library =
 
 type ScalarLibrary() =
     static member build () = ScalarLibrary() :> LibraryResolver
+    member this.Origin = (this :> LibraryResolver).Origin
+    member this.Name = (this :> LibraryResolver).Name
+    member this.listTopics () = (this :> LibraryResolver).listTopics ()
+    member this.listBehaviors topicDescriptor = (this :> LibraryResolver).listBehaviors topicDescriptor
+    member this.createMachine behaviorDescriptor = (this :> LibraryResolver).createMachine behaviorDescriptor
+    member this.behaviorWithIdentifier (behaviorIdentifier : BehaviorIdentifier) = library.behaviorWithIdentifier behaviorIdentifier
     interface LibraryResolver with
         member this.Origin = typeof<ScalarTopic>.Namespace
         member this.Name = "Scalar"

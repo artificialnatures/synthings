@@ -20,7 +20,6 @@
     <ItemGroup>
       <Compile Include="Waves.fs" />
       <Compile Include="Envelopes.fs" />
-      <Compile Include="Wiggle.fs" />
       <Compile Include="Program.fs" />
     </ItemGroup>
 

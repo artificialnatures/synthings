@@ -29,7 +29,7 @@ let ``Creating a graph using Application`` () =
     let induce signal = changeSet <- application.Induce signal
     List.iter induce signals
     //Find the view for relayMachine in the ChangeSet
-    let change = List.find (fun (change : Change<View>) -> change.Subject.DisplayName = relayMachine.Name) changeSet.ViewChanges
+    let change = List.find (fun (change : Change<View>) -> change.Subject.SubjectId = relayMachine.Id) changeSet.ViewChanges
     Assert.Equal(Operation.Update, change.Operation)
     Assert.Equal(relayMachine.Name, change.Subject.DisplayName)
     let history = List.map Signal.unpack change.Subject.Recording.Signals

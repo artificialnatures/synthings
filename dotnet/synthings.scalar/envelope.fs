@@ -30,10 +30,13 @@ module envelope =
         match behaviorIdentifier with
         | LinearDecay -> "Linear Decay"
     
-    let listBehaviors () =
+    let behaviorDescriptors =
         [
             {Behavior = LinearDecay; DisplayName = displayName LinearDecay; Id = Identifier.fromString("696AC296-A54D-4E1A-9942-F58C64FD14D1")}
         ]
+    
+    let findBehaviorDescriptor (behaviorIdentifier : BehaviorIdentifier) =
+        List.find (fun (descriptor : BehaviorDescriptor) -> descriptor.Behavior = behaviorIdentifier) behaviorDescriptors
     
     let createMachine (behaviorIdentifier : EnvelopeBehavior) (parameters : EnvelopeParameters) =
         let startTime, duration =

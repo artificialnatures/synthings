@@ -14,7 +14,6 @@
     <Compile Include="recording.fs" />
     <Compile Include="message.fs" />
     <Compile Include="machine.fs" />
-    <Compile Include="monitor.fs" />
     <Compile Include="connection.fs" />
     <Compile Include="graph.fs" />
     <Compile Include="taxonomy.fs" />

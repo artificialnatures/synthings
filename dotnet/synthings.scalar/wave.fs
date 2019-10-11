@@ -33,10 +33,13 @@ module wave =
         match behaviorIdentifier with
         | SineWave -> "Sine Wave"
     
-    let listBehaviors () =
+    let behaviorDescriptors =
         [
             {Behavior = SineWave; DisplayName = displayName SineWave; Id = Identifier.fromString("F681ED1F-0FD2-4763-9215-216323CE7CB7")}
         ]
+    
+    let findBehaviorDescriptor (behaviorIdentifier : BehaviorIdentifier) =
+        List.find (fun (descriptor : BehaviorDescriptor) -> descriptor.Behavior = behaviorIdentifier) behaviorDescriptors
     
     let createMachine (behaviorIdentifier : WaveBehavior) (parameters : WaveParameters) =
         let period, amplitude =
