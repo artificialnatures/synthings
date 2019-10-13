@@ -5,18 +5,18 @@ type Operation =
     | Update
     | Delete
 
-type Change<'subjectType> =
+type Change<'subject> =
     {
         Operation : Operation;
-        Subject : 'subjectType
+        Subject : 'subject
     }
 
-type Change<'subjectType> with
-    static member create (subject : 'subjectType) =
+type Change<'subject> with
+    static member create (subject : 'subject) =
         {Operation = Create; Subject = subject}
-    static member update (subject : 'subjectType) =
+    static member update (subject : 'subject) =
         {Operation = Update; Subject = subject}
-    static member delete (subject : 'subjectType) =
+    static member delete (subject : 'subject) =
         {Operation = Delete; Subject = subject}
 
 type ChangeSet =
