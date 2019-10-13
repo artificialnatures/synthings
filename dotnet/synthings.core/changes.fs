@@ -25,7 +25,7 @@ type ChangeSet =
         TimeOfCreation : Instant;
         MachineChanges : Change<Machine> list;
         ConnectionChanges : Change<Connection> list;
-        ViewChanges : Change<View> list
+        ViewChanges : Change<View> list;
     }
 
 type ChangeSet with

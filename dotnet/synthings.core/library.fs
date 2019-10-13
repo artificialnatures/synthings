@@ -17,6 +17,13 @@ type CoreParameters =
     | FloatNumber of number : float
     interface Parameters
 
+type CoreSubject =
+    | Graph of Graph
+    | Machine of Machine
+    | Connection of Connection
+    | Recording of Recording
+    interface Subject
+
 module library =
     open System
     let internal relay (signal : Signal) = signal

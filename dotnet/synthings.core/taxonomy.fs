@@ -6,6 +6,8 @@ type BehaviorIdentifier = interface end
 
 type Parameters = interface end
 
+type Subject = interface end
+
 type TopicDescriptor =
     {
         Topic : TopicIdentifier;
