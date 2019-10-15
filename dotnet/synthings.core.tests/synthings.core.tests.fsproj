@@ -11,7 +11,8 @@
     <Compile Include="Signals.fs" />
     <Compile Include="Graphs.fs" />
     <Compile Include="Applications.fs" />
-    <Compile Include="Views.fs" />
+    <Compile Include="Changes.fs" />
+    <Compile Include="Generics.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 

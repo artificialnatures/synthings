@@ -18,10 +18,10 @@ type CoreParameters =
     interface Parameters
 
 type CoreSubject =
-    | Graph of Graph
-    | Machine of Machine
-    | Connection of Connection
-    | Recording of Recording
+    | Graph
+    | Machine
+    | Connection
+    | Recording
     interface Subject
 
 module library =

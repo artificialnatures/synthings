@@ -22,6 +22,14 @@ type BehaviorDescriptor =
         Id : Identifier
     }
 
+type SubjectDescriptor =
+    {
+        Subject : Subject;
+        SubjectType : System.Type;
+        DisplayName : string;
+        Id : Identifier
+    }
+
 type LibraryResolver =
     abstract member Origin : string
     abstract member Name : string

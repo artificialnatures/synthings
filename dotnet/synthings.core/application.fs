@@ -23,13 +23,15 @@ type Application() =
         let window = TimeLimit(10.0)
         let view = View.forMachine machine window
         this.AddView view
-        ChangeSet.machineCreated machine view
+        //ChangeSet.machineCreated machine view
+        ChangeSet.empty //TODO: replace with refactored ChangeSet code
     member this.Connect (upstreamId : Identifier) (downstreamId : Identifier) =
         _graph <- Graph.connect upstreamId downstreamId _graph
         let connection = ConnectionSet.findConnection upstreamId downstreamId _graph.Connections
         let view = View.forConnection connection
         this.AddView view
-        ChangeSet.connectionCreated connection view
+        //ChangeSet.connectionCreated connection view
+        ChangeSet.empty //TODO: replace with refactored ChangeSet code
     member this.ConnectToRoot (downstreamId : Identifier) =
         this.Connect _graph.Root.Id downstreamId
     member this.Record (upstreamId : Identifier) (message : Message) =
@@ -37,7 +39,8 @@ type Application() =
             let view = _viewMap.Item upstreamId
             let revisedView = View.record message.Signal view
             this.AddView revisedView
-            _changeSet <- ChangeSet.addView revisedView _changeSet
+            //_changeSet <- ChangeSet.addView revisedView _changeSet
+            _changeSet <- ChangeSet.empty //TODO: replace with refactored ChangeSet code
     member this.Forward (upstreamId : Identifier) (message : Message) =
         this.Record upstreamId message
         Graph.sendFrom _graph upstreamId message
