@@ -6,45 +6,36 @@ open Xunit
 
 type SubjectType = interface end
 
-type TestSubjectType =
-    | WordType of word : string
-    | NumberType of number : int
+type Word =
+    | Word of string
     interface SubjectType
 
-type Subject = interface end
+type Number =
+    | Number of int
+    interface SubjectType
 
-type TestSubject =
-    | Words
-    | Numbers
-    interface Subject
-
-type Change =
+type Change<'subject when 'subject :> SubjectType> =
     {
-        Value : SubjectType
+        Value : 'subject
     }
 
+type ChangeType = interface end
+
+type TestChange =
+    | WordChange of Change<Word>
+    | NumberChange of Change<Number>
+    interface ChangeType
+
 [<Fact>]
-let ``Collections of different types`` () =
-    let words =
+let ``Changes of different types`` () =
+    let changes =
         [
-            {Value = WordType ("this")}
-            {Value = WordType ("that")}
-            {Value = WordType ("the other")}
+            WordChange {Value = Word "this"}
+            NumberChange {Value = Number 1}
+            WordChange {Value = Word "that"}
+            NumberChange {Value = Number 2}
+            WordChange {Value = Word "the other"}
+            NumberChange {Value = Number 3}
         ]
-    let numbers =
-        [
-            {Value = NumberType (1)}
-            {Value = NumberType (2)}
-            {Value = NumberType (3)}
-        ]
-    let changes (subject : Subject) =
-        match subject with
-        | :? TestSubject as testSubject ->
-            match testSubject with
-            | Words -> words
-            | Numbers -> numbers
-        | _ -> List.empty
-    let retrievedWords = changes Words
-    let retrievedNumbers = changes Numbers
-    Assert.Equal(3, retrievedWords.Length)
-    Assert.Equal(3, retrievedNumbers.Length)
+    let words = List.choose (fun change -> match change with | WordChange wordChange -> Some (string wordChange.Value) | _ -> None) changes
+    Assert.Equal(3, words.Length)
