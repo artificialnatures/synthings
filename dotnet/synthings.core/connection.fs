@@ -6,6 +6,7 @@ type Connection =
         UpstreamId : Identifier;
         DownstreamId : Identifier
     }
+    interface Subject
 
 type Connection with
     static member internal create (upstreamId : Identifier) (downstreamId : Identifier) =

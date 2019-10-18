@@ -1,5 +1,6 @@
 namespace synthings.core
 
+//TODO: Make Signal generic
 type Signal =
     {
         Id : Identifier;

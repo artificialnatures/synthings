@@ -1,12 +1,8 @@
 namespace synthings.core
 
+type Change = interface end
 type TopicIdentifier = interface end
-
 type BehaviorIdentifier = interface end
-
-type Parameters = interface end
-
-type Subject = interface end
 
 type TopicDescriptor =
     {
@@ -18,14 +14,6 @@ type TopicDescriptor =
 type BehaviorDescriptor =
     {
         Behavior : BehaviorIdentifier;
-        DisplayName : string;
-        Id : Identifier
-    }
-
-type SubjectDescriptor =
-    {
-        Subject : Subject;
-        SubjectType : System.Type;
         DisplayName : string;
         Id : Identifier
     }

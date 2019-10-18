@@ -6,6 +6,7 @@ type Graph =
         Machines : Map<Identifier, Machine>;
         Connections : ConnectionSet
     }
+    interface Subject
 
 type Graph with
     static member empty =

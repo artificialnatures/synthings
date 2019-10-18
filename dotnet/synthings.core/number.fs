@@ -1,5 +1,17 @@
 namespace synthings.core
 
+type DecimalSingle =
+    | DecimalSingle of float
+    interface Subject
+
+type DecimalDouble =
+    | DecimalDouble of double
+    interface Subject
+
+type Quantity =
+    | Quantity of int
+    interface Subject
+
 module number =
     open System
     

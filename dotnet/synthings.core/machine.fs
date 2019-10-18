@@ -7,6 +7,7 @@ type Machine =
         Input : Message -> unit;
         Behavior : Behavior
     }
+    interface Subject
 
 type Machine with
     static member input (id : Identifier) (behavior : Behavior) (message : Message) =

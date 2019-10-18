@@ -9,6 +9,7 @@
     <Compile Include="subject.fs" />
     <Compile Include="time.fs" />
     <Compile Include="number.fs" />
+    <Compile Include="text.fs" />
     <Compile Include="signal.fs" />
     <Compile Include="behavior.fs" />
     <Compile Include="recording.fs" />
@@ -18,9 +19,9 @@
     <Compile Include="graph.fs" />
     <Compile Include="taxonomy.fs" />
     <Compile Include="view.fs" />
+    <Compile Include="changes.fs" />
     <Compile Include="library.fs" />
     <Compile Include="aggregateLibrary.fs" />
-    <Compile Include="changes.fs" />
     <Compile Include="application.fs" />
   </ItemGroup>
   

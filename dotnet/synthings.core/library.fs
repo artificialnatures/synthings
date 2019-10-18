@@ -11,18 +11,16 @@ type CoreBehavior =
     | Error
     interface BehaviorIdentifier
 
-type CoreParameters =
-    | Default
-    | IntegerNumber of number : int
-    | FloatNumber of number : float
-    interface Parameters
-
-type CoreSubject =
-    | Graph
-    | Machine
-    | Connection
-    | Recording
-    interface Subject
+type CoreChange =
+    | TextChange of Change<Text>
+    | DecimalSingleChange of Change<DecimalSingle>
+    | DecimalDoubleChange of Change<DecimalDouble>
+    | QuantityChange of Change<Quantity>
+    | RecordingChange of Change<Recording>
+    | MachineChange of Change<Machine>
+    | ConnectionChange of Change<Connection>
+    | GraphChange of Change<Graph>
+    interface Change
 
 module library =
     open System

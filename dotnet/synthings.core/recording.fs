@@ -11,6 +11,7 @@ type Recording =
         Signals : Signal list;
         Window : Window
     }
+    interface Subject
 
 module window =
     let internal truncateByCount (limit : int) (signals : Signal list) =

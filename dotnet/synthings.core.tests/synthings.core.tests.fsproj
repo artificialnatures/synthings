@@ -10,8 +10,8 @@
     <Compile Include="Numbers.fs" />
     <Compile Include="Signals.fs" />
     <Compile Include="Graphs.fs" />
-    <Compile Include="Applications.fs" />
     <Compile Include="Changes.fs" />
+    <Compile Include="Applications.fs" />
     <Compile Include="Generics.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
