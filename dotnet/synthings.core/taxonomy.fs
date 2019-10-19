@@ -1,9 +1,13 @@
 namespace synthings.core
 
+type Signal = interface end
+type SignalValue = interface end
 type Change = interface end
 type TopicIdentifier = interface end
 type BehaviorIdentifier = interface end
-
+type EmptySignalValue =
+    | EmptySignalValue
+    interface SignalValue
 type TopicDescriptor =
     {
         Topic : TopicIdentifier;
@@ -17,10 +21,3 @@ type BehaviorDescriptor =
         DisplayName : string;
         Id : Identifier
     }
-
-type LibraryResolver =
-    abstract member Origin : string
-    abstract member Name : string
-    abstract member listTopics : unit -> TopicDescriptor list
-    abstract member listBehaviors : TopicDescriptor -> BehaviorDescriptor list
-    abstract member createMachine : BehaviorDescriptor -> Machine

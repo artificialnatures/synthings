@@ -19,12 +19,14 @@ type Application() =
         _viewMap <- Map.add view.SubjectId view _viewMap
     member this.CreateMachine (behaviorDescriptor : BehaviorDescriptor) =
         let machine = _library.createMachine behaviorDescriptor
-        _graph <- Graph.addMachine machine _graph
-        let window = TimeLimit(10.0)
-        let view = View.forMachine machine window
-        this.AddView view
-        //ChangeSet.machineCreated machine view
-        ChangeSet.empty //TODO: replace with refactored ChangeSet code
+        match machine with
+        | Some machine ->
+            _graph <- Graph.addMachine machine _graph
+            let window = TimeLimit(10.0)
+            let view = View.forMachine machine window
+            this.AddView view
+            ChangeSet.empty
+        |None -> ChangeSet.empty //TODO: replace with refactored ChangeSet code
     member this.Connect (upstreamId : Identifier) (downstreamId : Identifier) =
         _graph <- Graph.connect upstreamId downstreamId _graph
         let connection = ConnectionSet.findConnection upstreamId downstreamId _graph.Connections
@@ -37,8 +39,8 @@ type Application() =
     member this.Record (upstreamId : Identifier) (message : Message) =
         if Map.containsKey upstreamId _viewMap then
             let view = _viewMap.Item upstreamId
-            let revisedView = View.record message.Signal view
-            this.AddView revisedView
+            //let revisedView = View.record message.Signal view
+            //this.AddView revisedView
             //_changeSet <- ChangeSet.addView revisedView _changeSet
             _changeSet <- ChangeSet.empty //TODO: replace with refactored ChangeSet code
     member this.Forward (upstreamId : Identifier) (message : Message) =

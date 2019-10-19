@@ -84,8 +84,8 @@ module aggregateLibrary =
                 |> List.map (fun id -> _topicMaps.Item id)
                 |> List.tryFind (fun topicMap -> TopicMap.containsBehavior behaviorDescriptor topicMap)
             match matchingTopicMap with
-            | Some topicMap -> topicMap.Library.createMachine behaviorDescriptor
-            | None -> Machine.createError()
+            | Some topicMap -> Some (topicMap.Library.createMachine behaviorDescriptor)
+            | None -> None
         member this.Libraries = _libraries
         member this.Topics = _topics
         member this.listBehaviors topicDescriptor = _listBehaviors topicDescriptor

@@ -2,7 +2,7 @@ module synthings.core.tests.Changes
 
 open Xunit
 open synthings.core
-
+(*
 let changeSet =
     ChangeSet.empty ()
     |> ChangeSet.append (TextChange (Change.create (Text "this")))
@@ -39,3 +39,4 @@ let ``ChangeSets may contain changes for a variety of Subjects`` () =
     let expectedText = "this, that, the other thing"
     Assert.Equal(expectedQuantity, actualQuantity)
     Assert.Equal(expectedText, actualText)
+*)

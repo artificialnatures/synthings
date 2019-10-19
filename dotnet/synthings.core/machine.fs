@@ -16,15 +16,3 @@ type Machine with
     static member createMachine name behavior =
         let id = Identifier.create ()
         {Id = id; Name = name; Behavior = behavior; Input = Machine.input id behavior}
-    
-    static member createRelay () =
-        let relay (signal : Signal) = signal
-        Machine.createMachine "Relay" relay
-    
-    static member createError () =
-        let error (signal : Signal) = {signal with Value = 0.0}
-        Machine.createMachine "Error" error
-    
-    static member createMonitor (originalMachine : Machine) (record : Behavior) =
-        let behavior = originalMachine.Behavior >> record
-        {originalMachine with Behavior = behavior; Input = Machine.input originalMachine.Id behavior}

@@ -7,6 +7,7 @@
   <ItemGroup>
     <Compile Include="identifier.fs" />
     <Compile Include="subject.fs" />
+    <Compile Include="taxonomy.fs" />
     <Compile Include="time.fs" />
     <Compile Include="number.fs" />
     <Compile Include="text.fs" />
@@ -17,9 +18,9 @@
     <Compile Include="machine.fs" />
     <Compile Include="connection.fs" />
     <Compile Include="graph.fs" />
-    <Compile Include="taxonomy.fs" />
     <Compile Include="view.fs" />
     <Compile Include="changes.fs" />
+    <Compile Include="libraryResolver.fs" />
     <Compile Include="library.fs" />
     <Compile Include="aggregateLibrary.fs" />
     <Compile Include="application.fs" />

@@ -11,23 +11,26 @@ type CoreBehavior =
     | Error
     interface BehaviorIdentifier
 
-type CoreChange =
-    | TextChange of Change<Text>
-    | DecimalSingleChange of Change<DecimalSingle>
-    | DecimalDoubleChange of Change<DecimalDouble>
-    | QuantityChange of Change<Quantity>
-    | RecordingChange of Change<Recording>
-    | MachineChange of Change<Machine>
-    | ConnectionChange of Change<Connection>
-    | GraphChange of Change<Graph>
-    interface Change
+type CoreSignal =
+    | EmptySignal
+    | ErrorSignal of Signal<Text>
+    | TextSignal of Signal<Text>
+    | DecimalSingleSignal of Signal<DecimalSingle>
+    | DecimalDoubleSignal of Signal<DecimalDouble>
+    | QuantitySignal of Signal<Quantity>
+    interface Signal
 
 module library =
     open System
     let internal relay (signal : Signal) = signal
-    let internal uniformInteger (number : int) (signal : Signal) = {signal with Value = (float)number}
-    let internal uniformFloat (number : float) (signal : Signal) = {signal with Value = number}
-    let internal error (signal : Signal) = {signal with Value = 0.0} //TODO: add error handling
+    let internal uniformInteger (number : int) (signal : Signal) =
+        QuantitySignal(Signal.createFromInput (unbox signal) (Quantity(number))) :> Signal
+    let internal uniformFloat (number : float) (signal : Signal) =
+        DecimalSingleSignal(Signal.createFromInput (unbox signal) (DecimalSingle(number))) :> Signal
+    let internal uniformDouble (number : double) (signal : Signal) =
+        DecimalDoubleSignal(Signal.createFromInput (unbox signal) (DecimalDouble(number))) :> Signal
+    let internal error (signal : Signal) =
+        ErrorSignal(Signal.createFromInput (unbox signal) (Text("Error"))) :> Signal
     
     let internal topics () =
         [
