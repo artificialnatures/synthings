@@ -5,20 +5,19 @@ open synthings.core
 
 [<Fact>]
 let ``A signal sequence has equally distributed sample times`` () =
-    let interval = 1.0
-    let epoch = Instant.now ()
+    let configuration = {Epoch = Instant.now(); StartAtSeconds = 0.0; EndAtSeconds = 10.0; IntervalSeconds = 1.0}
     let result =
-        Signal.createUniformSeries epoch 0.0 10.0 interval 0.0
+        Signal.createUniformSeries configuration 0.0
         |> List.pairwise
         |> List.map (fun (first, second) -> Signal.timeSpan first second)
-        |> List.forall (fun span -> number.equalWithinTolerance span interval)
+        |> List.forall (fun span -> number.equalWithinTolerance span configuration.IntervalSeconds)
     Assert.True(result)
 
 [<Fact>]
 let ``A signal sequence has ascending sample times`` () =
-    let epoch = Instant.now ()
+    let configuration = {Epoch = Instant.now(); StartAtSeconds = 0.0; EndAtSeconds = 10.0; IntervalSeconds = 1.0}
     let result =
-        Signal.createUniformSeries epoch 0.0 10.0 1.0 0.0
+        Signal.createUniformSeries configuration 0.0
         |> List.map Signal.secondsSinceEpoch
         |> List.pairwise
         |> List.forall (fun pair -> fst pair < snd pair)
