@@ -31,7 +31,7 @@ module library =
         match behaviorIdentifier with
         | :? WaveBehavior as waveBehavior -> wave.createMachine waveBehavior WaveParameters.Default
         | :? EnvelopeBehavior as envelopeBehavior -> envelope.createMachine envelopeBehavior EnvelopeParameters.Default
-        | _ -> Machine.createError()
+        | _ -> failwith "Could not find behavior in library."
 
 type ScalarLibrary() =
     static member build () = ScalarLibrary() :> LibraryResolver

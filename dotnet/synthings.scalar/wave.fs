@@ -19,14 +19,20 @@ module wave =
     
     let sineWave (period : float) (amplitude : float) =
         let behavior (input : Signal) =
-            let y =
-                input
-                |> Signal.secondsSinceEpoch
-                |> number.normalizedPeriodicValue period
-                |> (*) number.TwoPi
-                |> Math.Sin
-                |> (*) (amplitude / 2.0)
-            {input with Value = y}
+            match input with
+            | :? CoreSignal as coreSignal ->
+                match coreSignal with
+                | EmptySignal signal ->
+                    let y =
+                        signal
+                        |> Signal.secondsSinceEpoch
+                        |> number.normalizedPeriodicValue period
+                        |> (*) number.TwoPi
+                        |> Math.Sin
+                        |> (*) (amplitude / 2.0)
+                    DecimalSingleSignal (Signal.createFromInput signal (DecimalSingle(y))) :> Signal
+                | _ -> failwith "Incompatible input type."
+            | _ -> failwith "Incompatible input type."
         behavior
     
     let displayName (behaviorIdentifier : WaveBehavior) =

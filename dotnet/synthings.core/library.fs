@@ -12,7 +12,7 @@ type CoreBehavior =
     interface BehaviorIdentifier
 
 type CoreSignal =
-    | EmptySignal
+    | EmptySignal of Signal<EmptySignalValue>
     | ErrorSignal of Signal<Text>
     | TextSignal of Signal<Text>
     | DecimalSingleSignal of Signal<DecimalSingle>

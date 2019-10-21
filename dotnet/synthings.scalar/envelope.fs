@@ -17,13 +17,19 @@ module envelope =
     let linearDecay (startTime : Instant) (duration : float) =
         let line = curve.linear -1.0 duration 1.0
         let behavior (input : Signal) =
-            let y =
-                input.Time
-                |> Instant.secondsBetween startTime
-                |> line
-                |> number.positiveOrZero
-                |> (*) input.Value
-            {input with Value = y}
+            match input with
+            | :? CoreSignal as coreSignal ->
+                match coreSignal with
+                | DecimalSingleSignal signal ->
+                    let y =
+                        signal.Time
+                        |> Instant.secondsBetween startTime
+                        |> line
+                        |> number.positiveOrZero
+                        |> (*) (unbox signal.Value)
+                    DecimalSingleSignal ({signal with Value = DecimalSingle(y)}) :> Signal
+                | _ -> failwith "Incompatible input type."
+            | _ -> failwith "Incompatible input type."
         behavior
     
     let displayName (behaviorIdentifier : EnvelopeBehavior) =

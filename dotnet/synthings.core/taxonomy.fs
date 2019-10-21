@@ -5,9 +5,12 @@ type SignalValue = interface end
 type Change = interface end
 type TopicIdentifier = interface end
 type BehaviorIdentifier = interface end
+type Parameters = interface end
+
 type EmptySignalValue =
     | EmptySignalValue
     interface SignalValue
+
 type TopicDescriptor =
     {
         Topic : TopicIdentifier;
