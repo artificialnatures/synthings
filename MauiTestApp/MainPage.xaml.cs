@@ -12,9 +12,11 @@ public partial class MainPage : ContentPage
 	private void OnCounterClicked(object sender, EventArgs e)
 	{
 		count++;
-		CounterLabel.Text = $"Current count: {count}";
+		CounterLabel.Text = $"Count count count: {count}";
 
 		SemanticScreenReader.Announce(CounterLabel.Text);
+		var canvas = AGoodOlGraphicView.Drawable as MyFirstDrawable;
+		canvas.DrawAnotherLine(count);
 	}
 }
 
