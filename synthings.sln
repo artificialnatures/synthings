@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "transmission", "transmission\transmission.fsproj", "{BB0752DC-B766-4C85-ABF7-D3B68C44D4B0}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "transmission.tests", "transmission.tests\transmission.tests.fsproj", "{6661DA51-241A-41FF-8859-2EB042207ED3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB0752DC-B766-4C85-ABF7-D3B68C44D4B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB0752DC-B766-4C85-ABF7-D3B68C44D4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB0752DC-B766-4C85-ABF7-D3B68C44D4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB0752DC-B766-4C85-ABF7-D3B68C44D4B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6661DA51-241A-41FF-8859-2EB042207ED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6661DA51-241A-41FF-8859-2EB042207ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6661DA51-241A-41FF-8859-2EB042207ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6661DA51-241A-41FF-8859-2EB042207ED3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

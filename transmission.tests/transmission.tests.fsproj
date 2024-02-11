@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <AssemblyName>synthings.transmission.tests</AssemblyName>
+    <RootNamespace>synthings.transmission.tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="MessageQueue.fs" />
+    <Compile Include="Tree.fs" />
+    <Compile Include="Proposal.fs" />
+    <Compile Include="Operation.fs" />
+    <Compile Include="EntityTable.fs" />
+    <Compile Include="ChangeSet.fs" />
+    <Compile Include="History.fs" />
+    <Compile Include="Render.fs" />
+    <Compile Include="Application.fs" />
+    <Compile Include="Main.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\transmission\transmission.fsproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Expecto" Version="10.*" />
+    <PackageReference Include="YoloDev.Expecto.TestSdk" Version="0.*" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.*" />
+    <PackageReference Update="FSharp.Core" Version="8.*" />
+  </ItemGroup>
+</Project>
