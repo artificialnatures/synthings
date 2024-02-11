@@ -47,7 +47,7 @@ module ConsoleRenderer =
             ()
 
 module Console =
-    let render (submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) (stateRepresentation : StateRepresentation) =
+    let render (submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) (renderableId : Identifier) (stateRepresentation : StateRepresentation) =
         match stateRepresentation with
         | ApplicationContainer _ -> ()
         | Cursor -> ()
@@ -71,12 +71,12 @@ module Console =
     let handleRenderTask (submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) (renderTask : RenderTask<StateRepresentation, Identifier>) =
         match renderTask with
         | CreateView createTask ->
-            render submitProposal createTask.entity
-            createTask.entityId
+            render submitProposal createTask.renderableId createTask.entity
+            createTask.renderableId
         | UpdateView updateTask ->
-            updateTask.entityId
+            updateTask.renderableId
         | DeleteView deleteTask ->
-            deleteTask.entityId
+            deleteTask.renderableId
 
     [<EntryPoint>]
     let program (arguments : string array) =

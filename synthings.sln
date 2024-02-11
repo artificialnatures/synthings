@@ -7,6 +7,12 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "transmission", "transmissio
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "transmission.tests", "transmission.tests\transmission.tests.fsproj", "{6661DA51-241A-41FF-8859-2EB042207ED3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sandbox", "sandbox", "{3E7F002D-F361-4FAE-812F-154DD379928E}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "console", "sandbox\console\console.fsproj", "{CB5FE7BB-3160-4118-932C-1E107F4D5D55}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "maui", "sandbox\maui\maui.fsproj", "{6E807DEC-33A2-48BB-AA1E-ED6067303AC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +30,17 @@ Global
 		{6661DA51-241A-41FF-8859-2EB042207ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6661DA51-241A-41FF-8859-2EB042207ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6661DA51-241A-41FF-8859-2EB042207ED3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB5FE7BB-3160-4118-932C-1E107F4D5D55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB5FE7BB-3160-4118-932C-1E107F4D5D55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB5FE7BB-3160-4118-932C-1E107F4D5D55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB5FE7BB-3160-4118-932C-1E107F4D5D55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E807DEC-33A2-48BB-AA1E-ED6067303AC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E807DEC-33A2-48BB-AA1E-ED6067303AC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E807DEC-33A2-48BB-AA1E-ED6067303AC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E807DEC-33A2-48BB-AA1E-ED6067303AC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CB5FE7BB-3160-4118-932C-1E107F4D5D55} = {3E7F002D-F361-4FAE-812F-154DD379928E}
+		{6E807DEC-33A2-48BB-AA1E-ED6067303AC6} = {3E7F002D-F361-4FAE-812F-154DD379928E}
 	EndGlobalSection
 EndGlobal

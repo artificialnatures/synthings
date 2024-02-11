@@ -86,6 +86,7 @@
     <Compile Include="$(TizenProjectFolder)Main.fs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.*" />
     <PackageReference Include="FSharp.Core" Version="8.*" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.*" />
   </ItemGroup>
