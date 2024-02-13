@@ -29,7 +29,8 @@ let tests =
                 | Orphan _ -> ("Orphan", -1)
                 | Delete operation -> ("Delete", operation.entity)
             let actual = 
-                match ChangeSet.assemble entityTable proposal with
+                let message = {sender=Identifier.empty; proposal=proposal}
+                match ChangeSet.assemble entityTable message with
                 | Ok changeSet ->
                     List.map validateOperation changeSet
                 | Error message ->
@@ -82,7 +83,8 @@ let tests =
                 | Orphan _ -> ("Invalid", -1)
                 | Delete _ -> ("Invalid", -1)
             let actual = 
-                match ChangeSet.assemble entityTable proposal with
+                let message = {sender=entityTable.rootId; proposal=proposal}
+                match ChangeSet.assemble entityTable message with
                 | Ok changeSet ->
                     List.map validateOperation changeSet
                 | Error message ->
@@ -131,7 +133,7 @@ let tests =
                 ])
             let proposal =
                 Replace {
-                    entityToReplace = Specified entityId
+                    entityToReplace = Self
                     replacement = replacementTree
                 }
             let validateOperation operation =
@@ -143,7 +145,8 @@ let tests =
                 | Orphan _ -> ("Orphan", -1)
                 | Delete operation -> ("Delete", operation.entity)
             let changeSet =
-                match ChangeSet.assemble entityTable proposal with
+                let message = {sender=entityId; proposal=proposal}
+                match ChangeSet.assemble entityTable message with
                 | Ok changeSet -> changeSet
                 | _ -> List.empty
             let actual = List.map validateOperation changeSet
@@ -190,7 +193,7 @@ let tests =
                 match Map.tryFindKey (fun _ value -> value = 4) entityTable.entities with
                 | Some identifier -> identifier
                 | None -> Identifier.empty
-            let proposal = Remove { entityToRemove = Specified entityId }
+            let proposal = Remove { entityToRemove = Self }
             let validateOperation operation =
                 match operation with
                 | Create _ -> ("Invalid", -1)
@@ -200,7 +203,8 @@ let tests =
                 | Orphan _ -> ("Orphan", -1)
                 | Delete operation -> ("Delete", operation.entity)
             let changeSet =
-                match ChangeSet.assemble entityTable proposal with
+                let message = {sender=entityId; proposal=proposal}
+                match ChangeSet.assemble entityTable message with
                 | Ok changeSet -> changeSet
                 | _ -> List.empty
             let actual = List.map validateOperation changeSet
@@ -264,6 +268,7 @@ let tests =
             let entityTable = EntityTable.fromTree (Leaf 1)
             let invalidIdentifier = Identifier.create()
             let proposal = Remove { entityToRemove = Specified invalidIdentifier }
-            let actual = ChangeSet.assemble entityTable proposal
+            let message = {sender=invalidIdentifier; proposal=proposal}
+            let actual = ChangeSet.assemble entityTable message
             Expect.isError actual "Invalid identifiers should result in an error."
     ]

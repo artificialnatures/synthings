@@ -14,8 +14,8 @@ type Application<'entity, 'renderable>(configuration : ApplicationConfiguration<
     let submitProposal, receiveProposal =
         MessageQueue.create<Proposal<'entity>, ChangeSet<'entity>> configuration.messagingImplementation
 
-    let accept proposal =
-        ChangeSet.assemble entityTable proposal
+    let accept message =
+        ChangeSet.assemble entityTable message
 
     let react changeSet =
         match changeSet with
@@ -39,8 +39,8 @@ type Application<'entity, 'renderable>(configuration : ApplicationConfiguration<
             renderTable <- Renderer.renderChangeSet submitProposal renderer renderTable changeSet
         | Error _ -> ()
 
-    let step proposal =
-        accept proposal
+    let step message =
+        accept message
         |> react
         |> record
         |> render
@@ -51,13 +51,13 @@ type Application<'entity, 'renderable>(configuration : ApplicationConfiguration<
         async {
             while isRunning do
                 match receiveProposal() with
-                | Some proposal ->
-                    step proposal
+                | Some message ->
+                    step message
                 | None -> ()
         }
 
-    member app.Step proposal =
-        step proposal
+    member app.Step message =
+        step message
     
     member app.buildTree () =
         EntityTable.buildTree None entityTable

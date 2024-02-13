@@ -6,21 +6,21 @@ module ChangeSet =
     let undo changeSet =
         List.map Operation.invert changeSet |> List.rev
     
-    let validate entityTable proposal =
-        match proposal with
+    let validate entityTable message =
+        match message.proposal with
         | Initialize _ ->
-            Ok proposal
+            Ok message
         | Add addProposal ->
-            match EntityTable.resolveIdentifier entityTable addProposal.parent with
-            | Ok _ -> Ok proposal
+            match EntityTable.resolveIdentifier entityTable addProposal.parent message.sender with
+            | Ok _ -> Ok message
             | Error message -> Error message
         | Replace replaceProposal ->
-            match EntityTable.resolveIdentifier entityTable replaceProposal.entityToReplace with
-            | Ok _ -> Ok proposal
+            match EntityTable.resolveIdentifier entityTable replaceProposal.entityToReplace message.sender with
+            | Ok _ -> Ok message
             | Error message -> Error message
         | Remove removeProposal ->
-            match EntityTable.resolveIdentifier entityTable removeProposal.entityToRemove with
-            | Ok _ -> Ok proposal
+            match EntityTable.resolveIdentifier entityTable removeProposal.entityToRemove message.sender with
+            | Ok _ -> Ok message
             | Error message -> Error message
     
     let create reorder _ tree =
@@ -90,12 +90,12 @@ module ChangeSet =
         List.append deleteOperations createOperations
         |> Ok
 
-    let add entityTable proposal =
-        match EntityTable.resolveIdentifier entityTable proposal.parent with
+    let add entityTable proposal relativeTo =
+        match EntityTable.resolveIdentifier entityTable proposal.parent relativeTo with
         | Ok parentId ->
             let tree = Tree.identify (Some parentId) None proposal.entityToAdd
             let reorder childId =
-                match EntityTable.resolveChildOrder entityTable proposal.parent childId proposal.order with
+                match EntityTable.resolveChildOrder entityTable proposal.parent relativeTo childId proposal.order with
                 | Some (order, priorOrder) ->
                     Reorder {
                         entityId = parentId
@@ -110,8 +110,8 @@ module ChangeSet =
             |> Ok
         | Error message -> Error message
 
-    let replace entityTable proposal =
-        match EntityTable.resolveIdentifierAndParent entityTable proposal.entityToReplace with
+    let replace entityTable proposal relativeTo =
+        match EntityTable.resolveIdentifierAndParent entityTable proposal.entityToReplace relativeTo with
         | Ok (entityId, parentId) ->
             let treeToBeDeleted = EntityTable.buildDetailedTree (Some entityId) entityTable
             let deleteOperations =
@@ -127,8 +127,8 @@ module ChangeSet =
             |> Ok
         | Error message -> failwith message
     
-    let remove entityTable proposal =
-        match EntityTable.resolveIdentifier entityTable proposal.entityToRemove with
+    let remove entityTable proposal relativeTo =
+        match EntityTable.resolveIdentifier entityTable proposal.entityToRemove relativeTo with
         | Ok entityId ->
             EntityTable.buildDetailedTree (Some entityId) entityTable
             |> Tree.collect delete
@@ -137,12 +137,12 @@ module ChangeSet =
             |> Ok
         | Error message -> Error message
     
-    let assemble entityTable proposal =
-        match validate entityTable proposal with
-        | Ok proposal ->
-            match proposal with
+    let assemble entityTable message =
+        match validate entityTable message with
+        | Ok message ->
+            match message.proposal with
             | Initialize proposal -> initialize entityTable proposal
-            | Add proposal -> add entityTable proposal
-            | Replace proposal -> replace entityTable proposal
-            | Remove proposal -> remove entityTable proposal
+            | Add proposal -> add entityTable proposal message.sender
+            | Replace proposal -> replace entityTable proposal message.sender
+            | Remove proposal -> remove entityTable proposal message.sender
         | Error message -> Error message

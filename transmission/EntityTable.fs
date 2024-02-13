@@ -25,11 +25,13 @@ module EntityTable =
         then Ok identifier
         else Error $"Identifier ({identifier}) missing from EntityTable."
     
-    let resolveIdentifier entityTable entityReference =
+    let resolveIdentifier entityTable entityReference relativeTo =
         match entityReference with
         | Root ->
             validate entityTable entityTable.rootId
-        | Ancestor (entityId, generations) ->
+        | Self ->
+            validate entityTable relativeTo
+        | Ancestor (generations) ->
             let rec findParent generation entityId =
                 match Map.tryFindKey (fun _ children -> List.contains entityId children) entityTable.relations with
                 | Some parentId -> 
@@ -38,33 +40,33 @@ module EntityTable =
                     else validate entityTable parentId
                 | None -> validate entityTable entityId
             if generations > 0
-            then findParent 1 entityId
-            else validate entityTable entityId
-        | Sibling (entityId, steps) ->
-            match Map.tryFindKey (fun _ children -> List.contains entityId children) entityTable.relations with
+            then findParent 1 relativeTo
+            else validate entityTable relativeTo
+        | Sibling (steps) ->
+            match Map.tryFindKey (fun _ children -> List.contains relativeTo children) entityTable.relations with
             | Some parentId -> 
                 let siblingIds = entityTable.relations[parentId]
-                let entityIndex = List.findIndex (fun siblingId -> siblingId = entityId) siblingIds
+                let entityIndex = List.findIndex (fun siblingId -> siblingId = relativeTo) siblingIds
                 let siblingId =
                     match entityIndex + steps with
                     | index when index < 0 -> siblingIds[0]
                     | index when index > (List.length siblingIds) - 1 -> List.last siblingIds
                     | index -> siblingIds[index]
                 validate entityTable siblingId
-            | None -> validate entityTable entityId
+            | None -> validate entityTable relativeTo
         | Specified entityId ->
             validate entityTable entityId
     
-    let resolveIdentifierAndParent entityTable entityReference =
-        match resolveIdentifier entityTable entityReference with
+    let resolveIdentifierAndParent entityTable entityReference relativeTo =
+        match resolveIdentifier entityTable entityReference relativeTo with
         | Ok entityId ->
             match Map.tryFindKey (fun _ children -> List.contains entityId children) entityTable.relations with
             | None -> Error $"No parent found for entity {entityId}."
             | Some parentId -> Ok (entityId, parentId)
         | Error message -> Error message
     
-    let resolveChildOrder entityTable parentReference childId insertionOrder =
-        match resolveIdentifier entityTable parentReference with
+    let resolveChildOrder entityTable parentReference relativeTo childId insertionOrder =
+        match resolveIdentifier entityTable parentReference relativeTo with
         | Ok parentId ->
             let priorOrder =
                 if List.contains childId entityTable.relations[parentId]

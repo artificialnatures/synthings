@@ -43,24 +43,24 @@ let tests =
         testCase "Resolve an EntityReference" <| fun _ ->
             let examples =
                 [
-                    //reference should equal            key
-                    (Root,                              exampleKeys[0]) //0 is the root entity
-                    (Ancestor (exampleKeys[1], 1),      exampleKeys[0]) //0 is the parent of 1
-                    (Ancestor (exampleKeys[5], 1),      exampleKeys[0]) //0 is the parent of 5
-                    (Ancestor (exampleKeys[5], 0),      exampleKeys[5]) //The 0th ancestor is myself
-                    (Ancestor (exampleKeys[5], -1),     exampleKeys[5]) //Negative generations is equivalent to 0th ancestor (self)
-                    (Ancestor (exampleKeys[55], 1),     exampleKeys[5]) //5 is the parent of 55
-                    (Ancestor (exampleKeys[55], 2),     exampleKeys[0]) //0 is the grandparent of 55
-                    (Sibling (exampleKeys[6], 2),       exampleKeys[8]) //8 is the sibling 2 steps subsequent to 6
-                    (Sibling (exampleKeys[32], -2),     exampleKeys[30]) //30 is the sibling 2 steps prior to 32
-                    (Sibling (exampleKeys[75], 0),      exampleKeys[75]) //The 0th sibling is myself
-                    (Sibling (exampleKeys[81], -2),     exampleKeys[80]) //If steps goes beyond the first sibling, the first sibling is used
-                    (Sibling (exampleKeys[88], 2),      exampleKeys[89]) //If steps goes beyond the last sibling, the last sibling is used
-                    (Specified exampleKeys[99],         exampleKeys[99]) //A specific Identifier anywhere in the EntityTable
+                    //(relativeTo, reference) should equal ->       key
+                    ((Identifier.empty, Root),                      exampleKeys[0]) //0 is the root entity
+                    ((exampleKeys[1], Ancestor 1),                  exampleKeys[0]) //0 is the parent of 1
+                    ((exampleKeys[5], Ancestor 1),                  exampleKeys[0]) //0 is the parent of 5
+                    ((exampleKeys[5], Ancestor 0),                  exampleKeys[5]) //The 0th ancestor is myself
+                    ((exampleKeys[5], Ancestor -1),                 exampleKeys[5]) //Negative generations is equivalent to 0th ancestor (self)
+                    ((exampleKeys[55], Ancestor 1),                 exampleKeys[5]) //5 is the parent of 55
+                    ((exampleKeys[55], Ancestor 2),                 exampleKeys[0]) //0 is the grandparent of 55
+                    ((exampleKeys[6], Sibling 2),                   exampleKeys[8]) //8 is the sibling 2 steps subsequent to 6
+                    ((exampleKeys[32], Sibling -2),                 exampleKeys[30]) //30 is the sibling 2 steps prior to 32
+                    ((exampleKeys[75], Sibling 0),                  exampleKeys[75]) //The 0th sibling is myself
+                    ((exampleKeys[81], Sibling -2),                 exampleKeys[80]) //If steps goes beyond the first sibling, the first sibling is used
+                    ((exampleKeys[88], Sibling 2),                  exampleKeys[89]) //If steps goes beyond the last sibling, the last sibling is used
+                    ((Identifier.empty, Specified exampleKeys[99]), exampleKeys[99]) //A specific Identifier anywhere in the EntityTable
                 ]
             let resolve example =
-                let reference, _ = example
-                EntityTable.resolveIdentifier exampleEntityTable reference
+                let (relativeTo, reference), _ = example
+                EntityTable.resolveIdentifier exampleEntityTable reference relativeTo
             let results = List.map resolve examples
             let actual = 
                 List.map Result.toOption results
@@ -72,14 +72,14 @@ let tests =
         testCase "Resolve an EntityReference and its parent" <| fun _ ->
             let examples =
                 [
-                    //reference should yield            (entityId,          parentId)
-                    (Ancestor (exampleKeys[55], 1),     (exampleKeys[5],    exampleKeys[0])) //0 is the parent of 5, which is the parent of 55
-                    (Sibling (exampleKeys[66], 2),      (exampleKeys[68],   exampleKeys[6])) //6 is the parent of 68, which is the sibling 2 steps subsequent to 66
-                    (Specified exampleKeys[99],         (exampleKeys[99],   exampleKeys[9])) //9 is the parent of 99
+                    //(relativeTo, reference) should yield ->           (entityId,          parentId)
+                    ((exampleKeys[55], Ancestor 1),                     (exampleKeys[5],    exampleKeys[0])) //0 is the parent of 5, which is the parent of 55
+                    ((exampleKeys[66], Sibling 2),                      (exampleKeys[68],   exampleKeys[6])) //6 is the parent of 68, which is the sibling 2 steps subsequent to 66
+                    ((Identifier.empty, Specified exampleKeys[99]),     (exampleKeys[99],   exampleKeys[9])) //9 is the parent of 99
                 ]
             let resolve example =
-                let reference, _ = example
-                EntityTable.resolveIdentifierAndParent exampleEntityTable reference
+                let (relativeTo, reference), _ = example
+                EntityTable.resolveIdentifierAndParent exampleEntityTable reference relativeTo
             let results = List.map resolve examples
             let actual = 
                 List.map Result.toOption results
@@ -89,7 +89,7 @@ let tests =
             Expect.equal actual expected "All Identifiers should match."
 
         testCase "Resolving an EntityReference with no parent returns an error" <| fun _ ->
-            let result = EntityTable.resolveIdentifierAndParent exampleEntityTable Root
+            let result = EntityTable.resolveIdentifierAndParent exampleEntityTable Root Identifier.empty
             Expect.isError result "An entity with no parent should return an error"
         
         testCase "Resolving insertion point" <| fun _ ->
@@ -97,7 +97,7 @@ let tests =
             let examples =
                 [
                     (
-                        (Root, insertedChildId, First),
+                        ((Identifier.empty, Root), insertedChildId, First),
                         [
                             insertedChildId
                             exampleKeys[1]
@@ -112,7 +112,7 @@ let tests =
                         ]
                     )
                     (
-                        (Ancestor(exampleKeys[33], 1), exampleKeys[35], First),
+                        ((exampleKeys[33], Ancestor 1), exampleKeys[35], First),
                         [
                             exampleKeys[35]
                             exampleKeys[30]
@@ -127,11 +127,11 @@ let tests =
                         ]
                     )
                     (
-                        (Sibling(exampleKeys[44], -2), insertedChildId, First),
+                        ((exampleKeys[44], Sibling -2), insertedChildId, First),
                         List.empty //only one child entity, so no reordering necessary
                     )
                     (
-                        (Specified exampleKeys[5], exampleKeys[52], First),
+                        ((Identifier.empty, Specified exampleKeys[5]), exampleKeys[52], First),
                         [
                             exampleKeys[52]
                             exampleKeys[50]
@@ -146,11 +146,11 @@ let tests =
                         ]
                     )
                     (
-                        (Specified exampleKeys[5], insertedChildId, Last),
+                        ((Identifier.empty, Specified exampleKeys[5]), insertedChildId, Last),
                         List.empty //child entity appended to the end of the list (Last), so no reordering necessary
                     )
                     (
-                        (Specified exampleKeys[5], exampleKeys[59], Precede exampleKeys[55]),
+                        ((Identifier.empty, Specified exampleKeys[5]), exampleKeys[59], Precede exampleKeys[55]),
                         [
                             exampleKeys[50]
                             exampleKeys[51]
@@ -166,8 +166,8 @@ let tests =
                     )
                 ]
             let resolve example =
-                let (parentReference, childId, insertionOrder), _ = example
-                let reorderedChildIds = EntityTable.resolveChildOrder exampleEntityTable parentReference childId insertionOrder
+                let ((relativeTo, parentReference), childId, insertionOrder), _ = example
+                let reorderedChildIds = EntityTable.resolveChildOrder exampleEntityTable parentReference relativeTo childId insertionOrder
                 match reorderedChildIds with
                 | Some (order, _) -> order  //Some means there should be a Reorder operation
                 | None -> List.empty        //None means no Reorder operation necessary

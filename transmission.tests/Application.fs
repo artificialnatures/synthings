@@ -27,7 +27,7 @@ let tests =
                 Initialize {
                     initialTree = (Node (2, [Leaf 21; Leaf 22]))
                 }
-            application.Step proposal
+            application.Step {sender=Identifier.empty; proposal=proposal}
             let actual = application.buildTree ()
             let expected = Node (2, [
                 Leaf 21

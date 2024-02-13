@@ -21,12 +21,14 @@ let tests =
                         entityToAdd = (Node (3, [Leaf 31]))
                     }
                 ]
-            let expected = 
-                match ChangeSet.assemble entityTable proposals[0] with
+            let expected =
+                let message = {sender=entityTable.rootId; proposal=proposals[0]}
+                match ChangeSet.assemble entityTable message with
                 | Ok changeSet -> List.singleton changeSet
                 | Error _ -> List.empty
             let revisedHistory = 
-                match ChangeSet.assemble entityTable proposals[1] with
+                let message = {sender=entityTable.rootId; proposal=proposals[1]}
+                match ChangeSet.assemble entityTable message with
                 | Ok changeSet -> changeSet :: expected
                 | Error _ -> expected
             let _, actual = History.undo revisedHistory

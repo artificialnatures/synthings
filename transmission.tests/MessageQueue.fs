@@ -7,12 +7,13 @@ open synthings.transmission
 let tests =
   testList "MessageQueue" [
     testCase "All messages sent via channel can be received" <| fun _ ->
-      let messages = [1..10]
+      let values = [1..10]
       let send, receive = MessageQueue.create<int, int> Channels
-      List.iter send messages
-      let receivedMessages = 
-        List.map (fun _ -> receive()) messages
+      List.iter (fun i -> send Identifier.empty i) values
+      let receivedValues = 
+        List.map (fun _ -> receive()) values
         |> List.filter Option.isSome
         |> List.map Option.get
-      Expect.sequenceEqual messages receivedMessages "All messages received in order."
+        |> List.map (fun message -> message.proposal)
+      Expect.sequenceEqual values receivedValues "All messages received in order."
   ]

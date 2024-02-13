@@ -12,7 +12,8 @@ type InsertionOrder =
     | Precede of Identifier
 
 type EntityReference =
-    | Root                              //The root entity in EntityTable
-    | Ancestor of Identifier * int      //An entity int generations up the hierarchy from Identifier
-    | Sibling of Identifier * int       //An entity int steps prior (-) or subsequent (+) to Identifier
-    | Specified of Identifier           //A specific entity designated with Identifier
+    | Root                          //The root entity in EntityTable
+    | Self                          //The sender entity
+    | Ancestor of int               //An entity int generations up the hierarchy from sender
+    | Sibling of int                //An entity int steps prior (-) or subsequent (+) to sender
+    | Specified of Identifier       //A specific entity designated with Identifier

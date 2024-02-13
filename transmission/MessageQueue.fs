@@ -3,8 +3,13 @@ namespace synthings.transmission
 type MessagingImplementation =
     | ZeroMQ
     | Channels
-type MessageDispatcher<'message> = 'message -> unit
-type MessageReceiver<'message> = unit -> 'message option
+type Message<'proposal> =
+    {
+        sender : Identifier
+        proposal : 'proposal
+    }
+type MessageDispatcher<'proposal> = Identifier -> 'proposal -> unit //Identifier and 'proposal are combined to form a Message<'proposal>
+type MessageReceiver<'proposal> = unit -> Message<'proposal> option
 
 module Json =
     open System.Text.Json
@@ -23,11 +28,11 @@ module MessageQueue =
     open NetMQ
     open NetMQ.Sockets
     
-    let createChannel<'message> () : (MessageDispatcher<'message> * MessageReceiver<'message>) =
-        let channel = Channel.CreateUnbounded<'message>()
+    let createChannel<'proposal> () : (MessageDispatcher<'proposal> * MessageReceiver<'proposal>) =
+        let channel = Channel.CreateUnbounded<Message<'proposal>>()
         //send adds a message to the queue (the producer side)
-        let send (message : 'message) =
-            channel.Writer.WriteAsync message |> ignore
+        let send (sender : Identifier) (proposal : 'proposal) =
+            channel.Writer.WriteAsync {sender=sender; proposal=proposal} |> ignore
         //receive removes a message from the queue (the consumer side)
         let receive () =
             if channel.Reader.Count > 0 then
@@ -55,7 +60,8 @@ module MessageQueue =
         subscriberSocket.Connect("tcp://127.0.0.1:5566")
         subscriberSocket.Subscribe(channelName)
 
-        let sendRequest (message : 'request) =
+        let sendRequest (sender : Identifier) (request : 'request) =
+            let message = {sender=sender; proposal=request}
             requestSocket.SendFrame(Json.toJson message)
             match requestSocket.ReceiveFrameString () with
             | "OK" -> ()
@@ -66,12 +72,13 @@ module MessageQueue =
             if responseSocket.HasIn then
                 let request =
                     responseSocket.ReceiveFrameString()
-                    |> Json.fromJson<'request>
+                    |> Json.fromJson<Message<'request>>
                 responseSocket.SendFrame("OK")
                 Some request
             else None
 
-        let publishMessage (message : 'response) =
+        let publishMessage (sender : Identifier) (response : 'response) =
+            let message = {sender=sender; proposal=response}
             publisherSocket.SendMoreFrame(channelName).SendFrame(Json.toJson message)
         
         let receiveSubscriptionMessage () =
@@ -79,7 +86,7 @@ module MessageQueue =
                 let channel = subscriberSocket.ReceiveFrameString()
                 let message = 
                     subscriberSocket.ReceiveFrameString()
-                    |> Json.fromJson<'response>
+                    |> Json.fromJson<Message<'response>>
                 Some message
             else None
         sendRequest, receiveRequest, publishMessage, receiveSubscriptionMessage
