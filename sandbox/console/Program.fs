@@ -39,44 +39,54 @@ module ConsoleRenderer =
     let text (text : string) =
         Spectre.Console.AnsiConsole.WriteLine text
 
-    let button (submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) (label : string) (onClickProposal : Proposal<StateRepresentation>) =
+    let button (submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) (renderableId : Identifier) (label : string) (onClickProposal : Proposal<StateRepresentation>) =
         let confirmed = AnsiConsole.Confirm (label, true)
         if confirmed then
-            submitProposal onClickProposal
-        else
-            ()
+            submitProposal renderableId onClickProposal
+        ()
 
 module Console =
     let render (submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) (renderableId : Identifier) (stateRepresentation : StateRepresentation) =
         match stateRepresentation with
-        | ApplicationContainer _ -> ()
-        | Cursor -> ()
-        | Window _ -> ()
-        | VerticalStack -> ()
-        | Canvas -> ()
-        | Transform _ -> ()
+        | ApplicationContainer -> 
+            Some stateRepresentation
+        | Cursor ->
+            Some stateRepresentation
+        | Window _ ->
+            Some stateRepresentation
+        | VerticalStack ->
+            Some stateRepresentation
+        | Canvas ->
+            Some stateRepresentation
+        | Transform _ ->
+            Some stateRepresentation
         | Button(label, onClickProposal) ->
-            ConsoleRenderer.button submitProposal label onClickProposal
+            ConsoleRenderer.button submitProposal renderableId label onClickProposal
+            Some stateRepresentation
         | Text text -> 
             ConsoleRenderer.text text
-        | Image _ -> ()
+            Some stateRepresentation
+        | Image _ -> None
         | File file -> 
             ConsoleRenderer.fileDisplay file
+            Some stateRepresentation
         | FilePicker filePaths -> 
             //ConsoleRenderer.filePicker submitProposal
-            ()
+            Some stateRepresentation
         | Wait -> 
             ConsoleRenderer.waitIndicator "Loading..."
+            Some stateRepresentation
         
-    let handleRenderTask (submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) (renderTask : RenderTask<StateRepresentation, Identifier>) =
+    let handleRenderTask (submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) (renderTask : RenderTask<StateRepresentation, StateRepresentation>) =
         match renderTask with
-        | CreateView createTask ->
-            render submitProposal createTask.renderableId createTask.entity
-            createTask.renderableId
-        | UpdateView updateTask ->
-            updateTask.renderableId
-        | DeleteView deleteTask ->
-            deleteTask.renderableId
+        | CreateView task ->
+            render submitProposal task.renderableId task.entity
+        | UpdateView task ->
+            render submitProposal task.renderableId task.entity
+        | DeleteView _ -> None
+        | ParentView _ -> None
+        | ReorderView _ -> None
+        | OrphanView _ -> None
 
     [<EntryPoint>]
     let program (arguments : string array) =
@@ -92,16 +102,19 @@ module Console =
                 VerticalStack,
                 [
                     Leaf (Text "Hello, world!")
-                    Leaf (Button ("OK", Replace {entityToReplace = Parent; replacement = goodbyeState}))
+                    Leaf (Button ("OK", Replace {entityToReplace = Ancestor 1; replacement = goodbyeState}))
                 ]
             )
         let configuration =
             {
                 messagingImplementation = Channels
-                rootEntity = ApplicationContainer
-                rootRenderable = Identifier.create()
                 renderer = handleRenderTask
-                initialProposal = Add {parent = Identifier.create(); siblingToPrecede = None; entityToAdd = helloState}
             }
-        Application<StateRepresentation, Identifier>(configuration).RunBlocking()
+        let app = Application<StateRepresentation, StateRepresentation>(configuration)
+        let initialProposal =
+            Initialize {
+                initialTree = helloState
+            }
+        app.Step {sender=Identifier.empty; proposal=initialProposal}
+        app.RunBlocking()
         0

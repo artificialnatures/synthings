@@ -34,9 +34,4 @@ let tests =
                 Leaf 22
             ])
             Expect.equal actual expected "Trees should be equal."
-        
-        testCase "Cover Add, Refresh (Update), Replace, Remove" <| fun _ ->
-            let actual = 0
-            let expected = 1
-            Expect.equal actual expected "See TODO list in README.md for details."
     ]

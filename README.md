@@ -2,14 +2,10 @@
 
 Research into simple, flexible, and robust systems for interactive graphical programming.
 
-- [ ] Need a mechanism to refer to entities before they have been instantiated
-    - call identify before adding events to renderables
-    - a "resolve" function in addition to submitProposal that resolves references like Parent or Sibling - would need unresolved and resolved Proposal types
-    - an extra "sender" parameter in the submitProposal function that passes the sender Identifier to allow resolution
-- [ ] Replace proposal -> Replace (entire subtree) and Refresh (just one entity)
-- [ ] Test coverage
+- [ ] Test application: one test for each proposal type
 - [ ] Get console sandbox app working
 - [ ] Get MAUI sandbox app working
+- [ ] Replace proposal -> Replace (entire subtree) and Refresh (just one entity)
 - [ ] Remove all uneccessary failwith statements
 - [ ] Refactoring
 - [ ] GUI Testing
