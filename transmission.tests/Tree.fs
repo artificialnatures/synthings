@@ -3,9 +3,51 @@ module Tree
 open Expecto
 open synthings.transmission
 
+type NeedlesslyWrappedInteger = {integerValue : int}
+
 [<Tests>]
 let tests =
     testList "Tree" [
+        testCase "Map" <| fun _ ->
+            let tree =
+                Node({integerValue=1}, [
+                    Leaf {integerValue=2}
+                    Node({integerValue=3}, [
+                        Leaf {integerValue=31}
+                        Leaf {integerValue=32}
+                        Leaf {integerValue=33}
+                    ])
+                    Node({integerValue=4}, [
+                        Leaf {integerValue=41}
+                        Leaf {integerValue=42}
+                        Node ({integerValue=430}, [
+                            Leaf {integerValue=431}
+                            Leaf {integerValue=432}
+                            Leaf {integerValue=433}
+                        ])
+                    ])
+                ])
+            let expected =
+                Node(1, [
+                    Leaf 2
+                    Node(3, [
+                        Leaf 31
+                        Leaf 32
+                        Leaf 33
+                    ])
+                    Node(4, [
+                        Leaf 41
+                        Leaf 42
+                        Node (430, [
+                            Leaf 431
+                            Leaf 432
+                            Leaf 433
+                        ])
+                    ])
+                ])
+            let actual = Tree.map (fun wrapped -> wrapped.integerValue) tree
+            Expect.equal actual expected "After map, the tree should have the same structure, but different values."
+
         testCase "Collect" <| fun _ ->
             let tree =
                 Node(1, [
@@ -50,6 +92,7 @@ let tests =
                     4330
                 ]
             Expect.equal actual expected "Collection should contain all entities in order."
+        
         testCase "Collect root and branches" <| fun _ ->
             let tree =
                 Node(1, [

@@ -42,6 +42,16 @@ module Tree =
                 |> Leaf
         identify parentId entityId tree
     
+    let map mapper tree =
+        let rec map tree =
+            match tree with
+            | Node (entity, children) ->
+                let mappedChildren = List.map map children
+                Node (mapper entity, mappedChildren)
+            | Leaf entity ->
+                Leaf (mapper entity)
+        map tree
+
     let collect collector tree =
         let rec collect recursionLevel collection tree =
             let collectedEntity = 
