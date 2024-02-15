@@ -113,14 +113,19 @@ module ChangeSet =
     let replace entityTable proposal relativeTo =
         match EntityTable.resolveIdentifierAndParent entityTable proposal.entityToReplace relativeTo with
         | Ok (entityId, parentId) ->
-            let treeToBeDeleted = EntityTable.buildDetailedTree (Some entityId) entityTable
+            let treeToBeDeleted =
+                match parentId with
+                | None ->
+                    EntityTable.buildDetailedTree None entityTable
+                | Some parentId ->
+                    EntityTable.buildDetailedTree (Some entityId) entityTable
             let deleteOperations =
                 Tree.collect delete treeToBeDeleted
                 |> List.rev
                 |> List.concat
             let create = create None
             let createOperations =
-                Tree.identify (Some parentId) (Some entityId) proposal.replacement
+                Tree.identify parentId (Some entityId) proposal.replacement
                 |> Tree.collect create
                 |> List.concat
             List.append deleteOperations createOperations

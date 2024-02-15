@@ -73,9 +73,10 @@ let tests =
             let examples =
                 [
                     //(relativeTo, reference) should yield ->           (entityId,          parentId)
-                    ((exampleKeys[55], Ancestor 1),                     (exampleKeys[5],    exampleKeys[0])) //0 is the parent of 5, which is the parent of 55
-                    ((exampleKeys[66], Sibling 2),                      (exampleKeys[68],   exampleKeys[6])) //6 is the parent of 68, which is the sibling 2 steps subsequent to 66
-                    ((Identifier.empty, Specified exampleKeys[99]),     (exampleKeys[99],   exampleKeys[9])) //9 is the parent of 99
+                    ((exampleKeys[3], Ancestor 1),                      (exampleKeys[0],    None)) //0 is the root entity, so it doesn't have a parent
+                    ((exampleKeys[55], Ancestor 1),                     (exampleKeys[5],    Some exampleKeys[0])) //0 is the parent of 5, which is the parent of 55
+                    ((exampleKeys[66], Sibling 2),                      (exampleKeys[68],   Some exampleKeys[6])) //6 is the parent of 68, which is the sibling 2 steps subsequent to 66
+                    ((Identifier.empty, Specified exampleKeys[99]),     (exampleKeys[99],   Some exampleKeys[9])) //9 is the parent of 99
                 ]
             let resolve example =
                 let (relativeTo, reference), _ = example
@@ -87,10 +88,6 @@ let tests =
                 |> List.map Option.get
             let expected = List.map snd examples
             Expect.equal actual expected "All Identifiers should match."
-
-        testCase "Resolving an EntityReference with no parent returns an error" <| fun _ ->
-            let result = EntityTable.resolveIdentifierAndParent exampleEntityTable Root Identifier.empty
-            Expect.isError result "An entity with no parent should return an error"
         
         testCase "Resolving insertion point" <| fun _ ->
             let insertedChildId = Identifier.create ()

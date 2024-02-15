@@ -60,9 +60,8 @@ module EntityTable =
     let resolveIdentifierAndParent entityTable entityReference relativeTo =
         match resolveIdentifier entityTable entityReference relativeTo with
         | Ok entityId ->
-            match Map.tryFindKey (fun _ children -> List.contains entityId children) entityTable.relations with
-            | None -> Error $"No parent found for entity {entityId}."
-            | Some parentId -> Ok (entityId, parentId)
+            let parentId = Map.tryFindKey (fun _ children -> List.contains entityId children) entityTable.relations
+            Ok (entityId, parentId)
         | Error message -> Error message
     
     let resolveChildOrder entityTable parentReference relativeTo childId insertionOrder =

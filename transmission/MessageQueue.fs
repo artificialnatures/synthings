@@ -32,7 +32,9 @@ module MessageQueue =
         let channel = Channel.CreateUnbounded<Message<'proposal>>()
         //send adds a message to the queue (the producer side)
         let send (sender : Identifier) (proposal : 'proposal) =
-            channel.Writer.WriteAsync {sender=sender; proposal=proposal} |> ignore
+            channel.Writer.WriteAsync({sender=sender; proposal=proposal}).AsTask()
+            |> Async.AwaitTask
+            |> Async.RunSynchronously
         //receive removes a message from the queue (the consumer side)
         let receive () =
             if channel.Reader.Count > 0 then
