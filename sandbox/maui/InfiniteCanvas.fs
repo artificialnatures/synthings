@@ -5,7 +5,7 @@ open Microsoft.Maui
 
 open synthings.transmission
 
-type InfiniteCanvas(canvas : StateRepresentation, submitProposal : MessageDispatcher<Proposal>) as this =
+type InfiniteCanvas(canvas : StateRepresentation, submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) as this =
     inherit AbsoluteLayout()
 
     let mutable previousTranslation = (0.0, 0.0)

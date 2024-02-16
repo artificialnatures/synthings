@@ -9,9 +9,9 @@ type MauiLayout = Microsoft.Maui.Controls.Layout
 type MauiCommand = Microsoft.Maui.Controls.Command
 
 module MauiRenderer =
-    let render (submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) (stateRepresentation : StateRepresentation) : MauiView =
+    let createView submitProposal renderableId stateRepresentation =
         match stateRepresentation with
-        | ApplicationContainer _ -> 
+        | ApplicationContainer -> 
             Microsoft.Maui.Controls.ContentView() :> MauiView
         | Cursor -> 
             Microsoft.Maui.Controls.ContentView() :> MauiView
@@ -27,7 +27,7 @@ module MauiRenderer =
             Microsoft.Maui.Controls.Label(Text = text, FontSize = 460.0) :> MauiView
         | Button(label, onClickProposal) ->
             let onClick () =
-                submitProposal onClickProposal
+                submitProposal renderableId onClickProposal
             Microsoft.Maui.Controls.Button(Text = label, Command = MauiCommand(onClick)) :> MauiView
         | Image image ->
             match image with
@@ -47,8 +47,26 @@ module MauiRenderer =
             content.Children.Add(Microsoft.Maui.Controls.Entry(Placeholder = "File Path"))
             content.Children.Add(Microsoft.Maui.Controls.Button(Text = "Pick File"))
             content :> MauiView
+        | Transform(_, _) ->
+            Microsoft.Maui.Controls.ContentView() :> MauiView
         | Wait -> 
             Microsoft.Maui.Controls.Label(Text = "Loading...", FontSize = 300.0) :> MauiView
+    
+    let render submitProposal renderTask =
+        match renderTask with
+        | CreateView task -> 
+            createView submitProposal task.renderableId task.entity
+            |> Some
+        | ParentView task ->
+            None
+        | ReorderView task ->
+            None
+        | UpdateView task ->
+            None
+        | OrphanView task ->
+            None
+        | DeleteView task ->
+            None
 
 type MauiRootContent() as mauiRootContent =
     inherit Microsoft.Maui.Controls.ContentView()
@@ -63,39 +81,27 @@ type MauiRootContent() as mauiRootContent =
         let debugWindow = Microsoft.Maui.Controls.Window(debugPage)
         do Microsoft.Maui.Controls.Application.Current.OpenWindow(debugWindow)
         mauiRootContent.Content <- renderRoot
-        let application = Application(Channels)
-        application.Run (Some MauiRenderer.render) //TODO: still need to fully pull render inside application...
-
-        let executeChangeSet (submitProposal : MessageDispatcher<Proposal<StateRepresentation>>) (changeSet : ChangeSet<StateRepresentation>) =
-            for operation in changeSet do
-                match operation with
-                | Create create ->
-                    let view = MauiRenderer.render submitProposal create.entity
-                    entityIdToView <- Map.add entityId view entityIdToView
-                    viewIdToEntityId <- Map.add view.Id entityId viewIdToEntityId
-                    //TODO: Use Insert to place the view in order
-                    match entityIdToView[parentId] with
-                    | :? MauiLayout -> (entityIdToView[parentId] :?> MauiLayout).Add(view)
-                | Update (entityId, entity, previousEntity) ->
-                    let view = MauiRenderer.render submitProposal entity
-                    viewIdToEntityId <- Map.remove entityIdToView[entityId].Id viewIdToEntityId
-                    viewIdToEntityId <- Map.add view.Id entityId viewIdToEntityId
-                    entityIdToView <- Map.remove entityId entityIdToView
-                    entityIdToView <- Map.add entityId view entityIdToView
-                | Delete (parentId, childToProceedId, entityId, entity) ->
-                    match entityIdToView[parentId] with
-                    | :? MauiLayout -> 
-                        (entityIdToView[parentId] :?> MauiLayout).Remove(entityIdToView[entityId]) |> ignore
-                        viewIdToEntityId <- Map.remove entityIdToView[entityId].Id viewIdToEntityId
-                        entityIdToView <- Map.remove entityId entityIdToView
-
-        let render submitProposal changeSet =
-            System.Console.WriteLine "Received render task."
-            executeChangeSet submitProposal changeSet
-            mauiRootContent.ReplaceDebugContent (Microsoft.Maui.Controls.Label(Text = sprintf "Change Set: %A" changeSet))
-        Application.runRender render application
-        //TODO: Specify initial state, send initial proposals
-        
+        let configuration =
+            {
+                messagingImplementation = Channels
+                renderer = MauiRenderer.render
+            }
+        let application = Application(configuration)
+        let goodbyeState =
+            Node (VerticalStack, [
+                Leaf (Text "Goobye, world!")
+            ])
+        let helloState =
+            Node (ApplicationContainer, [
+                Node (VerticalStack, [
+                    Leaf (Text "Hello, world!")
+                    Leaf (Button ("OK", Replace {entityToReplace=Ancestor 1; replacement=goodbyeState}))
+                ])
+            ])
+        let initialProposal =
+            Initialize {initialTree = helloState}
+        application.Enqueue Identifier.empty initialProposal
+        application.Run ()
 
     member mauiRootContent.ReplaceRootContent (content: MauiView) =
         Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread((fun () -> renderRoot.Content <- content))
