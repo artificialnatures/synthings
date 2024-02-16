@@ -100,9 +100,10 @@ type MauiRootContent() as mauiRootContent =
             None
 
     member mauiRootContent.OnLoaded eventArgs =
-        let debugPage = Microsoft.Maui.Controls.ContentPage(Content = debugRoot)
-        let debugWindow = Microsoft.Maui.Controls.Window(debugPage)
-        do Microsoft.Maui.Controls.Application.Current.OpenWindow(debugWindow)
+        //Debug Window:
+        //let debugPage = Microsoft.Maui.Controls.ContentPage(Content = debugRoot)
+        //let debugWindow = Microsoft.Maui.Controls.Window(debugPage)
+        //do Microsoft.Maui.Controls.Application.Current.OpenWindow(debugWindow)
         mauiRootContent.Content <- renderRoot
         let goodbyeState =
             Node (VerticalStack, [
@@ -117,8 +118,8 @@ type MauiRootContent() as mauiRootContent =
             ])
         let initialProposal =
             Initialize {initialTree = helloState}
-        mauiRootContent.Application.Enqueue Identifier.empty initialProposal
         mauiRootContent.Application.Run ()
+        mauiRootContent.Application.Enqueue Identifier.empty initialProposal
 
     member mauiRootContent.ReplaceRootContent (content: MauiView) =
         Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread((fun () -> renderRoot.Content <- content))
