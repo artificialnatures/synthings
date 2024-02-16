@@ -35,6 +35,9 @@ let render submitProposal renderTask =
 
 [<Tests>]
 let tests =
+    //testSequenced ensures that this collection of tests executes
+    //serially. These tests hang when run concurrently, likely because
+    //of some limitation in System.Threading.Channels
     testSequenced <| testList "Application" [ 
         testCase "Initialize" <| fun _ ->
             let configuration =
@@ -121,4 +124,39 @@ let tests =
                 Leaf 32
             ])
             Expect.equal actual expected "The root entity should have been replaced."
+        
+        testCase "Remove" <| fun _ ->
+            let configuration =
+                {
+                    messagingImplementation = Channels
+                    renderer = render
+                }
+            let application = Application(configuration)
+            let removeProposal =
+                Remove {
+                    entityToRemove = Ancestor 1 //remove the parent of the sender
+                }
+            let initialTree =
+                Node (Integer {value=2; onActivated=None}, [
+                    Node (Integer {value=21; onActivated=None}, [
+                        Leaf (Integer {value=210; onActivated=Some removeProposal})
+                        Leaf (Integer {value=211; onActivated=None})
+                    ])
+                    Leaf (Integer {value=22; onActivated=None})
+                ])
+            let initialProposal =
+                Initialize {
+                    initialTree = initialTree
+                }
+            application.Enqueue Identifier.empty initialProposal //Initialize application with some state
+            application.Step ()
+            triggerEvents () //simulate interaction, e.g. a mouse click
+            application.Step ()
+            let actual =
+                application.BuildTree ()
+                |> Tree.map (fun renderable -> match renderable with Integer integer -> integer.value)
+            let expected = Node (2, [
+                Leaf 22
+            ])
+            Expect.equal actual expected "An entity should have been deleted."
     ]

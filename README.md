@@ -2,7 +2,6 @@
 
 Research into simple, flexible, and robust systems for interactive graphical programming.
 
-- [ ] Test application: one test for each proposal type
 - [ ] Get console sandbox app working
 - [ ] Get MAUI sandbox app working
 - [ ] Replace proposal -> Replace (entire subtree) and Refresh (just one entity)
