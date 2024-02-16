@@ -115,6 +115,7 @@ module Console =
             Initialize {
                 initialTree = helloState
             }
-        app.Step {sender=Identifier.empty; proposal=initialProposal}
+        app.Enqueue Identifier.empty initialProposal
+        app.Step ()
         app.RunBlocking()
         0
