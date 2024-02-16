@@ -70,6 +70,9 @@ type Application<'entity, 'renderable>(configuration : ApplicationConfiguration<
                 retreiveNextMessage ()
         retreiveNextMessage ()
     
+    member app.FindRenderable renderableId =
+        Map.tryFind renderableId renderTable
+
     /// <summary>Get a snapshot of the Application state. Useful for testing and debugging.</summary>
     /// <returns>A Tree<'entity> representing the state of the application.</returns>
     member app.BuildTree () =

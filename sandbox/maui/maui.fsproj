@@ -11,9 +11,9 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
     <!-- Display name -->
-    <ApplicationTitle>making</ApplicationTitle>
+    <ApplicationTitle>sandbox</ApplicationTitle>
     <!-- App Identifier -->
-    <ApplicationId>com.companyname.making</ApplicationId>
+    <ApplicationId>com.artificialnatures.synthings.sandbox</ApplicationId>
     <ApplicationIdGuid>E85C92CA-962A-4117-9682-C4D9368AEF3B</ApplicationIdGuid>
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

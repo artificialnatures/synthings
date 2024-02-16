@@ -2,8 +2,6 @@
 
 Research into simple, flexible, and robust systems for interactive graphical programming.
 
-- [ ] Get console sandbox app working
-- [ ] Get MAUI sandbox app working
 - [ ] Replace proposal -> Replace (entire subtree) and Refresh (just one entity)
 - [ ] Remove all uneccessary failwith statements
 - [ ] Refactoring

@@ -52,12 +52,43 @@ module MauiRenderer =
         | Wait -> 
             Microsoft.Maui.Controls.Label(Text = "Loading...", FontSize = 300.0) :> MauiView
     
-    let render submitProposal renderTask =
+    let parent (parentView : MauiView) (childView : MauiView) =
+        let addChild =
+            match parentView with
+            | :? Microsoft.Maui.Controls.ContentView as parent ->
+                (fun () -> parent.Content <- childView)
+            | :? Microsoft.Maui.Controls.VerticalStackLayout as parent ->
+                (fun () -> parent.Children.Add childView)
+            | _ -> (fun () -> ())
+        addChild ()
+
+type MauiRootContent() as mauiRootContent =
+    inherit Microsoft.Maui.Controls.ContentView()
+
+    let renderRoot = Microsoft.Maui.Controls.ContentView(Background = Microsoft.Maui.Controls.SolidColorBrush.LightBlue, MinimumHeightRequest = 500.0)
+    let debugRoot = Microsoft.Maui.Controls.ContentView(Background = Microsoft.Maui.Controls.SolidColorBrush.LightYellow, MinimumHeightRequest = 200.0)
+    let configuration =
+        {
+            messagingImplementation = Channels
+            renderer = mauiRootContent.Render
+        }
+
+    do mauiRootContent.Loaded.Add(mauiRootContent.OnLoaded)
+
+    member mauiRootContent.Application = Application(configuration)
+
+    member mauiRootContent.Render submitProposal renderTask =
         match renderTask with
         | CreateView task -> 
-            createView submitProposal task.renderableId task.entity
-            |> Some
+            let renderable = MauiRenderer.createView submitProposal task.renderableId task.entity
+            Some renderable
         | ParentView task ->
+            let parentView = mauiRootContent.Application.FindRenderable task.parentRenderableId
+            let childView = mauiRootContent.Application.FindRenderable task.childRenderableId
+            match parentView, childView with
+            | Some parentView, Some childView ->
+                MauiRenderer.parent parentView childView
+            | _ -> ()
             None
         | ReorderView task ->
             None
@@ -68,25 +99,11 @@ module MauiRenderer =
         | DeleteView task ->
             None
 
-type MauiRootContent() as mauiRootContent =
-    inherit Microsoft.Maui.Controls.ContentView()
-
-    let renderRoot = Microsoft.Maui.Controls.ContentView(Background = Microsoft.Maui.Controls.SolidColorBrush.LightBlue, MinimumHeightRequest = 500.0)
-    let debugRoot = Microsoft.Maui.Controls.ContentView(Background = Microsoft.Maui.Controls.SolidColorBrush.LightYellow, MinimumHeightRequest = 200.0)
-    
-    do mauiRootContent.Loaded.Add(mauiRootContent.OnLoaded)
-
     member mauiRootContent.OnLoaded eventArgs =
         let debugPage = Microsoft.Maui.Controls.ContentPage(Content = debugRoot)
         let debugWindow = Microsoft.Maui.Controls.Window(debugPage)
         do Microsoft.Maui.Controls.Application.Current.OpenWindow(debugWindow)
         mauiRootContent.Content <- renderRoot
-        let configuration =
-            {
-                messagingImplementation = Channels
-                renderer = MauiRenderer.render
-            }
-        let application = Application(configuration)
         let goodbyeState =
             Node (VerticalStack, [
                 Leaf (Text "Goobye, world!")
@@ -100,8 +117,8 @@ type MauiRootContent() as mauiRootContent =
             ])
         let initialProposal =
             Initialize {initialTree = helloState}
-        application.Enqueue Identifier.empty initialProposal
-        application.Run ()
+        mauiRootContent.Application.Enqueue Identifier.empty initialProposal
+        mauiRootContent.Application.Run ()
 
     member mauiRootContent.ReplaceRootContent (content: MauiView) =
         Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread((fun () -> renderRoot.Content <- content))
