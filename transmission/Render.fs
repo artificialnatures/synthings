@@ -1,5 +1,10 @@
 namespace synthings.transmission
 
+type RendererImplementation =
+    | Testing
+    | Console
+    | MAUI
+
 type RenderableTask<'entity> =
     {
         renderableId : Identifier
@@ -39,7 +44,7 @@ type RenderTable<'renderable> =
 type Renderer<'entity, 'renderable> = 
     MessageDispatcher<Proposal<'entity>> -> RenderTask<'entity, 'renderable> -> 'renderable option
 
-module Renderer =
+module Render =
     let buildRenderTask (renderTable : RenderTable<_>) (operation : Operation<_>) : RenderTask<_, _> =
         match operation with
         | Create operation ->

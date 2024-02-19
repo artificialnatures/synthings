@@ -9,11 +9,11 @@ type ApplicationConfiguration<'entity, 'renderable> =
 type Application<'entity, 'renderable>(configuration : ApplicationConfiguration<'entity, 'renderable>) =
     let mutable entityTable : EntityTable<'entity> = EntityTable.empty 
     let mutable history : History<'entity> = List.empty
-    let renderer : Renderer<'entity, 'renderable> = configuration.renderer
-    let mutable renderTable : RenderTable<'renderable> = Map.empty
     let submitProposal, receiveProposal =
         MessageQueue.create<Proposal<'entity>, ChangeSet<'entity>> configuration.messagingImplementation
-
+    let mutable renderTable : RenderTable<'renderable> = Map.empty
+    let renderer : Renderer<'entity, 'renderable> = configuration.renderer
+    
     let accept message =
         ChangeSet.assemble entityTable message
 
@@ -36,7 +36,7 @@ type Application<'entity, 'renderable>(configuration : ApplicationConfiguration<
     let render changeSet =
         match changeSet with
         | Ok changeSet ->
-            renderTable <- Renderer.renderChangeSet submitProposal renderer renderTable changeSet
+            renderTable <- Render.renderChangeSet submitProposal renderer renderTable changeSet
         | Error _ -> ()
 
     let processMessage message =

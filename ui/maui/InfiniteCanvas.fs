@@ -1,4 +1,4 @@
-namespace synthings.sandbox.maui
+namespace synthings.ui.maui
 
 open Microsoft.Maui.Controls
 open Microsoft.Maui

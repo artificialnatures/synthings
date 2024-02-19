@@ -27,13 +27,13 @@ let tests =
                 | UpdateView update -> Some update.entity
                 | OrphanView _ -> None
                 | DeleteView _ -> None
-            renderTable <- Renderer.renderChangeSet (fun _ -> ()) render renderTable changeSet
+            renderTable <- Render.renderChangeSet (fun _ -> ()) render renderTable changeSet
             let changeSet =
                 [
                     Orphan {parentId = rootId; entityId = twentyTwoId}
                     Delete {entityId = twentyTwoId; entity = 22}
                 ]
-            renderTable <- Renderer.renderChangeSet (fun _ -> ()) render renderTable changeSet
+            renderTable <- Render.renderChangeSet (fun _ -> ()) render renderTable changeSet
             let actual = List.ofSeq renderTable.Values
             let expected = [2; 21]
             Expect.containsAll actual expected "All views in the render table should be updated according to the ChangeSet."
