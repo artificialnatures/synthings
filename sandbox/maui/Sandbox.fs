@@ -8,7 +8,7 @@ module Sandbox =
         let configuration =
             {
                 messagingImplementation = Channels
-                renderer = MauiRenderer.render // TODO: pull renderer inside transmission? pass in a Console | MAUI | etc. parameter here...
+                rendererImplementation = MauiRenderer.render // TODO: pull renderer inside transmission? pass in a Console | MAUI | etc. parameter here...
             }
         let application = Application(configuration)
         let goodbyeState =

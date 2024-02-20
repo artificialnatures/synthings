@@ -14,7 +14,6 @@
     <Compile Include="EntityTable.fs" />
     <Compile Include="ChangeSet.fs" />
     <Compile Include="History.fs" />
-    <Compile Include="Render.fs" />
     <Compile Include="Application.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>

@@ -108,7 +108,7 @@ module Console =
         let configuration =
             {
                 messagingImplementation = Channels
-                renderer = handleRenderTask
+                rendererImplementation = handleRenderTask
             }
         let app = Application<StateRepresentation, StateRepresentation>(configuration)
         let initialProposal =

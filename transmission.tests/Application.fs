@@ -3,35 +3,20 @@ module Application
 open Expecto
 open synthings.transmission
 
-type IntegerRenderable =
+type IntegerElement =
     {
         value : int
-        onActivated : Proposal<TestRenderable> option
+        onActivated : Proposal<TestState> option
     }
-and TestRenderable =
-    | Integer of IntegerRenderable
+and TestState =
+    | Integer of IntegerElement
 
-let mutable proposalQueue : list<unit -> unit> = List.empty
-
-let triggerEvents () = //for simulating interaction, e.g. mouse clicks
-    List.iter (fun proposal -> proposal ()) proposalQueue
-    proposalQueue <- List.empty
-
-let render submitProposal renderTask =
-    match renderTask with
-    | CreateView task ->
-        match task.entity with
-        | Integer renderable ->
-            match renderable.onActivated with
-            | Some proposal ->
-                proposalQueue <- List.append proposalQueue [(fun () -> submitProposal task.renderableId proposal)]
-            | None -> ()
-        Some task.entity
-    | ParentView task -> None
-    | ReorderView task -> None
-    | UpdateView task -> Some task.entity
-    | OrphanView task -> None
-    | DeleteView task -> None
+let triggerEvent submitProposal testState = //for simulating interaction, e.g. mouse clicks
+    match testState with
+    | Integer integerElement ->
+        match integerElement.onActivated with
+        | Some proposal -> submitProposal proposal
+        | None -> ()
 
 [<Tests>]
 let tests =
@@ -43,7 +28,7 @@ let tests =
             let configuration =
                 {
                     messagingImplementation = Channels
-                    renderer = render
+                    rendererImplementation = Testing
                 }
             let application = Application(configuration)
             let proposal =
@@ -65,7 +50,7 @@ let tests =
             let configuration =
                 {
                     messagingImplementation = Channels
-                    renderer = render
+                    rendererImplementation = Testing
                 }
             let application = Application(configuration)
             let proposal =
@@ -76,7 +61,7 @@ let tests =
                 }
             application.Enqueue Identifier.empty proposal //Initialize application with some state
             application.Step ()
-            triggerEvents () //simulate interaction, e.g. a mouse click
+            application.ForEachEntity triggerEvent //simulate interaction, e.g. a mouse click
             application.Step ()
             let actual =
                 application.BuildTree ()
@@ -90,7 +75,7 @@ let tests =
             let configuration =
                 {
                     messagingImplementation = Channels
-                    renderer = render
+                    rendererImplementation = Testing
                 }
             let application = Application(configuration)
             let replacementTree =
@@ -114,7 +99,7 @@ let tests =
                 }
             application.Enqueue Identifier.empty initialProposal //Initialize application with some state
             application.Step ()
-            triggerEvents () //simulate interaction, e.g. a mouse click
+            application.ForEachEntity triggerEvent //simulate interaction, e.g. a mouse click
             application.Step ()
             let actual =
                 application.BuildTree ()
@@ -129,7 +114,7 @@ let tests =
             let configuration =
                 {
                     messagingImplementation = Channels
-                    renderer = render
+                    rendererImplementation = Testing
                 }
             let application = Application(configuration)
             let removeProposal =
@@ -150,7 +135,7 @@ let tests =
                 }
             application.Enqueue Identifier.empty initialProposal //Initialize application with some state
             application.Step ()
-            triggerEvents () //simulate interaction, e.g. a mouse click
+            application.ForEachEntity triggerEvent //simulate interaction, e.g. a mouse click
             application.Step ()
             let actual =
                 application.BuildTree ()
