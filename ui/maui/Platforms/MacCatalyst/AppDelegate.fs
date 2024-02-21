@@ -1,7 +1,6 @@
 ﻿namespace synthings.ui.maui
 
 open Foundation
-open UIKit
 open Microsoft.Maui
 
 [<Register("AppDelegate")>]
@@ -17,6 +16,7 @@ type AppDelegate() =
         mauiApp
 
 module MauiApplicationEntryPoint =
+    open UIKit
     let start () =
         UIApplication.Main(Array.empty, null, typeof<AppDelegate>)
         0

@@ -16,4 +16,5 @@ type MauiProgram =
                     |> ignore
                 )
                 .Build()
+        let appShell = mauiApp.Services.GetService(typeof<App>)
         mauiApp

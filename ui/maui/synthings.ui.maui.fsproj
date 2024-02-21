@@ -89,7 +89,6 @@
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'ios'">
 		<None Include="$(iOSProjectFolder)Info.plist" LogicalName="Info.plist" />
 		<Compile Include="$(iOSProjectFolder)AppDelegate.fs" />
-		<Compile Include="$(iOSProjectFolder)Program.fs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'android'">

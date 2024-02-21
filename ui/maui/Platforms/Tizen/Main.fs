@@ -9,8 +9,8 @@ type Program() =
 
     override this.CreateMauiApp() = MauiProgram.CreateMauiApp()
 
-module Program =
-    [<EntryPoint>]
-    let main args =
+module MauiApplicationEntryPoint =
+    let start () =
         let app = Program()
         app.Run(args)
+        0
