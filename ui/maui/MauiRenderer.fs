@@ -59,24 +59,27 @@ module MauiRenderer =
             | _ -> (fun () -> ())
         addChild ()
     
-    let render findRenderable submitProposal renderTask =
-        match renderTask with
-        | CreateView task -> 
-            let renderable = createView submitProposal task.renderableId task.entity
-            Some renderable
-        | ParentView task ->
-            let parentView = findRenderable task.parentRenderableId
-            let childView = findRenderable task.childRenderableId
-            match parentView, childView with
-            | Some parentView, Some childView ->
-                parent parentView childView
-            | _ -> ()
-            None
-        | ReorderView task ->
-            None
-        | UpdateView task ->
-            None
-        | OrphanView task ->
-            None
-        | DeleteView task ->
-            None
+    let create () =
+        // TODO: pass in a reference to the window, root ContentView, etc.?
+        let mutable renderTable : Map<Identifier, MauiView> = Map.empty
+        let render submitProposal operation =
+            match operation with
+            | Create operation -> 
+                let renderable = createView submitProposal operation.entityId operation.entity
+                renderTable <- Map.add operation.entityId renderable renderTable
+            | Parent operation ->
+                let parentView = Map.tryFind operation.parentId renderTable
+                let childView = Map.tryFind operation.entityId renderTable
+                match parentView, childView with
+                | Some parentView, Some childView ->
+                    parent parentView childView
+                | _ -> ()
+            | Reorder operation ->
+                ()
+            | Update operation ->
+                ()
+            | Orphan operation ->
+                ()
+            | Delete operation ->
+                ()
+        render

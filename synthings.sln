@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "transmission", "transmission\transmission.fsproj", "{BB0752DC-B766-4C85-ABF7-D3B68C44D4B0}"
-EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "transmission.tests", "transmission.tests\transmission.tests.fsproj", "{6661DA51-241A-41FF-8859-2EB042207ED3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ui", "ui", "{92B2279A-BC37-4B41-9425-C040AC60AC07}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.ui.maui", "ui\maui\synthings.ui.maui.fsproj", "{CDFCDDB0-4E51-47B0-BE54-73AD8DFC0D0E}"
@@ -15,7 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sandbox", "sandbox", "{ADD1
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.sandbox.console", "sandbox\console\synthings.sandbox.console.fsproj", "{741CA887-8A9F-465E-BA9D-646C3DA1F38E}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.sandbox.maui", "sandbox\maui\synthings.sandbox.maui.fsproj", "{BC494E26-93AD-4828-ABDF-BBCC3924429F}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.ui.console", "ui\console\synthings.ui.console.fsproj", "{953DFEE9-02E7-4FD3-B008-6864928DC83E}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.transmission", "transmission\synthings.transmission.fsproj", "{8931D40A-6004-4BF9-B0CB-70873207135C}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.transmission.tests", "transmission.tests\synthings.transmission.tests.fsproj", "{B9C0EAB0-4FBA-4CD8-959B-E5BF33BFE2A7}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.sandbox.maui", "sandbox\maui\synthings.sandbox.maui.fsproj", "{D9E80696-D89F-4433-BB47-E2B34BAF4053}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,14 +28,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BB0752DC-B766-4C85-ABF7-D3B68C44D4B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB0752DC-B766-4C85-ABF7-D3B68C44D4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB0752DC-B766-4C85-ABF7-D3B68C44D4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB0752DC-B766-4C85-ABF7-D3B68C44D4B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6661DA51-241A-41FF-8859-2EB042207ED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6661DA51-241A-41FF-8859-2EB042207ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6661DA51-241A-41FF-8859-2EB042207ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6661DA51-241A-41FF-8859-2EB042207ED3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDFCDDB0-4E51-47B0-BE54-73AD8DFC0D0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDFCDDB0-4E51-47B0-BE54-73AD8DFC0D0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDFCDDB0-4E51-47B0-BE54-73AD8DFC0D0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -42,14 +36,27 @@ Global
 		{741CA887-8A9F-465E-BA9D-646C3DA1F38E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{741CA887-8A9F-465E-BA9D-646C3DA1F38E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{741CA887-8A9F-465E-BA9D-646C3DA1F38E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC494E26-93AD-4828-ABDF-BBCC3924429F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC494E26-93AD-4828-ABDF-BBCC3924429F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC494E26-93AD-4828-ABDF-BBCC3924429F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC494E26-93AD-4828-ABDF-BBCC3924429F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{953DFEE9-02E7-4FD3-B008-6864928DC83E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{953DFEE9-02E7-4FD3-B008-6864928DC83E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{953DFEE9-02E7-4FD3-B008-6864928DC83E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{953DFEE9-02E7-4FD3-B008-6864928DC83E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8931D40A-6004-4BF9-B0CB-70873207135C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8931D40A-6004-4BF9-B0CB-70873207135C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8931D40A-6004-4BF9-B0CB-70873207135C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8931D40A-6004-4BF9-B0CB-70873207135C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9C0EAB0-4FBA-4CD8-959B-E5BF33BFE2A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9C0EAB0-4FBA-4CD8-959B-E5BF33BFE2A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9C0EAB0-4FBA-4CD8-959B-E5BF33BFE2A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9C0EAB0-4FBA-4CD8-959B-E5BF33BFE2A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9E80696-D89F-4433-BB47-E2B34BAF4053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9E80696-D89F-4433-BB47-E2B34BAF4053}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9E80696-D89F-4433-BB47-E2B34BAF4053}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9E80696-D89F-4433-BB47-E2B34BAF4053}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CDFCDDB0-4E51-47B0-BE54-73AD8DFC0D0E} = {92B2279A-BC37-4B41-9425-C040AC60AC07}
 		{741CA887-8A9F-465E-BA9D-646C3DA1F38E} = {ADD1A9DB-9FE3-4647-8C05-05E3CD52FE60}
-		{BC494E26-93AD-4828-ABDF-BBCC3924429F} = {ADD1A9DB-9FE3-4647-8C05-05E3CD52FE60}
+		{953DFEE9-02E7-4FD3-B008-6864928DC83E} = {92B2279A-BC37-4B41-9425-C040AC60AC07}
+		{D9E80696-D89F-4433-BB47-E2B34BAF4053} = {ADD1A9DB-9FE3-4647-8C05-05E3CD52FE60}
 	EndGlobalSection
 EndGlobal

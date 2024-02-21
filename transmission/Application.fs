@@ -1,18 +1,17 @@
 ﻿namespace synthings.transmission
 
-type ApplicationConfiguration =
+type Renderer<'entity> = MessageDispatcher<Proposal<'entity>> -> Operation<'entity> -> unit
+
+type ApplicationConfiguration<'entity> =
     {
         messagingImplementation : MessagingImplementation
-        rendererImplementation : RendererImplementation
     }
 
-type Application<'entity>(configuration) =
-    let mutable entityTable : EntityTable<'entity> = EntityTable.empty 
+type Application<'entity>(configuration, renderer) =
+    let mutable entityTable : EntityTable<'entity> = EntityTable.empty
     let mutable history : History<'entity> = List.empty
     let submitProposal, receiveProposal =
         MessageQueue.create<Proposal<'entity>, ChangeSet<'entity>> configuration.messagingImplementation
-    let renderer =
-        Renderer.create configuration.rendererImplementation
     let accept message =
         ChangeSet.assemble entityTable message
     let react changeSet =
@@ -32,7 +31,7 @@ type Application<'entity>(configuration) =
     let render changeSet =
         match changeSet with
         | Ok changeSet ->
-            List.iter renderer changeSet
+            List.iter (renderer submitProposal) changeSet
         | Error _ -> ()
     let processMessage message =
         accept message
@@ -53,13 +52,13 @@ type Application<'entity>(configuration) =
         submitProposal entityId proposal
     /// <summary>Manually advance the Application one step, processing the next message in the queue. For testing or blocking execution environments, e.g. console apps.</summary>
     member app.Step () =
-        let rec retreiveNextMessage () =
+        let rec retrieveNextMessage () =
             match receiveProposal() with
             | Some message ->
                 processMessage message
             | None ->
-                retreiveNextMessage ()
-        retreiveNextMessage ()
+                retrieveNextMessage ()
+        retrieveNextMessage ()
     /// <summary>Call a function for each entity in the application state. For testing purposes.</summary>
     member app.ForEachEntity (action : (Proposal<'entity> -> unit) -> 'entity -> unit) =
         let entities = entityTable.entities |> Map.toList

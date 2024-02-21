@@ -12,11 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\transmission\transmission.fsproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Spectre.Console" Version="0.47.*" />
+    <ProjectReference Include="..\..\ui\console\synthings.ui.console.fsproj" />
   </ItemGroup>
 
 </Project>

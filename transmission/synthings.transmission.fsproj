@@ -1,10 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <AssemblyName>synthings.transmission</AssemblyName>
     <RootNamespace>synthings.transmission</RootNamespace>
   </PropertyGroup>
+  
   <ItemGroup>
     <Compile Include="Geometry.fs" />
     <Compile Include="Identifier.fs" />
@@ -19,12 +21,18 @@
     <Compile Include="ChangeSet.fs" />
     <Compile Include="History.fs" />
     <Compile Include="StateRepresentation.fs" />
-    <Compile Include="Render.fs" />
     <Compile Include="Application.fs" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <!--<ProjectReference Include="..\ui\console\synthings.ui.console.fsproj" />-->
+    <!--<ProjectReference Include="..\ui\maui\synthings.ui.maui.fsproj" />-->
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="FSharp.SystemTextJson" Version="1.2.*" />
     <PackageReference Include="NetMQ" Version="4.0.1.*" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.*" />
   </ItemGroup>
+  
 </Project>

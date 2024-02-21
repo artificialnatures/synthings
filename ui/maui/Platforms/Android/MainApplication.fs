@@ -7,4 +7,4 @@ open Microsoft.Maui
 type MainApplication(handle, ownership) =
     inherit MauiApplication(handle, ownership)
     
-    override _.CreateMauiApp() = MauiProgram.CreateMauiApp()
+    override _.CreateMauiApp() = AppDelegate.CreateMauiApp()

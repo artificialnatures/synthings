@@ -28,9 +28,8 @@ let tests =
             let configuration =
                 {
                     messagingImplementation = Channels
-                    rendererImplementation = Testing
                 }
-            let application = Application(configuration)
+            let application = Application(configuration, (fun _ _ -> ()))
             let proposal =
                 Initialize {
                     initialTree = (Node (Integer {value=2;onActivated=None}, [Leaf (Integer {value=21;onActivated=None}); Leaf (Integer {value=22;onActivated=None})]))
@@ -50,9 +49,8 @@ let tests =
             let configuration =
                 {
                     messagingImplementation = Channels
-                    rendererImplementation = Testing
                 }
-            let application = Application(configuration)
+            let application = Application(configuration, (fun _ _ -> ()))
             let proposal =
                 let entityToAdd = Leaf (Integer {value=21; onActivated=None})
                 let proposal = Add {parent=Self; order=Last; entityToAdd=entityToAdd}
@@ -75,9 +73,8 @@ let tests =
             let configuration =
                 {
                     messagingImplementation = Channels
-                    rendererImplementation = Testing
                 }
-            let application = Application(configuration)
+            let application = Application(configuration, (fun _ _ -> ()))
             let replacementTree =
                 Node (Integer {value=3; onActivated=None}, [
                     Leaf (Integer {value=31; onActivated=None})
@@ -114,9 +111,8 @@ let tests =
             let configuration =
                 {
                     messagingImplementation = Channels
-                    rendererImplementation = Testing
                 }
-            let application = Application(configuration)
+            let application = Application(configuration, (fun _ _ -> ()))
             let removeProposal =
                 Remove {
                     entityToRemove = Ancestor 1 //remove the parent of the sender

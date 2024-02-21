@@ -38,7 +38,31 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<ProjectReference Include="..\..\transmission\transmission.fsproj" />
+		<ProjectReference Include="..\..\transmission\synthings.transmission.fsproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- App Icon -->
+		<!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Images -->
+		<MauiImage Include="Resources\Images*.svg" />
+		<MauiImage Include="Resources\Images*.png" />
+		<MauiImage Include="Resources\Images*.jpg" />
+		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\*" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+
+		<!-- Styles -->
+		<EmbeddedResource Include="Resources\Styles\*" Exclude="Resources\Styles\Styles.fs" />
+		<Compile Include="Resources\Styles\Styles.fs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -54,31 +78,18 @@
 		<Compile Include="App.xaml.fs">
 			<DependentUpon>App.xaml</DependentUpon>
 		</Compile>
-		<Compile Include="InfiniteCanvas.fs" />
-		<Compile Include="MauiRenderer.fs" />
 		<Compile Include="MauiProgram.fs" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
-
-		<!-- Custom Fonts -->
-		<MauiFont Include="Resources\Fonts\*" />
-
-		<!-- Images -->
-		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
-
-		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
-		<MauiAsset Include="Resources\Raw\*" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-
-		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
-
-		<!-- Styles -->
-		<EmbeddedResource Include="Resources\Styles\*" Exclude="Resources\Styles\Styles.fs" />
-		<Compile Include="Resources\Styles\Styles.fs" />
+	
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'maccatalyst'">
+		<None Include="$(MacCatalystProjectFolder)Info.plist" LogicalName="Info.plist" />
+		<Compile Include="$(MacCatalystProjectFolder)AppDelegate.fs" />
+	</ItemGroup>
+	
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'ios'">
+		<None Include="$(iOSProjectFolder)Info.plist" LogicalName="Info.plist" />
+		<Compile Include="$(iOSProjectFolder)AppDelegate.fs" />
+		<Compile Include="$(iOSProjectFolder)Program.fs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'android'">
@@ -89,18 +100,6 @@
 		<AndroidManifest Include="$(AndroidProjectFolder)AndroidManifest.xml" />
 		<Compile Include="$(AndroidProjectFolder)MainActivity.fs" />
 		<Compile Include="$(AndroidProjectFolder)MainApplication.fs" />
-	</ItemGroup>
-
-	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'ios'">
-		<None Include="$(iOSProjectFolder)Info.plist" LogicalName="Info.plist" />
-		<Compile Include="$(iOSProjectFolder)AppDelegate.fs" />
-		<Compile Include="$(iOSProjectFolder)Program.fs" />
-	</ItemGroup>
-
-	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'maccatalyst'">
-		<None Include="$(MacCatalystProjectFolder)Info.plist" LogicalName="Info.plist" />
-		<Compile Include="$(MacCatalystProjectFolder)AppDelegate.fs" />
-		<Compile Include="$(MacCatalystProjectFolder)Program.fs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'windows'">
@@ -120,4 +119,10 @@
 		<Compile Include="$(TizenProjectFolder)Main.fs" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Compile Include="InfiniteCanvas.fs" />
+		<Compile Include="MauiRenderer.fs" />
+		<Compile Include="SynthingsMauiApplication.fs" />
+	</ItemGroup>
+	
 </Project>

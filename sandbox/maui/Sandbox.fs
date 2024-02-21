@@ -1,16 +1,14 @@
 namespace synthings.sandbox.maui
 
-open synthings.transmission
 open synthings.ui.maui
+open synthings.transmission
 
 module Sandbox =
-    let start () =
-        let configuration =
-            {
-                messagingImplementation = Channels
-                rendererImplementation = MauiRenderer.render // TODO: pull renderer inside transmission? pass in a Console | MAUI | etc. parameter here...
-            }
-        let application = Application(configuration)
+    [<EntryPoint>]
+    let start arguments =
+        let application = SynthingsMauiApplication()
+        application.Start ()
+        |> ignore
         let goodbyeState =
             Node (VerticalStack, [
                 Leaf (Text "Goobye, world!")
@@ -24,6 +22,6 @@ module Sandbox =
             ])
         let initialProposal =
             Initialize {initialTree = helloState}
-        application.Run ()
-        application.Enqueue Identifier.empty initialProposal
-        application
+        application.Application.Run ()
+        application.Application.Enqueue Identifier.empty initialProposal
+        0
