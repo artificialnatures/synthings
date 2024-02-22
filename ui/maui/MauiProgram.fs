@@ -8,7 +8,7 @@ type MauiProgram =
         let mauiApp =
             MauiApp
                 .CreateBuilder()
-                .UseMauiApp<App>()
+                .UseMauiApp<MauiApplicationRoot>()
                 .ConfigureFonts(fun fonts ->
                     fonts
                         .AddFont("OpenSans-Regular.ttf", "OpenSansRegular")
@@ -16,5 +16,5 @@ type MauiProgram =
                     |> ignore
                 )
                 .Build()
-        let appShell = mauiApp.Services.GetService(typeof<App>)
+        //let mauiApplication = mauiApp.Services.GetService(typeof<MauiApplication>)
         mauiApp

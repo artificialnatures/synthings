@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-maccatalyst;net8.0-ios;net8.0-android</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFramework>net8.0-maccatalyst</TargetFramework>
+		<!--<TargetFrameworks>net8.0-maccatalyst;net8.0-ios;net8.0-android</TargetFrameworks>-->
+		<!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>-->
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
 		<RootNamespace>synthings.sandbox.maui</RootNamespace>
+		<SingleProject>true</SingleProject>
 
 		<!-- Display name -->
-		<ApplicationTitle>synthings.sandbox.maui</ApplicationTitle>
+		<ApplicationTitle>Sandbox</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>org.synthings.sandbox.maui</ApplicationId>
@@ -35,6 +37,27 @@
 	
 	<ItemGroup>
 		<Compile Include="Sandbox.fs" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'maccatalyst'">
+		<None Include="$(MacCatalystProjectFolder)Info.plist" LogicalName="Info.plist" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'ios'">
+		<None Include="$(iOSProjectFolder)Info.plist" LogicalName="Info.plist" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'android'">
+		<AndroidManifest Include="$(AndroidProjectFolder)AndroidManifest.xml" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'windows'">
+		<Manifest Include="$(WindowsProjectFolder)app.manifest" />
+		<AppxManifest Include="$(WindowsProjectFolder)Package.appxmanifest" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'tizen'">
+		<TizenManifestFile Include="$(TizenProjectFolder)tizen-manifest.xml" />
 	</ItemGroup>
 
 </Project>
