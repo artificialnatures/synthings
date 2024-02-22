@@ -1,16 +1,14 @@
 namespace synthings.ui.maui
 
-open synthings.transmission
-
-type SynthingsMauiApplication() =
-    let configuration =
-        {
-            messagingImplementation = Channels
-        }
-    let renderer = MauiRenderer.create ()
-    let application = Application(configuration, renderer)
+module SynthingsMauiApplication =
+    open synthings.transmission
     
-    member this.Application = application
-    
-    member this.Start () =
+    let build () =
         MauiApplicationEntryPoint.start ()
+        |> ignore
+        let renderer = MauiRenderer.create ()
+        let configuration =
+            {
+                messagingImplementation = Channels
+            }
+        Application(configuration, renderer)

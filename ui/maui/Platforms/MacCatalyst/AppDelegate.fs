@@ -12,8 +12,7 @@ type AppDelegate() =
     member this.MauiApp = mauiApp
     
     override this.CreateMauiApp() =
-        mauiApp <- MauiProgram.CreateMauiApp()
-        mauiApp
+        MauiInitializer.buildMauiApp ()
 
 module MauiApplicationEntryPoint =
     open UIKit

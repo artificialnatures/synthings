@@ -7,7 +7,7 @@ open Microsoft.Maui
 type AppDelegate() =
     inherit MauiUIApplicationDelegate()
 
-    override _.CreateMauiApp() = MauiProgram.CreateMauiApp()
+    override _.CreateMauiApp() = MauiInitializer.buildMauiApp ()
 
 module MauiApplicationEntryPoint =
     open UIKit

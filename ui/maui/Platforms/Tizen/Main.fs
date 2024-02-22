@@ -7,7 +7,7 @@ open Microsoft.Maui.Hosting
 type Program() =
     inherit MauiApplication()
 
-    override this.CreateMauiApp() = MauiProgram.CreateMauiApp()
+    override this.CreateMauiApp() = MauiInitializer.buildMauiApp ()
 
 module MauiApplicationEntryPoint =
     let start () =

@@ -15,4 +15,4 @@ type App() =
 
     do this.LoadFromXaml(typeof<App>) |> ignore
     
-    override this.CreateMauiApp() = MauiProgram.CreateMauiApp()
+    override this.CreateMauiApp() = MauiInitializer.buildMauiApp ()

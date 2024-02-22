@@ -7,7 +7,7 @@ open Microsoft.Maui
 type MainApplication(handle, ownership) =
     inherit MauiApplication(handle, ownership)
     
-    override _.CreateMauiApp() = MauiProgram.CreateMauiApp()
+    override _.CreateMauiApp() = MauiInitializer.buildMauiApp ()
 
 // TODO: Figure out how to start an Android app imperatively
 module MauiApplicationEntryPoint =

@@ -80,8 +80,7 @@
 			<DependentUpon>App.xaml</DependentUpon>
 		</Compile>
 		-->
-		<Compile Include="MauiApplication.fs" />
-		<Compile Include="MauiProgram.fs" />
+		<Compile Include="MauiInitializer.fs" />
 	</ItemGroup>
 	
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'maccatalyst'">

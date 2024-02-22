@@ -6,9 +6,7 @@ open synthings.transmission
 module Sandbox =
     [<EntryPoint>]
     let start arguments =
-        let application = SynthingsMauiApplication()
-        application.Start ()
-        |> ignore
+        let application = SynthingsMauiApplication.build ()
         let goodbyeState =
             Node (VerticalStack, [
                 Leaf (Text "Goobye, world!")
@@ -22,6 +20,6 @@ module Sandbox =
             ])
         let initialProposal =
             Initialize {initialTree = helloState}
-        application.Application.Run ()
-        application.Application.Enqueue Identifier.empty initialProposal
+        application.Run ()
+        application.Enqueue Identifier.empty initialProposal
         0
