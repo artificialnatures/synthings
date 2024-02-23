@@ -11,15 +11,15 @@ module MauiInitializer =
         //do this.Resources.MergedDictionaries.Add(colors)
         //let styles = ResourceDictionary(Source=System.Uri("Resources/Styles/Styles.xaml"))
         //do this.Resources.MergedDictionaries.Add(styles)
-        let startMessage = Label(Text="synthings", FontFamily="Atkinson", FontSize=96, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center)
-        let page = ContentPage(Content=startMessage)
-        do this.MainPage <- page
-        
-        member this.ReplaceRootContent replacement =
-            match this.MainPage with
-            | :? ContentPage as page ->
-                page.Content <- replacement
-            | _ -> ()
+        let startMessage = Label(
+                Text="synthings",
+                FontFamily="Atkinson",
+                FontSize=96,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center
+            )
+        let rootView = ContentView(Content=startMessage)
+        do this.MainPage <- ContentPage(Content=rootView)
     
     let buildMauiApp () =
         MauiApp

@@ -7,8 +7,15 @@ type ApplicationConfiguration<'entity> =
         messagingImplementation : MessagingImplementation
     }
 
-type Application<'entity>(configuration, renderer) =
-    let mutable entityTable : EntityTable<'entity> = EntityTable.empty
+type Application<'entity>(configuration, rootEntity, createRenderer) =
+    let mutable entityTable : EntityTable<'entity> =
+        let rootId = Identifier.create ()
+        {
+            rootId = rootId
+            entities = [(rootId, rootEntity)] |> Map.ofList
+            relations = [(rootId, [])] |> Map.ofList 
+        }
+    let renderer = createRenderer entityTable.rootId
     let mutable history : History<'entity> = List.empty
     let submitProposal, receiveProposal =
         MessageQueue.create<Proposal<'entity>, ChangeSet<'entity>> configuration.messagingImplementation

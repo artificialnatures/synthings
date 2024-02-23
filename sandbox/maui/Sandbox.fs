@@ -12,11 +12,9 @@ module Sandbox =
                 Leaf (Text "Goobye, world!")
             ])
         let helloState =
-            Node (ApplicationContainer, [
-                Node (VerticalStack, [
-                    Leaf (Text "Hello, world!")
-                    Leaf (Button ("OK", Replace {entityToReplace=Ancestor 1; replacement=goodbyeState}))
-                ])
+            Node (VerticalStack, [
+                Leaf (Text "Hello, world!")
+                Leaf (Button ("OK", Replace {entityToReplace=Ancestor 1; replacement=goodbyeState}))
             ])
         let initialProposal =
             Initialize {initialTree = helloState}

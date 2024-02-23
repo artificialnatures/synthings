@@ -6,9 +6,8 @@ module SynthingsMauiApplication =
     let build () =
         MauiApplicationEntryPoint.start ()
         |> ignore
-        let renderer = MauiRenderer.create ()
         let configuration =
             {
                 messagingImplementation = Channels
             }
-        Application(configuration, renderer)
+        Application(configuration, ApplicationContainer, MauiRenderer.create)

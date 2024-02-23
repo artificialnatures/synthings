@@ -51,7 +51,7 @@ module ConsoleRenderer =
             waitStatus.Spinner <- Spinner.Known.Aesthetic //Favorites: Aesthetic, Arrow3, BouncingBall, Default, Flip, GrowVertical, Layer, Pong
             waitStatus.Start("Processing", fun _ -> ())
     
-    let create () =
+    let create rootId =
         let render submitProposal operation =
             match operation with
             | Create operation ->

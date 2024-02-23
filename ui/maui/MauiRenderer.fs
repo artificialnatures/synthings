@@ -59,24 +59,34 @@ module MauiRenderer =
             | _ -> (fun () -> ())
         addChild ()
     
-    let create () =
+    let create rootId =
         // TODO: pass in a reference to the window, root ContentView, etc.?
-        let  replaceRootContent replacement =
+        let rootView =
             match Microsoft.Maui.Controls.Application.Current with
             | :? MauiInitializer.MauiApplicationRoot as mauiApp ->
                 match mauiApp.MainPage with
                 | :? Microsoft.Maui.Controls.ContentPage as mainPage ->
-                    mainPage.Content <- replacement
-                | _ -> ()
-            | _ -> ()
-        let mutable renderTable : Map<Identifier, MauiView> = Map.empty
+                    match mainPage.Content with
+                    | :? Microsoft.Maui.Controls.ContentView as rootView ->
+                        Some rootView
+                    | _ -> None
+                | _ -> None
+            | _ -> None
+        let replaceRootContent replacement =
+            match rootView with
+            | Some rootView ->
+                rootView.Content <- replacement
+            | None -> ()
+        let mutable renderTable : Map<Identifier, MauiView> =
+            match rootView with
+            | Some rootView ->
+                [(rootId, rootView :> Microsoft.Maui.Controls.View)]
+                |> Map.ofList
+            | None -> Map.empty
         let render submitProposal operation =
-            //TODO: replace root content (when necessary)
             match operation with
             | Create operation -> 
                 let renderable = createView submitProposal operation.entityId operation.entity
-                if Map.isEmpty renderTable          //if this is the first renderable created
-                then replaceRootContent renderable  //replace the root content with it
                 renderTable <- Map.add operation.entityId renderable renderTable
             | Parent operation ->
                 let parentView = Map.tryFind operation.parentId renderTable

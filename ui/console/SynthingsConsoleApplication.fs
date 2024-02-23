@@ -8,4 +8,4 @@ module SynthingsConsoleApplication =
                 messagingImplementation = Channels
             }
         let renderer = ConsoleRenderer.create ()
-        Application(configuration, renderer)
+        Application(configuration, ApplicationContainer, ConsoleRenderer.create)
