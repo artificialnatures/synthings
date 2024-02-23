@@ -2,13 +2,9 @@
 
 Research into simple, flexible, and robust systems for interactive graphical programming.
 
-- [x] Create a new maui-fsharp project in synthings/ui/maui
-- [x] Try to start a Maui app by referencing synthings.ui.maui from synthings.sandbox.maui
-- [x] Transfer MAUI code from synthings.sandbox.maui to synthings.ui.maui
+- [ ] How to wait until the MAUI app is fully initialized?
 - [ ] Replace proposal -> Replace (entire subtree) and Refresh (just one entity)
-- [ ] Remove all uneccessary failwith statements
-- [ ] Refactoring
-- [ ] GUI Testing
+- [ ] Remove all uneccessary failwith statements with error reporting mechanisms (don't fail, recover and provide next steps)
 
 | Proposal | Action | Data |
 |---|---|---|
