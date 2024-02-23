@@ -63,20 +63,17 @@ module MauiRenderer =
         // TODO: pass in a reference to the window, root ContentView, etc.?
         let rootView =
             match Microsoft.Maui.Controls.Application.Current with
-            | :? MauiInitializer.MauiApplicationRoot as mauiApp ->
-                match mauiApp.MainPage with
-                | :? Microsoft.Maui.Controls.ContentPage as mainPage ->
-                    match mainPage.Content with
-                    | :? Microsoft.Maui.Controls.ContentView as rootView ->
-                        Some rootView
-                    | _ -> None
-                | _ -> None
+            | :? MauiApplicationRoot as mauiApp ->
+                if mauiApp.IsInitialized
+                then Some mauiApp.RootContent
+                else None
             | _ -> None
         let replaceRootContent replacement =
             match rootView with
             | Some rootView ->
                 rootView.Content <- replacement
-            | None -> ()
+            | None ->
+                failwith "Root ContentView not yet initialized."
         let mutable renderTable : Map<Identifier, MauiView> =
             match rootView with
             | Some rootView ->
