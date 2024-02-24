@@ -59,25 +59,16 @@ module MauiRenderer =
             | _ -> (fun () -> ())
         addChild ()
     
-    let create rootId =
-        // TODO: pass in a reference to the window, root ContentView, etc.?
-        let rootView =
-            match Microsoft.Maui.Controls.Application.Current with
-            | :? MauiApplicationRoot as mauiApp ->
-                if mauiApp.IsInitialized
-                then Some mauiApp.RootContent
-                else None
-            | _ -> None
+    let create (mauiApp : MauiApplicationRoot option) rootId =
         let replaceRootContent replacement =
-            match rootView with
-            | Some rootView ->
-                rootView.Content <- replacement
-            | None ->
-                failwith "Root ContentView not yet initialized."
+            match mauiApp with
+            | Some mauiApp ->
+                mauiApp.ReplaceContent replacement
+            | None -> ()
         let mutable renderTable : Map<Identifier, MauiView> =
-            match rootView with
-            | Some rootView ->
-                [(rootId, rootView :> Microsoft.Maui.Controls.View)]
+            match mauiApp with
+            | Some mauiApp ->
+                [(rootId, mauiApp.RootContent :> Microsoft.Maui.Controls.View)]
                 |> Map.ofList
             | None -> Map.empty
         let render submitProposal operation =

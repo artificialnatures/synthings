@@ -20,6 +20,7 @@ type MauiApplicationRoot() as this =
     let mutable isInitialized = false
     do rootPage.Loaded.Add(fun _ -> isInitialized <- true)
     do this.MainPage <- rootPage
-    member this.RootPage = rootPage
-    member this.RootContent = rootContent
     member this.IsInitialized = isInitialized
+    member this.RootContent = rootContent
+    member this.ReplaceContent content =
+        rootContent.Content <- content

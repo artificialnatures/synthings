@@ -3,12 +3,11 @@ namespace synthings.ui.maui
 module MauiInitializer =
     open Microsoft.Maui.Hosting
     open Microsoft.Maui.Controls.Hosting
+    open Microsoft.Extensions.Logging
     
     let buildMauiApp () =
-        MauiApp
-            .CreateBuilder()
-            .UseMauiApp<MauiApplicationRoot>()
-            .ConfigureFonts(fun fonts ->
+        let builder = MauiApp.CreateBuilder().UseMauiApp<MauiApplicationRoot>()
+        builder.ConfigureFonts(fun fonts ->
                 fonts
                     .AddFont("OpenSans-Regular.ttf", "OpenSansRegular")
                     .AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold")
@@ -18,4 +17,7 @@ module MauiInitializer =
                     .AddFont("Atkinson-Hyperlegible-BoldItalic-102.ttf", "AtkinsonBoldItalic")
                 |> ignore
             )
-            .Build()
+            |> ignore
+        builder.Logging.AddConsole()
+        |> ignore
+        builder.Build()

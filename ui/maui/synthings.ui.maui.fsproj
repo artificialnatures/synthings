@@ -33,6 +33,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="FSharp.Core" Version="8.0.100" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.*" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.*" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 	</ItemGroup>
