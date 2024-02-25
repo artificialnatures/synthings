@@ -1,12 +1,19 @@
 namespace synthings.ui.maui
 
-module MauiInitializer =
-    open Microsoft.Maui.Hosting
-    open Microsoft.Maui.Controls.Hosting
-    open Microsoft.Extensions.Logging
+open Microsoft.Maui.Hosting
+open Microsoft.Maui.Controls.Hosting
+open Microsoft.Extensions.DependencyInjection
+open Microsoft.Extensions.Logging
+
+type MauiInitializer =
+    static let mutable references : MauiReferences option = None
+    static member References
+        with get() = references
     
-    let buildMauiApp () =
+    static member BuildMauiApp () =
         let builder = MauiApp.CreateBuilder().UseMauiApp<MauiApplicationRoot>()
+        builder.Services.AddSingleton<MauiReferences>()
+        |> ignore
         builder.ConfigureFonts(fun fonts ->
                 fonts
                     .AddFont("OpenSans-Regular.ttf", "OpenSansRegular")
@@ -20,4 +27,9 @@ module MauiInitializer =
             |> ignore
         builder.Logging.AddConsole()
         |> ignore
-        builder.Build()
+        let mauiApp = builder.Build()
+        references <-
+            match mauiApp.Services.GetService(typeof<MauiReferences>) with
+            | :? MauiReferences as refs -> Some refs
+            | _ -> None
+        mauiApp

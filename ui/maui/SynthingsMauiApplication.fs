@@ -12,13 +12,15 @@ module SynthingsMauiApplication =
         |> Async.RunSynchronously
     
     let build () =
+        (*
         let mauiApp =
             match Microsoft.Maui.Controls.Application.Current with
             | :? MauiApplicationRoot as mauiApp -> Some mauiApp
             | _ -> None
+        *)
         let configuration =
             {
                 messagingImplementation = Channels
             }
-        let createRenderer = MauiRenderer.create mauiApp
+        let createRenderer = MauiRenderer.create MauiInitializer.References
         Application(configuration, ApplicationContainer, createRenderer)

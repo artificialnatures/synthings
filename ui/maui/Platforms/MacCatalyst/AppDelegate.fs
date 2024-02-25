@@ -6,13 +6,8 @@ open Microsoft.Maui
 [<Register("AppDelegate")>]
 type AppDelegate() =
     inherit MauiUIApplicationDelegate()
-    
-    let mutable mauiApp : Hosting.MauiApp = null
-    
-    member this.MauiApp = mauiApp
-    
     override this.CreateMauiApp() =
-        MauiInitializer.buildMauiApp ()
+        MauiInitializer.BuildMauiApp ()
 
 module MauiApplicationEntryPoint =
     open UIKit

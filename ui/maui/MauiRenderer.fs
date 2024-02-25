@@ -59,16 +59,16 @@ module MauiRenderer =
             | _ -> (fun () -> ())
         addChild ()
     
-    let create (mauiApp : MauiApplicationRoot option) rootId =
+    let create (references : MauiReferences option) rootId =
         let replaceRootContent replacement =
-            match mauiApp with
-            | Some mauiApp ->
-                mauiApp.ReplaceContent replacement
+            match references with
+            | Some references ->
+                references.ReplaceContent replacement
             | None -> ()
         let mutable renderTable : Map<Identifier, MauiView> =
-            match mauiApp with
-            | Some mauiApp ->
-                [(rootId, mauiApp.RootContent :> Microsoft.Maui.Controls.View)]
+            match references with
+            | Some references ->
+                [(rootId, references.RootContent :> Microsoft.Maui.Controls.View)]
                 |> Map.ofList
             | None -> Map.empty
         let render submitProposal operation =

@@ -2,7 +2,7 @@ namespace synthings.ui.maui
 
 open Microsoft.Maui.Controls
 
-type MauiApplicationRoot() as this =
+type MauiApplicationRoot(references : MauiReferences) as this =
     inherit Application()
     //let colors = ResourceDictionary(Source=System.Uri("Resources/Styles/Colors.xaml"))
     //do this.Resources.MergedDictionaries.Add(colors)
@@ -17,10 +17,23 @@ type MauiApplicationRoot() as this =
         )
     let rootContent = ContentView(Content=startMessage)
     let rootPage = ContentPage(Content=rootContent)
-    let mutable isInitialized = false
-    do rootPage.Loaded.Add(fun _ -> isInitialized <- true)
+    do rootPage.Loaded.Add(fun _ -> references.RootPage <- rootPage)
     do this.MainPage <- rootPage
-    member this.IsInitialized = isInitialized
-    member this.RootContent = rootContent
+    do references.App <- this :> Application
+    do references.RootContent <- rootContent
+and MauiReferences() as this =
+    let mutable app : Application = null
+    let mutable rootPage : ContentPage = null
+    let mutable rootContent : ContentView = null
+    member this.IsInitialized = rootContent <> null
+    member this.App
+        with get () = app
+        and set (value) = app <- value
+    member this.RootPage
+        with get () = rootPage
+        and set (value) = rootPage <- value
+    member this.RootContent
+        with get () = rootContent
+        and set (value) = rootContent <- value
     member this.ReplaceContent content =
         rootContent.Content <- content
