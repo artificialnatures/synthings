@@ -6,10 +6,6 @@ open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Logging
 
 type MauiInitializer =
-    static let mutable references : MauiReferences option = None
-    static member References
-        with get() = references
-    
     static member BuildMauiApp () =
         let builder = MauiApp.CreateBuilder().UseMauiApp<MauiApplicationRoot>()
         builder.Services.AddSingleton<MauiReferences>()
@@ -27,9 +23,4 @@ type MauiInitializer =
             |> ignore
         builder.Logging.AddConsole()
         |> ignore
-        let mauiApp = builder.Build()
-        references <-
-            match mauiApp.Services.GetService(typeof<MauiReferences>) with
-            | :? MauiReferences as refs -> Some refs
-            | _ -> None
-        mauiApp
+        builder.Build()
