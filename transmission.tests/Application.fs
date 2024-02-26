@@ -25,11 +25,7 @@ let tests =
     //of some limitation in System.Threading.Channels
     testSequenced <| testList "Application" [ 
         testCase "Initialize" <| fun _ ->
-            let configuration =
-                {
-                    messagingImplementation = Channels
-                }
-            let application = Application(configuration, (fun _ _ -> ()))
+            let application = Application()
             let proposal =
                 Initialize {
                     initialTree = (Node (Integer {value=2;onActivated=None}, [Leaf (Integer {value=21;onActivated=None}); Leaf (Integer {value=22;onActivated=None})]))
@@ -46,11 +42,7 @@ let tests =
             Expect.equal actual expected "Trees should be equal."
         
         testCase "Add" <| fun _ ->
-            let configuration =
-                {
-                    messagingImplementation = Channels
-                }
-            let application = Application(configuration, (fun _ _ -> ()))
+            let application = Application()
             let proposal =
                 let entityToAdd = Leaf (Integer {value=21; onActivated=None})
                 let proposal = Add {parent=Self; order=Last; entityToAdd=entityToAdd}
@@ -70,11 +62,7 @@ let tests =
             Expect.equal actual expected "A new entity should have been added."
         
         testCase "Replace" <| fun _ ->
-            let configuration =
-                {
-                    messagingImplementation = Channels
-                }
-            let application = Application(configuration, (fun _ _ -> ()))
+            let application = Application()
             let replacementTree =
                 Node (Integer {value=3; onActivated=None}, [
                     Leaf (Integer {value=31; onActivated=None})
@@ -108,11 +96,7 @@ let tests =
             Expect.equal actual expected "The root entity should have been replaced."
         
         testCase "Remove" <| fun _ ->
-            let configuration =
-                {
-                    messagingImplementation = Channels
-                }
-            let application = Application(configuration, (fun _ _ -> ()))
+            let application = Application()
             let removeProposal =
                 Remove {
                     entityToRemove = Ancestor 1 //remove the parent of the sender

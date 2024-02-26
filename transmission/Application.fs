@@ -2,23 +2,12 @@
 
 type Renderer<'entity> = MessageDispatcher<Proposal<'entity>> -> Operation<'entity> -> unit
 
-type ApplicationConfiguration<'entity> =
-    {
-        messagingImplementation : MessagingImplementation
-    }
-//TODO: back to a record type + functions?
-type Application<'entity>(configuration, rootEntity, createRenderer) =
-    let mutable entityTable : EntityTable<'entity> =
-        let rootId = Identifier.create ()
-        {
-            rootId = rootId
-            entities = [(rootId, rootEntity)] |> Map.ofList
-            relations = [(rootId, [])] |> Map.ofList 
-        }
-    let renderer = createRenderer entityTable.rootId
-    let mutable history : History<'entity> = List.empty
+type Application<'entity>() =
+    let mutable entityTable : EntityTable<'entity> = EntityTable.empty
+    let mutable renderChangeSet : Renderer<'entity> = (fun _ _ -> ())
+    let mutable history : History<'entity> option = None
     let submitProposal, receiveProposal =
-        MessageQueue.create<Proposal<'entity>, ChangeSet<'entity>> configuration.messagingImplementation
+        MessageQueue.create<Proposal<'entity>, ChangeSet<'entity>> Channels
     let accept message =
         ChangeSet.assemble entityTable message
     let react changeSet =
@@ -29,16 +18,19 @@ type Application<'entity>(configuration, rootEntity, createRenderer) =
         | Error error ->
             Error error
     let record changeSet =
-        match changeSet with
-        | Ok changeSet ->
-            history <- List.append [ changeSet ] history
-            Ok changeSet
-        | Error error ->
-            Error error
+        match history with
+        | Some historyList ->
+            match changeSet with
+            | Ok changeSet ->
+                history <- List.append [ changeSet ] historyList |> Some
+                Ok changeSet
+            | Error error ->
+                Error error
+        | None -> changeSet
     let render changeSet =
         match changeSet with
         | Ok changeSet ->
-            List.iter (renderer submitProposal) changeSet
+            List.iter (renderChangeSet submitProposal) changeSet
         | Error _ -> ()
     let processMessage message =
         accept message
