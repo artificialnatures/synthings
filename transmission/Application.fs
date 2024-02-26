@@ -6,7 +6,7 @@ type ApplicationConfiguration<'entity> =
     {
         messagingImplementation : MessagingImplementation
     }
-
+//TODO: back to a record type + functions?
 type Application<'entity>(configuration, rootEntity, createRenderer) =
     let mutable entityTable : EntityTable<'entity> =
         let rootId = Identifier.create ()
