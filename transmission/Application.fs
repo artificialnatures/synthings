@@ -46,6 +46,9 @@ type Application<'entity>() =
                     processMessage message
                 | None -> ()
         }
+    /// <summary>Provide a render function to the Application. The render function will be called for each Operation in each ChangeSet.</summary>
+    member app.WithRenderer (render : Renderer<'entity>) =
+        renderChangeSet <- render
     /// <summary>Manually enqueue a Message. Call Step after Enqueue to process the message. For testing or blocking execution environments, e.g. console apps.</summary>
     member app.Enqueue entityId proposal =
         submitProposal entityId proposal
