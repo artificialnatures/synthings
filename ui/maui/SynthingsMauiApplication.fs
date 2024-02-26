@@ -21,7 +21,5 @@ module SynthingsMauiApplication =
     
     let build () =
         startMauiApp ()
-        //MauiReferences.Completion.Task.Result
-        //|> Some
-        //|> buildSynthingsApp
-        buildSynthingsApp None
+        Some MauiReferences.Completion.Task.Result
+        |> buildSynthingsApp

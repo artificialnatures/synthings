@@ -36,10 +36,10 @@ type MauiApplicationRoot(references : MauiReferences) as mauiApplicationRoot =
     let rootContent = ContentView(Content=startMessage)
     let rootPage = ContentPage(Content=rootContent)
     do mauiApplicationRoot.MainPage <- rootPage
-    let complete () =
+    let complete _ =
         references.App <- mauiApplicationRoot :> Application
         references.RootContent <- rootContent
         references.RootPage <- rootPage
         MauiReferences.Completion.SetResult(references)
         ()
-    do rootPage.Loaded.Add(fun _ -> references.RootPage <- rootPage)
+    do rootPage.Loaded.Add(complete)
