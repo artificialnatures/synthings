@@ -11,16 +11,6 @@
 		<EnableDefaultItems>false</EnableDefaultItems>
 		<DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
 
-		<!-- Display name -->
-		<ApplicationTitle>synthings.ui.maui</ApplicationTitle>
-
-		<!-- App Identifier -->
-		<ApplicationId>org.synthings.ui.maui</ApplicationId>
-
-		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<ApplicationVersion>1</ApplicationVersion>
-
 		<TargetPlatformIdentifier Condition=" $(TargetPlatformIdentifier) == '' ">$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)'))</TargetPlatformIdentifier>
 
 		<SupportedOSPlatformVersion Condition="$(TargetPlatformIdentifier) == 'ios'">14.2</SupportedOSPlatformVersion>
@@ -66,61 +56,20 @@
 		<EmbeddedResource Include="Resources\Styles\*" Exclude="Resources\Styles\Styles.fs" />
 		<Compile Include="Resources\Styles\Styles.fs" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<!--
-		<EmbeddedResource Include="MainPage.xaml" />
-		<Compile Include="MainPage.xaml.fs">
-			<DependentUpon>MainPage.xaml</DependentUpon>
-		</Compile>
-		<EmbeddedResource Include="AppShell.xaml" />
-		<Compile Include="AppShell.xaml.fs">
-			<DependentUpon>AppShell.xaml</DependentUpon>
-		</Compile>
-		<EmbeddedResource Include="App.xaml" />
-		<Compile Include="App.xaml.fs">
-			<DependentUpon>App.xaml</DependentUpon>
-		</Compile>
-		-->
-		<Compile Include="MauiApplicationRoot.fs" />
-		<Compile Include="MauiInitializer.fs" />
-	</ItemGroup>
 	
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'maccatalyst'">
-		<None Include="$(MacCatalystProjectFolder)Info.plist" LogicalName="Info.plist" />
-		<Compile Include="$(MacCatalystProjectFolder)AppDelegate.fs" />
 	</ItemGroup>
 	
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'ios'">
-		<None Include="$(iOSProjectFolder)Info.plist" LogicalName="Info.plist" />
-		<Compile Include="$(iOSProjectFolder)AppDelegate.fs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'android'">
-		<AndroidResource Include="$(MonoAndroidResourcePrefix)/*/*" />
-		<AndroidResource Remove="$(MonoAndroidResourcePrefix)/raw/.*" />
-		<AndroidResource Update="$(MonoAndroidResourcePrefix)/raw/*" />
-		<AndroidAsset Include="$(MonoAndroidAssetsPrefix)/**/*" Exclude="$(MonoAndroidAssetsPrefix)/**/.*/**" />
-		<AndroidManifest Include="$(AndroidProjectFolder)AndroidManifest.xml" />
-		<Compile Include="$(AndroidProjectFolder)MainActivity.fs" />
-		<Compile Include="$(AndroidProjectFolder)MainApplication.fs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'windows'">
-		<Manifest Include="$(WindowsProjectFolder)app.manifest" />
-		<AppxManifest Include="$(WindowsProjectFolder)Package.appxmanifest" />
-		<ApplicationDefinition Include="$(WindowsProjectFolder)App.xaml">
-			<Generator>MSBuild:Compile</Generator>
-			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-		</ApplicationDefinition>
-		<Compile Include="$(WindowsProjectFolder)App.xaml.fs">
-			<DependentUpon>$(WindowsProjectFolder)App.xaml</DependentUpon>
-		</Compile>
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'tizen'">
-		<TizenManifestFile Include="$(TizenProjectFolder)tizen-manifest.xml" />
-		<Compile Include="$(TizenProjectFolder)Main.fs" />
 	</ItemGroup>
 
 	<ItemGroup>

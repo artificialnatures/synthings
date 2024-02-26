@@ -17,7 +17,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.transmission", "t
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.transmission.tests", "transmission.tests\synthings.transmission.tests.fsproj", "{B9C0EAB0-4FBA-4CD8-959B-E5BF33BFE2A7}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.sandbox.maui", "sandbox\maui\synthings.sandbox.maui.fsproj", "{D9E80696-D89F-4433-BB47-E2B34BAF4053}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "synthings.sandbox.maui", "sandbox\maui\synthings.sandbox.maui.fsproj", "{30C5FBE8-32CF-4564-BA5B-05C9F86DE03B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,15 +48,15 @@ Global
 		{B9C0EAB0-4FBA-4CD8-959B-E5BF33BFE2A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9C0EAB0-4FBA-4CD8-959B-E5BF33BFE2A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9C0EAB0-4FBA-4CD8-959B-E5BF33BFE2A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D9E80696-D89F-4433-BB47-E2B34BAF4053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9E80696-D89F-4433-BB47-E2B34BAF4053}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9E80696-D89F-4433-BB47-E2B34BAF4053}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9E80696-D89F-4433-BB47-E2B34BAF4053}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30C5FBE8-32CF-4564-BA5B-05C9F86DE03B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30C5FBE8-32CF-4564-BA5B-05C9F86DE03B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30C5FBE8-32CF-4564-BA5B-05C9F86DE03B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30C5FBE8-32CF-4564-BA5B-05C9F86DE03B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CDFCDDB0-4E51-47B0-BE54-73AD8DFC0D0E} = {92B2279A-BC37-4B41-9425-C040AC60AC07}
 		{741CA887-8A9F-465E-BA9D-646C3DA1F38E} = {ADD1A9DB-9FE3-4647-8C05-05E3CD52FE60}
 		{953DFEE9-02E7-4FD3-B008-6864928DC83E} = {92B2279A-BC37-4B41-9425-C040AC60AC07}
-		{D9E80696-D89F-4433-BB47-E2B34BAF4053} = {ADD1A9DB-9FE3-4647-8C05-05E3CD52FE60}
+		{30C5FBE8-32CF-4564-BA5B-05C9F86DE03B} = {ADD1A9DB-9FE3-4647-8C05-05E3CD52FE60}
 	EndGlobalSection
 EndGlobal
