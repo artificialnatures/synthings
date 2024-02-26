@@ -1,15 +1,19 @@
 ﻿namespace synthings.sandbox.maui
 
+open Microsoft.Extensions.DependencyInjection
 open Microsoft.Maui.Hosting
 open Microsoft.Maui.Controls.Hosting
 open synthings.ui.maui
 
 type MauiProgram =
     static member CreateMauiApp() =
-        MauiApp
-            .CreateBuilder()
-            .UseMauiApp<SynthingsMauiApplication>()
-            .ConfigureFonts(fun fonts ->
+        let mauiApp =
+            MauiApp
+                .CreateBuilder()
+                .UseMauiApp<SynthingsMauiApplication>()
+        mauiApp.Services.AddSingleton(SynthingsProgram.buildApplication ())
+        |> ignore
+        mauiApp.ConfigureFonts(fun fonts ->
                 fonts
                     .AddFont("BerkeleyMono-Regular.ttf", "BerkeleyMono")
                     .AddFont("BerkeleyMono-Bold.ttf", "BerkeleyMonoBold")
@@ -17,4 +21,5 @@ type MauiProgram =
                     .AddFont("BerkeleyMono-BoldItalic.ttf", "BerkeleyMonoBoldItalic")
                 |> ignore
             )
-            .Build()
+            |> ignore
+        mauiApp.Build()

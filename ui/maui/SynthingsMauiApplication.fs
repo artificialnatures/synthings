@@ -1,11 +1,11 @@
 namespace synthings.ui.maui
 
 open synthings.transmission
-//TODO: inject - application : Application<StateRepresentation>
-type SynthingsMauiApplication() as mauiApp =
+
+type SynthingsMauiApplication(application : Application<StateRepresentation>) as mauiApp =
     inherit Microsoft.Maui.Controls.Application()
     let startMessage = Microsoft.Maui.Controls.Label(
-            Text="synthings",
+            Text="waiting",
             FontFamily="Atkinson",
             FontSize=96,
             VerticalOptions = Microsoft.Maui.Controls.LayoutOptions.Center,
@@ -15,5 +15,5 @@ type SynthingsMauiApplication() as mauiApp =
     let rootPage = Microsoft.Maui.Controls.ContentPage(Content=rootContent)
     do mauiApp.MainPage <- rootPage
     let complete _ =
-        startMessage.Text <- "synthings -> loaded"
+        startMessage.Text <- "synthings"
     do rootPage.Loaded.Add(complete)
