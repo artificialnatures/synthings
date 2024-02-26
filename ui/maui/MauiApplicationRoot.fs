@@ -3,10 +3,11 @@ namespace synthings.ui.maui
 open Microsoft.Maui.Controls
 
 type MauiReferences() =
-    let completion = System.Threading.Tasks.TaskCompletionSource<MauiReferences>()
+    static let completion = System.Threading.Tasks.TaskCompletionSource<MauiReferences>()
     let mutable app : Application = null
     let mutable rootPage : ContentPage = null
     let mutable rootContent : ContentView = null
+    static member Completion = completion
     member _.App
         with get () = app
         and set (value) = app <- value
@@ -16,7 +17,6 @@ type MauiReferences() =
     member _.RootContent
         with get () = rootContent
         and set (value) = rootContent <- value
-    member _.Completion = completion
     member _.ReplaceContent content =
         rootContent.Content <- content
 
@@ -40,6 +40,6 @@ type MauiApplicationRoot(references : MauiReferences) as mauiApplicationRoot =
         references.App <- mauiApplicationRoot :> Application
         references.RootContent <- rootContent
         references.RootPage <- rootPage
-        references.Completion.SetResult(references)
+        MauiReferences.Completion.SetResult(references)
         ()
     do rootPage.Loaded.Add(fun _ -> references.RootPage <- rootPage)

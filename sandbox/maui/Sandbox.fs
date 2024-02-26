@@ -6,7 +6,6 @@ open synthings.transmission
 module Sandbox =
     [<EntryPoint>]
     let start arguments =
-        SynthingsMauiApplication.startMaui ()
         let application = SynthingsMauiApplication.build ()
         let goodbyeState =
             Node (VerticalStack, [

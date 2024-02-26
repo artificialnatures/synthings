@@ -1,16 +1,27 @@
 namespace synthings.ui.maui
 
+open Microsoft.FSharp.Control
+
 module SynthingsMauiApplication =
     open synthings.transmission
     
-    let startMaui () =
+    let waitForMauiToLoad = MauiReferences.Completion.Task
+    
+    let startMauiApp () =
         MauiApplicationEntryPoint.start ()
         |> ignore
     
-    let build () =
+    let buildSynthingsApp mauiReferences =
         let configuration =
             {
                 messagingImplementation = Channels
             }
-        let createRenderer = MauiRenderer.create None
+        let createRenderer = MauiRenderer.create mauiReferences
         Application(configuration, ApplicationContainer, createRenderer)
+    
+    let build () =
+        startMauiApp ()
+        //MauiReferences.Completion.Task.Result
+        //|> Some
+        //|> buildSynthingsApp
+        buildSynthingsApp None
