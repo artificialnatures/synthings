@@ -1,7 +1,6 @@
 namespace synthings.sandbox.maui
 
 open synthings.transmission
-open synthings.ui.maui
 
 module Sandbox =
     let goodbyeState =
