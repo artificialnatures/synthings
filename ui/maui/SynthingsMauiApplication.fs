@@ -101,6 +101,58 @@ and SynthingsMauiApplication(application : Application<StateRepresentation>) as 
         | MauiTransform parent -> ()
         | MauiWait parent -> ()
     
+    let reorder parentView =
+        match parentView with
+        | MauiApplication parent -> ()
+        | MauiCursor parent -> ()
+        | MauiWindow parent -> ()
+        | MauiVerticalStack parent -> ()
+        | MauiCanvas parent -> ()
+        | MauiText parent -> ()
+        | MauiButton parent -> ()
+        | MauiImage parent -> ()
+        | MauiFilePicker parent -> ()
+        | MauiTransform parent -> ()
+        | MauiWait parent -> ()
+    
+    let update view =
+        match view with
+        | MauiApplication view -> ()
+        | MauiCursor view -> ()
+        | MauiWindow view -> ()
+        | MauiVerticalStack view -> ()
+        | MauiCanvas view -> ()
+        | MauiText view -> ()
+        | MauiButton view -> ()
+        | MauiImage view -> ()
+        | MauiFilePicker view -> ()
+        | MauiTransform view -> ()
+        | MauiWait view -> ()
+    
+    let orphan parentView childView =
+        match parentView with
+        | MauiApplication parent -> ()
+        | MauiCursor parent -> ()
+        | MauiWindow parent ->
+            //TODO: handle multiple windows
+            match unbox childView with
+            | Some child ->
+                mauiApp.ReplaceRootContent(Microsoft.Maui.Controls.ContentView())
+            | None -> ()
+        | MauiVerticalStack parent ->
+            match unbox childView with
+            | Some child ->
+                parent.Children.Remove child
+                |> ignore
+            | None -> ()
+        | MauiCanvas parent -> ()
+        | MauiText parent -> ()
+        | MauiButton parent -> ()
+        | MauiImage parent -> ()
+        | MauiFilePicker parent -> ()
+        | MauiTransform parent -> ()
+        | MauiWait parent -> ()
+    
     let createRenderer () =
         let mutable renderTable : Map<Identifier, MauiView> = Map.empty
         let render submitProposal operation =
@@ -127,13 +179,46 @@ and SynthingsMauiApplication(application : Application<StateRepresentation>) as 
                         ()
                 parent
             | Reorder operation ->
-                (fun () -> ())
+                let reorder () =
+                    let view = Map.tryFind operation.entityId renderTable
+                    match view with
+                    | Some view ->
+                            reorder view
+                    | _ ->
+                        //TODO: notify of error
+                        ()
+                reorder
             | Update operation ->
-                (fun () -> ())
+                let update () =
+                    let view = Map.tryFind operation.entityId renderTable
+                    match view with
+                    | Some view ->
+                            update view
+                    | _ ->
+                        //TODO: notify of error
+                        ()
+                update
             | Orphan operation ->
-                (fun () -> ())
+                let orphan () =
+                    let parentView = Map.tryFind operation.parentId renderTable
+                    let childView = Map.tryFind operation.entityId renderTable
+                    match parentView, childView with
+                    | Some parentView, Some childView ->
+                            orphan parentView childView
+                    | _ ->
+                        //TODO: notify of error
+                        ()
+                orphan
             | Delete operation ->
-                (fun () -> ())
+                let delete () =
+                    let view = Map.tryFind operation.entityId renderTable
+                    match view with
+                    | Some _ ->
+                            renderTable <- Map.remove operation.entityId renderTable
+                    | _ ->
+                        //TODO: notify of error
+                        ()
+                delete
         render
     
     let startMessage = Microsoft.Maui.Controls.Label(
