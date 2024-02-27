@@ -124,4 +124,51 @@ let tests =
                 Leaf 22
             ])
             Expect.equal actual expected "An entity should have been deleted."
+        
+        testCase "Render" <| fun _ ->
+            let application = Application()
+            let mutable renderTable : Map<Identifier, TestState> = Map.empty
+            let render submitProposal operation =
+                match operation with
+                | Create operation ->
+                    let create () =
+                        renderTable <- Map.add operation.entityId operation.entity renderTable
+                    create
+                | Parent operation ->
+                    let parent () =
+                        let parent = Map.tryFind operation.parentId renderTable
+                        let child = Map.tryFind operation.entityId renderTable
+                        match parent, child with
+                        | Some parent, Some child -> ()
+                        | _ -> failwith "Could not find parent and/or child in render table."
+                    parent
+                | Reorder operation -> (fun () -> ())
+                | Update operation -> (fun () -> ())
+                | Orphan operation -> (fun () -> ())
+                | Delete operation -> (fun () -> ())
+            application.WithRenderer render None
+            let proposal =
+                Initialize {
+                    initialTree = (Node (Integer {value=2;onActivated=None}, [Leaf (Integer {value=21;onActivated=None}); Leaf (Integer {value=22;onActivated=None})]))
+                }
+            application.Enqueue Identifier.empty proposal
+            application.Step ()
+            let extractValue state =
+                match state with
+                | Integer state -> state.value
+            let collector _ tree =
+                let state =
+                    match tree with
+                    | Node (state, _) -> state
+                    | Leaf state -> state
+                extractValue state
+            let actual =
+                application.BuildTree ()
+                |> Tree.collect collector
+            let expected = [
+                2
+                21
+                22
+            ]
+            Expect.equal actual expected "Trees should be equal."
     ]

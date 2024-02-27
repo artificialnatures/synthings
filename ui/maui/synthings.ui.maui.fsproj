@@ -73,7 +73,6 @@
 
 	<ItemGroup>
 		<Compile Include="InfiniteCanvas.fs" />
-		<Compile Include="MauiRenderer.fs" />
 		<Compile Include="SynthingsMauiApplication.fs" />
 	</ItemGroup>
 	

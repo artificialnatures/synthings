@@ -54,9 +54,9 @@ module ConsoleRenderer =
     let render submitProposal operation =
         match operation with
         | Create operation ->
-            display submitProposal operation.entityId operation.entity
-        | Parent operation -> ()
-        | Reorder operation -> ()
-        | Update operation -> ()
-        | Orphan operation -> ()
-        | Delete operation -> ()
+            (fun () -> display submitProposal operation.entityId operation.entity)
+        | Parent operation -> (fun () -> ())
+        | Reorder operation -> (fun () -> ())
+        | Update operation -> (fun () -> ())
+        | Orphan operation -> (fun () -> ())
+        | Delete operation -> (fun () -> ())

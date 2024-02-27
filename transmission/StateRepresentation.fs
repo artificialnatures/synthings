@@ -14,5 +14,4 @@ type StateRepresentation =
     | FilePicker of string list
     | Wait
 and Window =
-    { title: string
-      content: StateRepresentation }
+    { title: string }

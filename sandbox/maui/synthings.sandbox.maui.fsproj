@@ -34,7 +34,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="SynthingsProgram.fs" />
+		<Compile Include="Sandbox.fs" />
 		<Compile Include="MauiProgram.fs" />
 	</ItemGroup>
 

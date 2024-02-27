@@ -1,10 +1,13 @@
 ﻿namespace synthings.transmission
 
-type Renderer<'entity> = MessageDispatcher<Proposal<'entity>> -> Operation<'entity> -> unit
+type RenderCommand = unit -> unit
+type RenderDispatcher = RenderCommand -> unit
+type Renderer<'entity> = MessageDispatcher<Proposal<'entity>> -> Operation<'entity> -> RenderCommand
 
 type Application<'entity>() =
     let mutable entityTable : EntityTable<'entity> = EntityTable.empty
-    let mutable renderChangeSet : Renderer<'entity> = (fun _ _ -> ())
+    let mutable render : Renderer<'entity> = (fun _ _ -> (fun () -> ()))
+    let mutable renderDispatcher : RenderDispatcher = (fun renderCommand -> renderCommand ())
     let mutable history : History<'entity> option = None
     let submitProposal, receiveProposal =
         MessageQueue.create<Proposal<'entity>, ChangeSet<'entity>> Channels
@@ -27,16 +30,21 @@ type Application<'entity>() =
             | Error error ->
                 Error error
         | None -> changeSet
-    let render changeSet =
+    let renderChangeSet changeSet =
         match changeSet with
         | Ok changeSet ->
-            List.iter (renderChangeSet submitProposal) changeSet
-        | Error _ -> ()
+            //TODO: collect all render calls into a single function
+            let renderOperations = List.map (fun operation -> render submitProposal operation) changeSet
+            (fun () -> List.iter (fun renderOperation -> renderOperation ()) renderOperations)
+        | Error _ ->
+            //TODO: notify of error
+            (fun () -> ())
     let processMessage message =
         accept message
         |> react
         |> record
-        |> render
+        |> renderChangeSet
+        |> renderDispatcher
     let mutable isRunning = false
     let applicationRunner =
         async {
@@ -47,8 +55,11 @@ type Application<'entity>() =
                 | None -> ()
         }
     /// <summary>Provide a render function to the Application. The render function will be called for each Operation in each ChangeSet.</summary>
-    member app.WithRenderer (render : Renderer<'entity>) =
-        renderChangeSet <- render
+    member app.WithRenderer (renderer : Renderer<'entity>) (dispatcher : RenderDispatcher option) =
+        render <- renderer
+        match dispatcher with
+        | Some dispatcher -> renderDispatcher <- dispatcher
+        | None -> ()
     /// <summary>Manually enqueue a Message. Call Step after Enqueue to process the message. For testing or blocking execution environments, e.g. console apps.</summary>
     member app.Enqueue entityId proposal =
         submitProposal entityId proposal

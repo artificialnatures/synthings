@@ -11,7 +11,7 @@ type MauiProgram =
             MauiApp
                 .CreateBuilder()
                 .UseMauiApp<SynthingsMauiApplication>()
-        mauiApp.Services.AddSingleton(SynthingsProgram.buildApplication ())
+        mauiApp.Services.AddSingleton(Sandbox.buildApplication ())
         |> ignore
         mauiApp.ConfigureFonts(fun fonts ->
                 fonts

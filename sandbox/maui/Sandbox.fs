@@ -1,0 +1,26 @@
+namespace synthings.sandbox.maui
+
+open synthings.transmission
+open synthings.ui.maui
+
+module Sandbox =
+    let goodbyeState =
+        Node (VerticalStack, [
+            Leaf (Text "Goobye, world!")
+        ])
+    let helloState =
+        Node (ApplicationContainer, [
+            Node (Window {title = "sandbox"}, [
+                Node (VerticalStack, [
+                    Leaf (Text "Hello, world!")
+                    Leaf (Button ("OK", Replace {entityToReplace=Ancestor 1; replacement=goodbyeState}))
+                ])
+            ])
+        ])
+    let initialProposal =
+        Initialize {initialTree = helloState}
+    
+    let buildApplication () =
+        let application = Application()
+        application.Enqueue Identifier.empty initialProposal
+        application
