@@ -4,7 +4,7 @@ type RenderCommand = unit -> unit
 type RenderDispatcher = RenderCommand -> unit
 type Renderer<'entity> = MessageDispatcher<Proposal<'entity>> -> Operation<'entity> -> RenderCommand
 
-type Application<'entity>() =
+type Transmission<'entity>() =
     let mutable entityTable : EntityTable<'entity> = EntityTable.empty
     let mutable render : Renderer<'entity> = (fun _ _ -> (fun () -> ()))
     let mutable renderDispatcher : RenderDispatcher = (fun renderCommand -> renderCommand ())
@@ -46,7 +46,7 @@ type Application<'entity>() =
         |> renderChangeSet
         |> renderDispatcher
     let mutable isRunning = false
-    let applicationRunner =
+    let asyncRunner =
         async {
             while isRunning do
                 match receiveProposal() with
@@ -55,16 +55,16 @@ type Application<'entity>() =
                 | None -> ()
         }
     /// <summary>Provide a render function to the Application. The render function will be called for each Operation in each ChangeSet.</summary>
-    member app.WithRenderer (renderer : Renderer<'entity>) (dispatcher : RenderDispatcher option) =
+    member _.WithRenderer (renderer : Renderer<'entity>) (dispatcher : RenderDispatcher option) =
         render <- renderer
         match dispatcher with
         | Some dispatcher -> renderDispatcher <- dispatcher
         | None -> ()
     /// <summary>Manually enqueue a Message. Call Step after Enqueue to process the message. For testing or blocking execution environments, e.g. console apps.</summary>
-    member app.Enqueue entityId proposal =
+    member _.Enqueue entityId proposal =
         submitProposal entityId proposal
     /// <summary>Manually advance the Application one step, processing the next message in the queue. For testing or blocking execution environments, e.g. console apps.</summary>
-    member app.Step () =
+    member _.Step () =
         let rec retrieveNextMessage () =
             match receiveProposal() with
             | Some message ->
@@ -73,22 +73,22 @@ type Application<'entity>() =
                 retrieveNextMessage ()
         retrieveNextMessage ()
     /// <summary>Call a function for each entity in the application state. For testing purposes.</summary>
-    member app.ForEachEntity (action : (Proposal<'entity> -> unit) -> 'entity -> unit) =
+    member _.ForEachEntity (action : (Proposal<'entity> -> unit) -> 'entity -> unit) =
         let entities = entityTable.entities |> Map.toList
         List.iter (fun (identifier, entity) -> action (submitProposal identifier) entity) entities
     /// <summary>Get a snapshot of the Application state. Useful for testing and debugging.</summary>
     /// <returns>A Tree representing the state of the application.</returns>
-    member app.BuildTree () =
+    member _.BuildTree () =
         EntityTable.buildTree None entityTable
     ///<summary>Run the Application without blocking the main thread. The typical run scenario for GUI apps.</summary>
-    member app.Run () =
+    member _.Run () =
         isRunning <- true
-        Async.Start applicationRunner
+        Async.Start asyncRunner
     /// <summary>Run the Application and block the main thread. Call Application.Step to manually advance to the next state. The typical run scenario for tests and console apps.</summary>
-    member app.RunBlocking () =
+    member _.RunBlocking () =
         isRunning <- true
-        applicationRunner |> Async.RunSynchronously
+        asyncRunner |> Async.RunSynchronously
     /// <summary>Shut down message processing, event loops, and exit the process.</summary>
-    member app.Quit () =
+    member _.Quit () =
         // TODO: Ensure that any messaging queues (sockets, channels, etc.) are disposed
         isRunning <- false

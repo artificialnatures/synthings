@@ -15,7 +15,7 @@ type MauiView =
     | MauiFilePicker of Microsoft.Maui.Controls.HorizontalStackLayout
     | MauiTransform of Microsoft.Maui.Controls.ContentView
     | MauiWait of Microsoft.Maui.Controls.Label
-and SynthingsMauiApplication(application : Application<StateRepresentation>) as mauiApp =
+and SynthingsMauiApplication(transmission : Transmission<StateRepresentation>) as mauiApp =
     inherit Microsoft.Maui.Controls.Application()
     
     let createView submitProposal renderableId stateRepresentation =
@@ -238,8 +238,8 @@ and SynthingsMauiApplication(application : Application<StateRepresentation>) as 
             (fun () -> renderCommand ())
             |> mauiApp.Dispatcher.Dispatch
             |> ignore)
-        application.WithRenderer renderer (Some renderDispatcher)
-        application.Run ()
+        transmission.WithRenderer renderer (Some renderDispatcher)
+        transmission.Run ()
     do rootPage.Loaded.Add(complete)
     
     member mauiApp.ReplaceRootContent(view) =

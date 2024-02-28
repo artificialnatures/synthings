@@ -2,7 +2,7 @@ namespace synthings.ui.console
 
 module SynthingsConsoleApplication =
     open synthings.transmission
-    let create () =
-        let application = Application()
-        application.WithRenderer ConsoleRenderer.render None
-        application
+    let build () =
+        let transmission = Transmission()
+        transmission.WithRenderer ConsoleRenderer.render None
+        transmission

@@ -1,4 +1,4 @@
-module Application
+module Transmission
 
 open Expecto
 open synthings.transmission
@@ -23,17 +23,17 @@ let tests =
     //testSequenced ensures that this collection of tests executes
     //serially. These tests hang when run concurrently, likely because
     //of some limitation in System.Threading.Channels
-    testSequenced <| testList "Application" [ 
+    testSequenced <| testList "Transmission" [ 
         testCase "Initialize" <| fun _ ->
-            let application = Application()
+            let transmission = Transmission()
             let proposal =
                 Initialize {
                     initialTree = (Node (Integer {value=2;onActivated=None}, [Leaf (Integer {value=21;onActivated=None}); Leaf (Integer {value=22;onActivated=None})]))
                 }
-            application.Enqueue Identifier.empty proposal
-            application.Step ()
+            transmission.Enqueue Identifier.empty proposal
+            transmission.Step ()
             let actual =
-                application.BuildTree ()
+                transmission.BuildTree ()
                 |> Tree.map (fun renderable -> match renderable with Integer integer -> integer.value)
             let expected = Node (2, [
                 Leaf 21
@@ -42,19 +42,19 @@ let tests =
             Expect.equal actual expected "Trees should be equal."
         
         testCase "Add" <| fun _ ->
-            let application = Application()
+            let transmission = Transmission()
             let proposal =
                 let entityToAdd = Leaf (Integer {value=21; onActivated=None})
                 let proposal = Add {parent=Self; order=Last; entityToAdd=entityToAdd}
                 Initialize {
                     initialTree = Leaf (Integer {value=2;onActivated=Some proposal})
                 }
-            application.Enqueue Identifier.empty proposal //Initialize application with some state
-            application.Step ()
-            application.ForEachEntity triggerEvent //simulate interaction, e.g. a mouse click
-            application.Step ()
+            transmission.Enqueue Identifier.empty proposal //Initialize application with some state
+            transmission.Step ()
+            transmission.ForEachEntity triggerEvent //simulate interaction, e.g. a mouse click
+            transmission.Step ()
             let actual =
-                application.BuildTree ()
+                transmission.BuildTree ()
                 |> Tree.map (fun renderable -> match renderable with Integer integer -> integer.value)
             let expected = Node (2, [
                 Leaf 21
@@ -62,7 +62,7 @@ let tests =
             Expect.equal actual expected "A new entity should have been added."
         
         testCase "Replace" <| fun _ ->
-            let application = Application()
+            let transmission = Transmission()
             let replacementTree =
                 Node (Integer {value=3; onActivated=None}, [
                     Leaf (Integer {value=31; onActivated=None})
@@ -82,12 +82,12 @@ let tests =
                 Initialize {
                     initialTree = initialTree
                 }
-            application.Enqueue Identifier.empty initialProposal //Initialize application with some state
-            application.Step ()
-            application.ForEachEntity triggerEvent //simulate interaction, e.g. a mouse click
-            application.Step ()
+            transmission.Enqueue Identifier.empty initialProposal //Initialize application with some state
+            transmission.Step ()
+            transmission.ForEachEntity triggerEvent //simulate interaction, e.g. a mouse click
+            transmission.Step ()
             let actual =
-                application.BuildTree ()
+                transmission.BuildTree ()
                 |> Tree.map (fun renderable -> match renderable with Integer integer -> integer.value)
             let expected = Node (3, [
                 Leaf 31
@@ -96,7 +96,7 @@ let tests =
             Expect.equal actual expected "The root entity should have been replaced."
         
         testCase "Remove" <| fun _ ->
-            let application = Application()
+            let transmission = Transmission()
             let removeProposal =
                 Remove {
                     entityToRemove = Ancestor 1 //remove the parent of the sender
@@ -113,12 +113,12 @@ let tests =
                 Initialize {
                     initialTree = initialTree
                 }
-            application.Enqueue Identifier.empty initialProposal //Initialize application with some state
-            application.Step ()
-            application.ForEachEntity triggerEvent //simulate interaction, e.g. a mouse click
-            application.Step ()
+            transmission.Enqueue Identifier.empty initialProposal //Initialize application with some state
+            transmission.Step ()
+            transmission.ForEachEntity triggerEvent //simulate interaction, e.g. a mouse click
+            transmission.Step ()
             let actual =
-                application.BuildTree ()
+                transmission.BuildTree ()
                 |> Tree.map (fun renderable -> match renderable with Integer integer -> integer.value)
             let expected = Node (2, [
                 Leaf 22
@@ -126,7 +126,7 @@ let tests =
             Expect.equal actual expected "An entity should have been deleted."
         
         testCase "Render" <| fun _ ->
-            let application = Application()
+            let transmission = Transmission()
             let mutable renderTable : Map<Identifier, TestState> = Map.empty
             let render submitProposal operation =
                 match operation with
@@ -146,13 +146,13 @@ let tests =
                 | Update operation -> (fun () -> ())
                 | Orphan operation -> (fun () -> ())
                 | Delete operation -> (fun () -> ())
-            application.WithRenderer render None
+            transmission.WithRenderer render None
             let proposal =
                 Initialize {
                     initialTree = (Node (Integer {value=2;onActivated=None}, [Leaf (Integer {value=21;onActivated=None}); Leaf (Integer {value=22;onActivated=None})]))
                 }
-            application.Enqueue Identifier.empty proposal
-            application.Step ()
+            transmission.Enqueue Identifier.empty proposal
+            transmission.Step ()
             let extractValue state =
                 match state with
                 | Integer state -> state.value
@@ -163,7 +163,7 @@ let tests =
                     | Leaf state -> state
                 extractValue state
             let actual =
-                application.BuildTree ()
+                transmission.BuildTree ()
                 |> Tree.collect collector
             let expected = [
                 2

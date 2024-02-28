@@ -19,7 +19,7 @@ module Sandbox =
     let initialProposal =
         Initialize {initialTree = helloState}
     
-    let buildApplication () =
-        let application = Application()
-        application.Enqueue Identifier.empty initialProposal
-        application
+    let build () =
+        let transmission = Transmission()
+        transmission.Enqueue Identifier.empty initialProposal
+        transmission

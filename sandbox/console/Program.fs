@@ -21,11 +21,11 @@ module Program =
                     Leaf (Button ("OK", Replace {entityToReplace = Ancestor 1; replacement = goodbyeState}))
                 ]
             )
-        let application = SynthingsConsoleApplication.create ()
+        let transmission = SynthingsConsoleApplication.build ()
         let initialProposal =
             Initialize {
                 initialTree = helloState
             }
-        application.Enqueue Identifier.empty initialProposal
-        application.RunBlocking()
+        transmission.Enqueue Identifier.empty initialProposal
+        transmission.RunBlocking()
         0

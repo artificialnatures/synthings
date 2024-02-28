@@ -21,7 +21,7 @@
     <Compile Include="ChangeSet.fs" />
     <Compile Include="History.fs" />
     <Compile Include="StateRepresentation.fs" />
-    <Compile Include="Application.fs" />
+    <Compile Include="Transmission.fs" />
   </ItemGroup>
   
   <ItemGroup>
