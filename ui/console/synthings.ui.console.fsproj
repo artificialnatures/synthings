@@ -2,7 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <PackageId>org.synthings.ui.console</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Aaron Westre</Authors>
+    <Company>Artificial Natures</Company>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="True" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="ConsoleRenderer.fs" />
