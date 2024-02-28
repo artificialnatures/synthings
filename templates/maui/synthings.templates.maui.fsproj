@@ -6,7 +6,6 @@
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
-		<RootNamespace>synthings.sandbox.maui</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<EnableDefaultItems>false</EnableDefaultItems>
@@ -16,7 +15,7 @@
 		<ApplicationTitle>sandbox</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>org.synthings.sandbox.maui</ApplicationId>
+		<ApplicationId>org.synthings.templates.maui</ApplicationId>
 		<ApplicationIdGuid>E0988DEF-17F6-44C4-9D87-B4097A789BB2</ApplicationIdGuid>
 
 		<!-- Versions -->

@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "synthings",
+  "classifications": [ "synthings", "maui" ],
+  "identity": "org.synthings.templates.maui",
+  "name": "synthings MAUI application",
+  "shortName": "synthings-maui",
+  "sourceName":"org.synthings.templates.maui",
+  "tags": {
+    "language": "F#",
+    "type": "project"
+  }
+}

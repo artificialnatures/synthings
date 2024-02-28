@@ -1,4 +1,4 @@
-﻿namespace synthings.sandbox.console
+﻿namespace synthings.templates.console
 
 open synthings.transmission
 open synthings.ui.console

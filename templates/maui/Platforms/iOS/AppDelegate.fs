@@ -1,4 +1,4 @@
-﻿namespace synthings.sandbox.maui
+﻿namespace synthings.templates.maui
 
 open Foundation
 open Microsoft.Maui

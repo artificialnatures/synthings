@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "synthings",
+  "classifications": [ "synthings", "console" ],
+  "identity": "org.synthings.templates.console",
+  "name": "synthings console application",
+  "shortName": "synthings-console",
+  "sourceName":"org.synthings.templates.console",
+  "tags": {
+    "language": "F#",
+    "type": "project"
+  }
+}

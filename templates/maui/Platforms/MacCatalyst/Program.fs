@@ -1,9 +1,9 @@
-﻿namespace synthings.sandbox.maui
+﻿namespace synthings.templates.maui
 
 open UIKit
 
 module Program =
     [<EntryPoint>]
-    let main args =        
+    let main args =
         UIApplication.Main(args, null, typeof<AppDelegate>)
         0

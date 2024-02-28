@@ -1,4 +1,4 @@
-﻿namespace synthings.sandbox.maui
+﻿namespace synthings.templates.maui
 
 open Android.App
 open Microsoft.Maui

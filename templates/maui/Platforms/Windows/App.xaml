@@ -1,8 +1,8 @@
 ﻿<maui:MauiWinUIApplication
-    x:Class="synthings.sandbox.maui.WinUI.App"
+    x:Class="synthings.templates.maui.WinUI.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:maui="using:Microsoft.Maui"
-    xmlns:local="using:synthings.sandbox.maui.WinUI">
+    xmlns:local="using:synthings.templates.maui.WinUI">
 
 </maui:MauiWinUIApplication>
