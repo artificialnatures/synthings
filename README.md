@@ -1,14 +1,10 @@
 # synthings
 
+![synthings screenshot](synthings-translation.png)
+
 Research into simple, flexible, and robust systems for interactive graphical programming.
 
-- [ ] Make Sandbox a full MAUI project
-- [ ] Make a SynthingsMauiApplication class (starting point for writing an app)
-- [ ] Add SynthingsMauiApplication via dependency injection
-- [ ] Initialize synthings Application once root content view is loaded
-- [ ] Test MAUI app
-- [ ] Remove class stuff from transmission.Application
-- [ ] Make a dotnet project template based on sandbox for easy project creation
+- [ ] import images
 - [ ] Replace proposal -> Replace (entire subtree) and Refresh (just one entity)
 - [ ] Remove all uneccessary failwith statements with error reporting mechanisms (don't fail, recover and provide next steps)
 
