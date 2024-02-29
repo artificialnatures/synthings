@@ -32,7 +32,7 @@ and SynthingsMauiApplication(transmission : Transmission<StateRepresentation>) a
         | VerticalStack ->
             Microsoft.Maui.Controls.VerticalStackLayout() |> MauiVerticalStack
         | Canvas ->
-            InfiniteCanvas(stateRepresentation, submitProposal) |> MauiCanvas
+            InfiniteCanvas() |> MauiCanvas
         | Text text -> 
             Microsoft.Maui.Controls.Label(Text = text, FontSize = 460.0) |> MauiText
         | Button(label, onClickProposal) ->
@@ -77,7 +77,6 @@ and SynthingsMauiApplication(transmission : Transmission<StateRepresentation>) a
         | MauiFilePicker view -> view :> Microsoft.Maui.Controls.View |> Some
         | MauiTransform view -> view :> Microsoft.Maui.Controls.View |> Some
         | MauiWait view -> view :> Microsoft.Maui.Controls.View |> Some
-        
     
     let parent parentView childView =
         match parentView with
@@ -87,13 +86,16 @@ and SynthingsMauiApplication(transmission : Transmission<StateRepresentation>) a
             //TODO: handle multiple windows
             match unbox childView with
             | Some child ->
-                mauiApp.ReplaceRootContent(child)
+                mauiApp.ReplaceRootContent child
             | None -> ()
         | MauiVerticalStack parent ->
             match unbox childView with
             | Some child -> parent.Children.Add child
             | None -> ()
-        | MauiCanvas parent -> ()
+        | MauiCanvas parent ->
+            match unbox childView with
+            | Some child -> parent.AddChild child
+            | None -> ()
         | MauiText parent -> ()
         | MauiButton parent -> ()
         | MauiImage parent -> ()

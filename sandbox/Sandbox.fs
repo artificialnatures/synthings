@@ -3,21 +3,18 @@ namespace synthings.sandbox
 open synthings.transmission
 
 module Sandbox =
-    let goodbyeState =
-        Node (VerticalStack, [
-            Leaf (Text "Goobye, world!")
-        ])
-    let helloState =
+    let initialState =
         Node (ApplicationContainer, [
             Node (Window {title = "sandbox"}, [
-                Node (VerticalStack, [
-                    Leaf (Text "Hello, world!")
-                    Leaf (Button ("OK", Replace {entityToReplace=Ancestor 1; replacement=goodbyeState}))
+                Node (Canvas, [
+                    Leaf (Text "synthings")
+                    Leaf (Text "synthings")
+                    Leaf (Text "synthings")
                 ])
             ])
         ])
     let initialProposal =
-        Initialize {initialTree = helloState}
+        Initialize {initialTree = initialState}
     
     let build () =
         let transmission = Transmission()
