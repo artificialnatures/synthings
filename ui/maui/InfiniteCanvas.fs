@@ -8,14 +8,17 @@ open synthings.transmission
 type InfiniteCanvas() as this =
     inherit ScrollView()
     
+    do this.Background <- SolidColorBrush.BlanchedAlmond
+    do this.Orientation <- ScrollOrientation.Both
     let content = AbsoluteLayout()
-    do content.Background <- SolidColorBrush.BlanchedAlmond
+    do content.WidthRequest <- 10000.0
+    do content.HeightRequest <- 10000.0
+    do content.Background <- SolidColorBrush.Cornsilk
     let dropRecognizer = DropGestureRecognizer()
     do dropRecognizer.DragOver.Add (fun _ -> content.Background <- SolidColorBrush.LightPink)
-    do dropRecognizer.Drop.Add (fun _ -> content.Background <- SolidColorBrush.BlanchedAlmond)
+    do dropRecognizer.Drop.Add (fun _ -> content.Background <- SolidColorBrush.Cornsilk)
     do content.GestureRecognizers.Add dropRecognizer
     do this.Content <- content
-    do this.Orientation <- ScrollOrientation.Both
     let mutable previousTranslation = (0.0, 0.0)
     let mutable previousScale = 1.0
     
