@@ -12,7 +12,7 @@
 		<DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
 
 		<!-- Display name -->
-		<ApplicationTitle>sandbox</ApplicationTitle>
+		<ApplicationTitle>sandbox template</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>org.synthings.templates.maui</ApplicationId>
@@ -72,12 +72,14 @@
 
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'maccatalyst'">
 		<None Include="$(MacCatalystProjectFolder)Info.plist" LogicalName="Info.plist" />
+		<None Include="$(MacCatalystProjectFolder)Entitlements.plist" LogicalName="Entitlements.plist" />
 		<Compile Include="$(MacCatalystProjectFolder)AppDelegate.fs" />
 		<Compile Include="$(MacCatalystProjectFolder)Program.fs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'ios'">
 		<None Include="$(iOSProjectFolder)Info.plist" LogicalName="Info.plist" />
+		<None Include="$(MacCatalystProjectFolder)Entitlements.plist" LogicalName="Entitlements.plist" />
 		<Compile Include="$(iOSProjectFolder)AppDelegate.fs" />
 		<Compile Include="$(iOSProjectFolder)Program.fs" />
 	</ItemGroup>

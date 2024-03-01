@@ -3,8 +3,6 @@ namespace synthings.ui.maui
 open Microsoft.Maui.Controls
 open Microsoft.Maui
 
-open synthings.transmission
-
 type InfiniteCanvas() as this =
     inherit ScrollView()
     
@@ -16,7 +14,10 @@ type InfiniteCanvas() as this =
     do content.Background <- SolidColorBrush.Cornsilk
     let dropRecognizer = DropGestureRecognizer()
     do dropRecognizer.DragOver.Add (fun _ -> content.Background <- SolidColorBrush.LightPink)
-    do dropRecognizer.Drop.Add (fun _ -> content.Background <- SolidColorBrush.Cornsilk)
+    let onDrop (args : DropEventArgs) =
+        let data = args.Data
+        content.Background <- SolidColorBrush.Cornsilk
+    do dropRecognizer.Drop.Add onDrop
     do content.GestureRecognizers.Add dropRecognizer
     do this.Content <- content
     let mutable previousTranslation = (0.0, 0.0)
@@ -52,14 +53,23 @@ type InfiniteCanvas() as this =
         | _ -> ()
     
     let onRightClick (args : TappedEventArgs) =
-        let position =
-            let mousePosition = args.GetPosition(this)
-            if mousePosition.HasValue
-            then (mousePosition.Value.X, mousePosition.Value.Y)
-            else (0.0, 0.0)
-        //AddChild (Transform (position, Image DotNetBot), canvas)
-        //|> submitProposal
-        ()
+        let importImage () =
+            let location = args.GetPosition(content)
+            if location.HasValue then
+                let result =
+                    Microsoft.Maui.Storage.FilePicker.Default.PickAsync()
+                    |> Async.AwaitTask
+                    |> Async.RunSynchronously
+                if result <> null then
+                    //result.ContentType
+                    //result.FileName
+                    //result.FullPath
+                    let image = Image(Source=StreamImageSource(Stream=(fun _ -> result.OpenReadAsync())))
+                    image.TranslationX <- location.Value.X
+                    image.TranslationY <- location.Value.Y
+                    content.Children.Add image
+        this.Dispatcher.Dispatch(importImage)
+        |> ignore
 
     let setupGestureRecognizers () =
         (*
@@ -82,10 +92,6 @@ type InfiniteCanvas() as this =
     do setupGestureRecognizers ()
     
     member this.AddChild (view : View) =
-        (*
-        let mutable previousLocation : (float * float) option = None
-        let mutable location : (float * float) option = None
-        *)
         let mutable isDragging = false
         let mutable originalLocation = (0.0, 0.0)
         let dragRecognizer = DragGestureRecognizer()
@@ -98,28 +104,7 @@ type InfiniteCanvas() as this =
         dragRecognizer.DragStartingCommand <- Command(fun () ->
                 isDragging <- true
             )
-        (*
-        dragRecognizer.DropCompletedCommand <- Command(fun () ->
-                match location with
-                | Some (x, y) ->
-                    view.AnchorX <- x
-                    view.AnchorY <- y
-                | None -> ()
-            )
-        *)
         view.GestureRecognizers.Add dragRecognizer
-        (*
-        let pointerRecognizer = PointerGestureRecognizer()
-        let onMoved (args : PointerEventArgs) =
-            match location with
-            | Some _ ->
-                let point = args.GetPosition(this)
-                if point.HasValue
-                then location <- Some (point.Value.X, point.Value.Y)
-            | None -> ()
-        pointerRecognizer.PointerMoved.Add onMoved
-        view.GestureRecognizers.Add pointerRecognizer
-        *)
         let onDrop (args : DropEventArgs) =
             if isDragging then
                 let location = args.GetPosition(content)

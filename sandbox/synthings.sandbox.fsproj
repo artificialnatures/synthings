@@ -15,8 +15,8 @@
 		<ApplicationTitle>sandbox</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>synthings sandbox</ApplicationId>
-		<ApplicationIdGuid>E0988DEF-17F6-44C4-9D87-B4097A789BB2</ApplicationIdGuid>
+		<ApplicationId>org.synthings.sandbox</ApplicationId>
+		<ApplicationIdGuid>bb124f51-dbb4-4bb9-9ef6-8458d45c20d8</ApplicationIdGuid>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -72,12 +72,14 @@
 
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'maccatalyst'">
 		<None Include="$(MacCatalystProjectFolder)Info.plist" LogicalName="Info.plist" />
+		<None Include="$(MacCatalystProjectFolder)Entitlements.plist" LogicalName="Entitlements.plist" />
 		<Compile Include="$(MacCatalystProjectFolder)AppDelegate.fs" />
 		<Compile Include="$(MacCatalystProjectFolder)Program.fs" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetPlatformIdentifier) == 'ios'">
 		<None Include="$(iOSProjectFolder)Info.plist" LogicalName="Info.plist" />
+		<None Include="$(MacCatalystProjectFolder)Entitlements.plist" LogicalName="Entitlements.plist" />
 		<Compile Include="$(iOSProjectFolder)AppDelegate.fs" />
 		<Compile Include="$(iOSProjectFolder)Program.fs" />
 	</ItemGroup>
